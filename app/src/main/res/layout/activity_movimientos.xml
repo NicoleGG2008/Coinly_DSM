@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/coinly_surface"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/Coinly.TopBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:paddingStart="20dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:accessibilityHeading="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Historial"
+            android:textAppearance="@style/TextAppearance.Coinly.TopBarTitle" />
+
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/btnToggleFilters"
+            style="@style/Widget.Coinly.IconButton"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Mostrar u ocultar filtros avanzados"
+            android:src="@drawable/ic_filter" />
+        <ImageButton
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:id="@+id/btnAddMovement"
+            style="@style/Widget.Coinly.IconButton.Teal"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Agregar movimiento"
+            android:src="@drawable/ic_plus" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="ifContentScrolls">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSearch"
+                style="@style/Widget.Coinly.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:errorEnabled="false"
+                app:startIconContentDescription="Buscar"
+                app:startIconDrawable="@drawable/ic_search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSearch"
+                    style="@style/Widget.Coinly.EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Buscar movimientos..."
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip android:id="@+id/chipAll" style="@style/Widget.Coinly.Chip"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:checkable="true" android:checked="true" android:text="Todos" />
+                <com.google.android.material.chip.Chip android:id="@+id/chipIncome" style="@style/Widget.Coinly.Chip"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:checkable="true" android:text="Ingresos" />
+                <com.google.android.material.chip.Chip android:id="@+id/chipExpense" style="@style/Widget.Coinly.Chip"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:checkable="true" android:text="Gastos" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <LinearLayout
+                android:id="@+id/advancedFilters"
+                style="@style/Coinly.Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone">
+
+                <TextView
+                    style="@style/Coinly.Text.Section"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:text="Filtros avanzados" />
+
+                <TextView
+                    style="@style/Coinly.Text.FieldLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/acFilterCategory"
+                    android:text="Categoría" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilFilterCategory"
+                    style="@style/Widget.Coinly.TextInputLayout.Dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                        android:id="@+id/acFilterCategory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Todas"
+                        android:inputType="none"
+                        android:minHeight="52dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/coinly_text_primary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                        <TextView
+                            style="@style/Coinly.Text.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/etMinAmount"
+                            android:text="Monto mínimo" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilMinAmount"
+                            style="@style/Widget.Coinly.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:prefixText="$">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etMinAmount"
+                                style="@style/Widget.Coinly.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                        <TextView
+                            style="@style/Coinly.Text.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/etMaxAmount"
+                            android:text="Monto máximo" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilMaxAmount"
+                            style="@style/Widget.Coinly.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:prefixText="$">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etMaxAmount"
+                                style="@style/Widget.Coinly.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="0.00"
+                                android:inputType="numberDecimal" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp" android:layout_weight="1" android:orientation="vertical">
+                        <TextView
+                            style="@style/Coinly.Text.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/etDateFrom"
+                            android:text="Desde" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilDateFrom"
+                            style="@style/Widget.Coinly.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etDateFrom"
+                                style="@style/Widget.Coinly.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Elegir"
+                                android:inputType="none"
+                                android:cursorVisible="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp" android:layout_weight="1" android:orientation="vertical">
+                        <TextView
+                            style="@style/Coinly.Text.FieldLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:labelFor="@+id/etDateTo"
+                            android:text="Hasta" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilDateTo"
+                            style="@style/Widget.Coinly.TextInputLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etDateTo"
+                                style="@style/Widget.Coinly.EditText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="Elegir"
+                                android:inputType="none"
+                                android:cursorVisible="false" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnClearFilters" style="@style/Widget.Coinly.Button.Outline.Neutral"
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginEnd="6dp" android:layout_weight="1" android:text="Limpiar" />
+                    <com.google.android.material.button.MaterialButton android:id="@+id/btnApplyFilters" style="@style/Widget.Coinly.Button"
+                        android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp" android:layout_weight="1" android:text="Aplicar" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvMovementCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:accessibilityLiveRegion="polite"
+                android:textAppearance="@style/TextAppearance.Coinly.Muted"
+                tools:text="10 movimientos" />
+
+            <LinearLayout
+                android:id="@+id/layoutMovements"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
