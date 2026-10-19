@@ -9,6 +9,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Coinly">
+
+        <!-- 1. La app inicia en la pantalla de Bienvenida -->
+        <activity
+            android:name=".BienvenidaActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 2. Autenticación y cuenta (adjustResize: el teclado no tapa los campos) -->
+        <activity android:name=".LoginActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".RegisterActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ForgotPasswordActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ChangePasswordActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".EditProfileActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+
+        <!-- 3. Pantalla principal y secciones -->
+        <activity android:name=".MainActivity" android:exported="false" />
+        <activity android:name=".MovimientosActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".PresupuestosActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".NoticiasActivity" android:exported="false" />
+        <activity android:name=".NoticiaDetalleActivity" android:exported="false" />
+        <activity android:name=".EducacionActivity" android:exported="false" />
+        <activity android:name=".PerfilActivity" android:exported="false" />
     </application>
 
 </manifest>
