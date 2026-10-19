@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tema oscuro: paleta tomada del diseño (fondo #10162B, tarjetas #18213B, bordes #293654) -->
+<resources>
+    <color name="coinly_surface">#10162B</color>
+    <color name="coinly_card">#18213B</color>
+    <color name="coinly_border">#293654</color>
+    <color name="coinly_divider">#222C48</color>
+    <color name="coinly_outline">#3F4E78</color>
+    <color name="coinly_text_primary">#F1F5F9</color>
+    <color name="coinly_text_secondary">#A3B0C9</color>
+    <color name="coinly_heading">#FFFFFF</color>
+
+    <!-- Texto, bordes e iconos de acento: más claros que el relleno para superar 4.5:1 -->
+    <color name="coinly_accent">#2FC1DD</color>
+    <color name="coinly_on_accent">#00222B</color>
+    <color name="coinly_green_text">#56E1A5</color>
+    <color name="coinly_danger_text">#FF8DBE</color>
+    <color name="coinly_on_warning">#E6F27A</color>
+
+    <!-- Fondos de estado -->
+    <color name="coinly_tint_success">#12302E</color>
+    <color name="coinly_tint_danger">#3A1B34</color>
+    <color name="coinly_tint_warning">#38381A</color>
+    <color name="coinly_tint_info">#11323F</color>
+    <color name="coinly_tint_neutral">#1F2947</color>
+</resources>

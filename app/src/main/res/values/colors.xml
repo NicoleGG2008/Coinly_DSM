@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Marca -->
+    <color name="coinly_brand_navy">#000636</color>
+    <color name="coinly_teal">#0E7490</color>
+    <color name="coinly_green">#2FA36B</color>
+    <color name="coinly_info">#17D3E8</color>
+    <!-- Verde de relleno con contraste AA para texto blanco -->
+    <color name="coinly_green_strong">#26865A</color>
+    <color name="coinly_success">#22C08E</color>
+    <!-- Verde más oscuro para TEXTO sobre fondos claros (contraste AA) -->
+    <color name="coinly_green_text">#1F7A4D</color>
+    <color name="coinly_warning">#CEE949</color>
+    <color name="coinly_danger">#C22973</color>
+
+    <!-- Superficies y texto -->
+    <color name="coinly_surface">#F4F6FB</color>
+    <color name="coinly_card">#FFFFFF</color>
+    <color name="coinly_border">#E2E8F0</color>
+    <color name="coinly_divider">#F1F5F9</color>
+    <color name="coinly_text_primary">#1E293B</color>
+    <color name="coinly_text_secondary">#596981</color>
+
+    <!-- Tintes suaves (fondos de estados) -->
+    <color name="coinly_tint_success">#EDFBF5</color>
+    <color name="coinly_tint_danger">#FDF0F6</color>
+    <color name="coinly_tint_warning">#FEFDE8</color>
+    <color name="coinly_tint_info">#EFF9FB</color>
+    <color name="coinly_tint_neutral">#F0F2F8</color>
+    <color name="coinly_on_warning">#5C6000</color>
+
+    <!-- Roles de texto/icono/borde. En modo oscuro (values-night) cambian a variantes más claras
+         para mantener el contraste; los rellenos (coinly_teal, coinly_danger...) no cambian. -->
+    <color name="coinly_heading">#000636</color>
+    <color name="coinly_accent">#0E7490</color>
+    <color name="coinly_on_accent">#FFFFFF</color>
+    <color name="coinly_danger_text">#C22973</color>
+    <color name="coinly_outline">#E2E8F0</color>
+
+    <!-- Sobre fondos oscuros -->
+    <color name="coinly_on_dark">#FFFFFF</color>
+    <color name="coinly_on_dark_muted">#B3FFFFFF</color>
+    <color name="coinly_glass">#1FFFFFFF</color>
+    <color name="coinly_glass_border">#2EFFFFFF</color>
+    <color name="coinly_chart_income">#56E1A5</color>
+    <color name="coinly_chart_expense">#FF8DBE</color>
+</resources>

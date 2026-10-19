@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ===== Tema base: Material 3 claro ===== -->
+    <style name="Theme.Coinly" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/coinly_accent</item>
+        <item name="colorOnPrimary">@color/coinly_on_accent</item>
+        <item name="colorPrimaryContainer">@color/coinly_tint_info</item>
+        <item name="colorOnPrimaryContainer">@color/coinly_heading</item>
+        <item name="colorSecondary">@color/coinly_green</item>
+        <item name="colorOnSecondary">@color/coinly_on_dark</item>
+        <item name="colorSurface">@color/coinly_card</item>
+        <item name="colorOnSurface">@color/coinly_text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/coinly_text_secondary</item>
+        <item name="colorOutline">@color/coinly_outline</item>
+        <item name="colorError">@color/coinly_danger_text</item>
+        <item name="colorOnError">@color/coinly_on_accent</item>
+        <item name="android:colorBackground">@color/coinly_surface</item>
+        <item name="android:windowBackground">@color/coinly_surface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Superficies de Material (menús, selector de fecha, hojas) siguen la paleta Coinly -->
+        <item name="colorSurfaceContainerLowest">@color/coinly_card</item>
+        <item name="colorSurfaceContainerLow">@color/coinly_card</item>
+        <item name="colorSurfaceContainer">@color/coinly_card</item>
+        <item name="colorSurfaceContainerHigh">@color/coinly_card</item>
+        <item name="colorSurfaceContainerHighest">@color/coinly_tint_neutral</item>
+        <item name="colorSurfaceVariant">@color/coinly_tint_neutral</item>
+        <item name="android:textColorPrimary">@color/coinly_text_primary</item>
+        <item name="android:textColorSecondary">@color/coinly_text_secondary</item>
+        <item name="android:textColorHint">@color/coinly_text_secondary</item>
+
+        <!-- Tipografía: cambia aquí las fuentes (ver README del diseño) -->
+        <item name="android:fontFamily">sans-serif</item>
+
+        <item name="materialButtonStyle">@style/Widget.Coinly.Button</item>
+        <item name="textInputStyle">@style/Widget.Coinly.TextInputLayout</item>
+        <item name="chipStyle">@style/Widget.Coinly.Chip</item>
+        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.Coinly.BottomSheetDialog</item>
+    </style>
+
+    <!-- ===== Texto ===== -->
+    <style name="TextAppearance.Coinly.Display" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">36sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/coinly_on_dark</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+    </style>
+    <style name="TextAppearance.Coinly.Heading" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/coinly_heading</item>
+    </style>
+    <style name="TextAppearance.Coinly.TopBarTitle" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/coinly_on_dark</item>
+    </style>
+    <style name="TextAppearance.Coinly.Section" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/coinly_heading</item>
+    </style>
+    <style name="TextAppearance.Coinly.Body" parent="">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+    </style>
+    <style name="TextAppearance.Coinly.BodyStrong" parent="TextAppearance.Coinly.Body">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.Coinly.Muted" parent="">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/coinly_text_secondary</item>
+    </style>
+    <style name="TextAppearance.Coinly.Caption" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/coinly_text_secondary</item>
+    </style>
+    <style name="TextAppearance.Coinly.Overline" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textColor">@color/coinly_text_secondary</item>
+    </style>
+    <style name="TextAppearance.Coinly.FieldLabel" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/coinly_heading</item>
+    </style>
+    <!-- Montos: cifras tabulares. Para usar JetBrains Mono cambia fontFamily -->
+    <style name="TextAppearance.Coinly.Amount" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFeatureSettings">tnum</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+    </style>
+    <style name="TextAppearance.Coinly.Link" parent="">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/coinly_accent</item>
+    </style>
+
+    <!-- Atajos para vistas de texto -->
+    <style name="Coinly.Text.FieldLabel" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.Coinly.FieldLabel</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+    <style name="Coinly.Text.Section" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.Coinly.Section</item>
+        <item name="android:accessibilityHeading">true</item>
+    </style>
+    <style name="Coinly.Text.Link" parent="">
+        <item name="android:textAppearance">@style/TextAppearance.Coinly.Link</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <!-- ===== Contenedores ===== -->
+    <style name="Coinly.Card" parent="">
+        <item name="android:background">@drawable/bg_card_container</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">16dp</item>
+    </style>
+    <style name="Coinly.TopBar" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:background">@color/coinly_brand_navy</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <!-- ===== Botones ===== -->
+    <style name="Widget.Coinly.Button" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/coinly_teal</item>
+        <item name="android:textColor">@color/coinly_on_dark</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">54dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="iconTint">@color/coinly_on_dark</item>
+    </style>
+    <style name="Widget.Coinly.Button.Green">
+        <item name="backgroundTint">@color/coinly_green_strong</item>
+    </style>
+    <style name="Widget.Coinly.Button.Navy">
+        <item name="backgroundTint">@color/coinly_brand_navy</item>
+    </style>
+    <style name="Widget.Coinly.Button.Danger">
+        <item name="backgroundTint">@color/coinly_danger</item>
+    </style>
+    <style name="Widget.Coinly.Button.Outline" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/coinly_accent</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">54dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/coinly_accent</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="iconTint">@color/coinly_accent</item>
+    </style>
+    <style name="Widget.Coinly.Button.Outline.Neutral">
+        <item name="android:textColor">@color/coinly_text_secondary</item>
+        <item name="strokeColor">@color/coinly_outline</item>
+        <item name="iconTint">@color/coinly_text_secondary</item>
+    </style>
+    <style name="Widget.Coinly.Button.Outline.Danger">
+        <item name="android:textColor">@color/coinly_danger_text</item>
+        <item name="strokeColor">@color/coinly_danger_text</item>
+        <item name="iconTint">@color/coinly_danger_text</item>
+    </style>
+    <style name="Widget.Coinly.Button.Outline.OnDark">
+        <item name="android:textColor">@color/coinly_on_dark</item>
+        <item name="strokeColor">@color/coinly_glass_border</item>
+        <item name="backgroundTint">@color/coinly_glass</item>
+    </style>
+    <style name="Widget.Coinly.Button.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/coinly_accent</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <!-- Acciones rápidas del inicio (tarjetas tonales con borde) -->
+    <style name="Widget.Coinly.Button.Quick" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+    </style>
+    <style name="Widget.Coinly.Button.Quick.Income">
+        <item name="backgroundTint">@color/coinly_tint_success</item>
+        <item name="strokeColor">@color/coinly_success</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+        <item name="iconTint">@color/coinly_green</item>
+    </style>
+    <style name="Widget.Coinly.Button.Quick.Expense">
+        <item name="backgroundTint">@color/coinly_tint_danger</item>
+        <item name="strokeColor">@color/coinly_danger_text</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+        <item name="iconTint">@color/coinly_danger_text</item>
+    </style>
+    <style name="Widget.Coinly.Button.Quick.History">
+        <item name="backgroundTint">@color/coinly_tint_info</item>
+        <item name="strokeColor">@color/coinly_info</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+        <item name="iconTint">@color/coinly_accent</item>
+    </style>
+    <style name="Widget.Coinly.Button.Quick.Budgets">
+        <item name="backgroundTint">@color/coinly_tint_neutral</item>
+        <item name="strokeColor">@color/coinly_heading</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+        <item name="iconTint">@color/coinly_heading</item>
+    </style>
+
+    <style name="Widget.Coinly.Button.Toggle" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/toggle_bg</item>
+        <item name="android:textColor">@color/toggle_text</item>
+        <item name="strokeColor">@color/coinly_outline</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
+    <style name="Widget.Coinly.Button.TypeIncome" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/type_income_bg</item>
+        <item name="android:textColor">@color/type_income_text</item>
+        <item name="strokeColor">@color/type_income_stroke</item>
+        <item name="iconTint">@color/type_income_text</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+    </style>
+
+    <style name="Widget.Coinly.Button.TypeExpense" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="backgroundTint">@color/type_expense_bg</item>
+        <item name="android:textColor">@color/type_expense_text</item>
+        <item name="strokeColor">@color/type_expense_stroke</item>
+        <item name="iconTint">@color/type_expense_text</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:minHeight">56dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">8dp</item>
+    </style>
+
+    <style name="Widget.Coinly.Switch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/switch_track</item>
+        <item name="thumbTint">@color/switch_thumb</item>
+    </style>
+
+    <style name="ShapeAppearance.Coinly.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- Botones de icono (48dp, objetivo táctil accesible) -->
+    <style name="Widget.Coinly.IconButton" parent="">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:background">@drawable/bg_icon_btn_dark</item>
+        <item name="android:tint">@color/coinly_on_dark</item>
+    </style>
+    <style name="Widget.Coinly.IconButton.Teal">
+        <item name="android:background">@drawable/bg_icon_btn_teal</item>
+    </style>
+    <style name="Widget.Coinly.IconButton.Plain">
+        <item name="android:background">@drawable/bg_ripple_circle_dark</item>
+    </style>
+
+    <!-- ===== Campos de texto ===== -->
+    <style name="Widget.Coinly.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/box_stroke</item>
+        <item name="boxStrokeErrorColor">@color/coinly_danger_text</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxBackgroundColor">@color/coinly_card</item>
+        <item name="hintEnabled">false</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorTextColor">@color/coinly_danger_text</item>
+        <item name="errorIconTint">@color/coinly_danger_text</item>
+        <item name="startIconTint">@color/coinly_text_secondary</item>
+        <item name="endIconTint">@color/coinly_text_secondary</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Coinly.Control</item>
+        <item name="errorTextAppearance">@style/TextAppearance.Coinly.Error</item>
+    </style>
+    <style name="Widget.Coinly.TextInputLayout.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/box_stroke</item>
+        <item name="boxStrokeErrorColor">@color/coinly_danger_text</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="boxBackgroundColor">@color/coinly_card</item>
+        <item name="hintEnabled">false</item>
+        <item name="errorEnabled">true</item>
+        <item name="errorTextColor">@color/coinly_danger_text</item>
+        <item name="endIconTint">@color/coinly_text_secondary</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Coinly.Control</item>
+        <item name="errorTextAppearance">@style/TextAppearance.Coinly.Error</item>
+    </style>
+    <style name="TextAppearance.Coinly.Error" parent="">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/coinly_danger_text</item>
+    </style>
+    <style name="ShapeAppearance.Coinly.Control" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+    <style name="ShapeAppearance.Coinly.Sheet" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">24dp</item>
+        <item name="cornerSizeTopRight">24dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="Widget.Coinly.EditText" parent="Widget.Material3.TextInputEditText.OutlinedBox">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/coinly_text_primary</item>
+        <item name="android:textColorHint">@color/coinly_text_secondary</item>
+        <item name="android:minHeight">52dp</item>
+    </style>
+
+    <!-- ===== Chips ===== -->
+    <style name="Widget.Coinly.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_bg</item>
+        <item name="chipStrokeColor">@color/chip_stroke</item>
+        <item name="chipStrokeWidth">2dp</item>
+        <item name="android:textColor">@color/chip_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="checkedIconVisible">true</item>
+        <item name="checkedIconTint">@color/coinly_accent</item>
+        <item name="chipMinHeight">40dp</item>
+        <item name="ensureMinTouchTargetSize">true</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Coinly.Pill</item>
+    </style>
+    <style name="ShapeAppearance.Coinly.Pill" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <!-- ===== Hojas inferiores (formularios, detalles, confirmaciones) ===== -->
+    <style name="ThemeOverlay.Coinly.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/Widget.Coinly.BottomSheet</item>
+    </style>
+    <style name="Widget.Coinly.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="backgroundTint">@color/coinly_card</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.Coinly.Sheet</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearance.Coinly.Sheet</item>
+    </style>
+
+    <!-- Barra de progreso de presupuestos -->
+    <style name="Widget.Coinly.Progress" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/bg_progress_budget</item>
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">10dp</item>
+    </style>
+</resources>
