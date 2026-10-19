@@ -27,6 +27,16 @@ class UserPrefs(context: Context) {
         get() = prefs.getString("p_avatar", null)
         set(v) = prefs.edit().putString("p_avatar", v).apply()
 
+    /** Tema oscuro (se aplica a toda la app desde CoinlyApp y Perfil). */
+    var darkMode: Boolean
+        get() = prefs.getBoolean("a11y_dark", false)
+        set(v) = prefs.edit().putBoolean("a11y_dark", v).apply()
+
+    /** Factor de tamaño de letra: 0.9 (A−), 1.0 (A), 1.15 (A+). */
+    var fontFactor: Float
+        get() = prefs.getFloat("a11y_font", 1.0f)
+        set(v) = prefs.edit().putFloat("a11y_font", v).apply()
+
     val firstName: String get() = name.trim().substringBefore(' ').ifEmpty { "Usuario" }
     val initial: String get() = name.trim().firstOrNull()?.uppercaseChar()?.toString() ?: "U"
 

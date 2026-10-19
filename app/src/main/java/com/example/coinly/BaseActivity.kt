@@ -1,5 +1,7 @@
 package com.example.coinly
 
+import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -9,15 +11,46 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.coinly.data.UserPrefs
 import com.example.coinly.ui.ScreenFrame
 
-/** Base común: dibujo de borde a borde con iconos claros sobre el azul de la marca. */
+/**
+ * Base común: dibujo de borde a borde con iconos claros sobre el azul de la marca
+ * y escala de texto elegida por la persona en Perfil › Accesibilidad.
+ */
 open class BaseActivity : AppCompatActivity() {
 
+    override fun attachBaseContext(newBase: Context) {
+        val factor = UserPrefs(newBase).fontFactor
+        if (factor == 1.0f) {
+            super.attachBaseContext(newBase)
+            return
+        }
+        val config = Configuration(newBase.resources.configuration)
+        config.fontScale = config.fontScale * factor
+        super.attachBaseContext(newBase.createConfigurationContext(config))
+    }
+
+    /**
+     * Mantiene el tamaño de letra elegido y, a la vez, respeta el modo claro/oscuro
+     * que AppCompat aplica a la configuración (sin esto el tema oscuro pisaría la escala).
+     */
+    override fun applyOverrideConfiguration(overrideConfiguration: Configuration?) {
+        if (overrideConfiguration != null) {
+            val uiMode = overrideConfiguration.uiMode
+            overrideConfiguration.setTo(baseContext.resources.configuration)
+            overrideConfiguration.uiMode = uiMode
+        }
+        super.applyOverrideConfiguration(overrideConfiguration)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Arriba siempre hay azul de marca (iconos claros); abajo, iconos oscuros en claro y claros en oscuro
+        val dark = UserPrefs(this).darkMode
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+            navigationBarStyle = if (dark) SystemBarStyle.dark(Color.TRANSPARENT)
+            else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
         )
         super.onCreate(savedInstanceState)
     }
