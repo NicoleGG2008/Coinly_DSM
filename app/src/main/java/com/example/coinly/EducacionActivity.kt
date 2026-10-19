@@ -1,14 +1,26 @@
 package com.example.coinly
 
-import android.content.Intent
 import android.os.Bundle
-import com.example.coinly.ui.ScreenFrame
-import com.example.coinly.ui.StubScreen
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Toast
 
-/** PLACEHOLDER: se reemplaza al agregar la pantalla real. */
 class EducacionActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(ScreenFrame.wrap(this, StubScreen.build(this, "Educación", withHomeButton = true)))
+        setScreen(R.layout.activity_educacion)
+
+        val listView = findViewById<ListView>(R.id.listViewNews)
+
+        val articulos = arrayOf(
+            "Cómo ahorrar siendo estudiante universitario",
+            "Guía básica de inversiones para jóvenes",
+            "Errores comunes al crear tu primer presupuesto"
+        )
+
+        listView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, articulos)
+        listView.setOnItemClickListener { _, _, position, _ ->
+            Toast.makeText(this, "Abriendo: ${articulos[position]}", Toast.LENGTH_SHORT).show()
+        }
     }
 }
