@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/bg_card_ripple"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvBudgetCategory"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.Coinly.BodyStrong"
+            tools:text="Alimentación" />
+
+        <TextView
+            android:id="@+id/tvBudgetStatusBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="4dp"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="En orden" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarBudget"
+        style="@style/Widget.Coinly.Progress"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_marginBottom="8dp"
+        android:max="100"
+        tools:progress="60" />
+
+    <TextView
+        android:id="@+id/tvBudgetSummary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.Coinly.Caption"
+        tools:text="$145.00 de $200.00 · 72%" />
+</LinearLayout>
