@@ -32,7 +32,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/coinly_icon"
-            android:contentDescription="Icono de Coinly AI"
+            android:contentDescription="@string/ai_chat_icon_desc"
             android:background="@drawable/bg_badge_info"
             android:padding="6dp" />
 
@@ -46,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Coinly AI"
+                android:text="@string/ai_title"
                 android:textAppearance="@style/TextAppearance.Coinly.Heading"
                 android:textSize="18sp" />
 
@@ -54,7 +54,7 @@
                 android:id="@+id/tvAiStatusBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Asistente Financiero con Gemini"
+                android:text="@string/ai_subtitle_gemini"
                 android:textAppearance="@style/TextAppearance.Coinly.Caption"
                 android:textColor="@color/coinly_accent"
                 android:layout_marginTop="2dp" />
@@ -70,7 +70,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:contentDescription="Cerrar chat de Coinly AI" />
+            android:contentDescription="@string/ai_chat_close_desc" />
     </LinearLayout>
 
     <View
@@ -121,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Coinly AI está escribiendo..."
+            android:text="@string/ai_typing_text"
             android:textAppearance="@style/TextAppearance.Coinly.Caption"
             android:textColor="@color/coinly_accent"
             android:textStyle="italic" />
@@ -165,7 +165,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Pregunta algo sobre tu dinero..."
+            android:hint="@string/ai_input_hint"
             app:errorEnabled="false">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -176,7 +176,7 @@
                 android:inputType="textMultiLine|textCapSentences"
                 android:maxLines="3"
                 android:imeOptions="actionSend"
-                android:contentDescription="Escribe tu consulta financiera para Coinly AI" />
+                android:contentDescription="@string/ai_input_desc" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -187,7 +187,7 @@
             android:src="@drawable/ic_send"
             android:background="@drawable/bg_icon_btn_teal"
             app:tint="@color/coinly_on_dark"
-            android:contentDescription="Enviar mensaje a Coinly AI"
+            android:contentDescription="@string/ai_send_desc"
             android:clickable="true"
             android:focusable="true" />
     </LinearLayout>

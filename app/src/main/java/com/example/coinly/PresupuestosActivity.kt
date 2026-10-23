@@ -49,7 +49,7 @@ class PresupuestosActivity : BaseActivity() {
         } else {
             active.forEach { b ->
                 val message = if (b.status == BudgetStatus.DANGER)
-                    "Has excedido tu presupuesto de ${b.category}: gastaste ${Ui.money(b.spent)} de ${Ui.money(b.limit)}."
+                    "Has excedido tu presupuesto de ${b.category}: gastaste ${Ui.money(this, b.spent)} de ${Ui.money(this, b.limit)}."
                 else
                     "Presupuesto de ${b.category} cercano al límite."
                 Ui.banner(alerts, Ui.tone(b.status), message) {
@@ -85,10 +85,10 @@ class PresupuestosActivity : BaseActivity() {
         Ui.bindStatusBadge(view.findViewById(R.id.tvBdBadge), b)
         view.findViewById<TextView>(R.id.tvBdPercent).text = "${b.percent}% usado"
         Ui.styleBudgetProgress(view.findViewById(R.id.progressBd), b)
-        view.findViewById<TextView>(R.id.tvBdLimit).text = Ui.money(b.limit)
-        view.findViewById<TextView>(R.id.tvBdSpent).text = Ui.money(b.spent)
+        view.findViewById<TextView>(R.id.tvBdLimit).text = Ui.money(this, b.limit)
+        view.findViewById<TextView>(R.id.tvBdSpent).text = Ui.money(this, b.spent)
         view.findViewById<TextView>(R.id.tvBdAvailable).apply {
-            text = (if (b.available < 0) "−" else "") + Ui.money(kotlin.math.abs(b.available))
+            text = (if (b.available < 0) "−" else "") + Ui.money(this@PresupuestosActivity, kotlin.math.abs(b.available))
             setTextColor(getColor(if (b.available >= 0) R.color.coinly_green_text else R.color.coinly_danger_text))
         }
 

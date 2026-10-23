@@ -63,6 +63,7 @@ class CoinlyAiAssistant(private val context: Context) {
         val name = userPrefs.name.ifBlank { "Usuario" }
         val career = userPrefs.career.ifBlank { "Estudiante" }
         val university = userPrefs.university.ifBlank { "Universidad" }
+        val currency = userPrefs.currency
 
         val movements = movementRepository.getMovements()
         val budgets = budgetRepository.getBudgets()
@@ -81,14 +82,15 @@ class CoinlyAiAssistant(private val context: Context) {
 
         sb.append("DATOS FINANCIEROS REALES DEL USUARIO DENTRO DE COINLY:\n")
         sb.append("• Nombre: $name ($career en $university)\n")
-        sb.append("• Balance Neto Actual: ${Ui.money(balance)}\n")
-        sb.append("• Ingresos Totales: +${Ui.money(income)}\n")
-        sb.append("• Gastos Totales: −${Ui.money(expense)}\n\n")
+        sb.append("• Moneda Preferida: $currency\n")
+        sb.append("• Balance Neto Actual: ${Ui.money(context, balance)}\n")
+        sb.append("• Ingresos Totales: +${Ui.money(context, income)}\n")
+        sb.append("• Gastos Totales: −${Ui.money(context, expense)}\n\n")
 
         if (expenseByCat.isNotEmpty()) {
             sb.append("• Desglose de Gastos por Categoría:\n")
             expenseByCat.forEach { (cat, amt) ->
-                sb.append("  - $cat: ${Ui.money(amt)}\n")
+                sb.append("  - $cat: ${Ui.money(context, amt)}\n")
             }
             sb.append("\n")
         } else {
@@ -99,17 +101,17 @@ class CoinlyAiAssistant(private val context: Context) {
             sb.append("• Presupuestos Configurados:\n")
             budgets.forEach { b ->
                 val statusText = when (b.status) {
-                    com.example.coinly.model.BudgetStatus.DANGER -> "EXCEDIDO (${Ui.money(b.spent - b.limit)} sobre el límite)"
+                    com.example.coinly.model.BudgetStatus.DANGER -> "EXCEDIDO (${Ui.money(context, b.spent - b.limit)} sobre el límite)"
                     com.example.coinly.model.BudgetStatus.WARNING -> "CERCA DEL LÍMITE (${b.percent}% usado)"
                     com.example.coinly.model.BudgetStatus.SUCCESS -> "EN RANGO (${b.percent}% usado)"
                 }
-                sb.append("  - ${b.category}: Límite ${Ui.money(b.limit)} | Gastado ${Ui.money(b.spent)} | Estado: $statusText\n")
+                sb.append("  - ${b.category}: Límite ${Ui.money(context, b.limit)} | Gastado ${Ui.money(context, b.spent)} | Estado: $statusText\n")
             }
         } else {
             sb.append("• No tiene presupuestos creados aún.\n")
         }
 
-        sb.append("\nInstrucciones adicionales: Da consejos personalizados usando exactamente los valores numéricos anteriores cuando corresponda. Si te preguntan si pueden gastar x cantidad en x categoría, evalúa con sus presupuestos y saldo disponible.")
+        sb.append("\nInstrucciones adicionales: Da consejos personalizados usando exactamente los valores numéricos y la moneda ($currency) anteriores cuando corresponda. Si te preguntan si pueden gastar x cantidad en x categoría, evalúa con sus presupuestos y saldo disponible.")
         return sb.toString()
     }
 }

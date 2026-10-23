@@ -12,11 +12,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.coinly.data.UserPrefs
+import com.example.coinly.ui.CoinlyAiChatSheet
 import com.example.coinly.ui.ScreenFrame
 
 /**
  * Base común: dibujo de borde a borde con iconos claros sobre el azul de la marca
  * y escala de texto elegida por la persona en Perfil › Accesibilidad.
+ * Conserva el estado de Coinly AI Chat al rotar la pantalla.
  */
 open class BaseActivity : AppCompatActivity() {
 
@@ -55,6 +57,18 @@ open class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(KEY_CHAT_WAS_OPEN, CoinlyAiChatSheet.isShowing)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        if (savedInstanceState.getBoolean(KEY_CHAT_WAS_OPEN, false)) {
+            CoinlyAiChatSheet.show(this)
+        }
+    }
+
     /** Infla [layout] dentro del marco que respeta las barras del sistema. */
     protected fun setScreen(@LayoutRes layout: Int) {
         setContentView(ScreenFrame.wrap(this, layoutInflater.inflate(layout, null)))
@@ -67,5 +81,9 @@ open class BaseActivity : AppCompatActivity() {
             v.setPadding(bars.left, bars.top, bars.right, bars.bottom)
             WindowInsetsCompat.CONSUMED
         }
+    }
+
+    companion object {
+        private const val KEY_CHAT_WAS_OPEN = "coinly_chat_was_open"
     }
 }
