@@ -7,13 +7,16 @@ import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.widget.TextViewCompat
+import com.example.coinly.ui.CoinlyAiChatSheet
 import com.example.coinly.ui.ScreenFrame
+import com.google.android.material.card.MaterialCardView
 
 object BottomNav {
 
@@ -93,7 +96,56 @@ object BottomNav {
             }
             bar.addView(cell, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
         }
-        return ScreenFrame.wrap(activity, content, bar)
+
+        // Contenedor principal con el botón flotante Coinly AI
+        val contentContainer = FrameLayout(activity).apply {
+            addView(
+                content,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
+            )
+
+            // Botón flotante FAB para Coinly AI con Gemini
+            val fabSize = dp(activity, 58)
+            val fab = MaterialCardView(activity).apply {
+                radius = dp(activity, 29).toFloat()
+                cardElevation = dp(activity, 8).toFloat()
+                setCardBackgroundColor(ContextCompat.getColor(activity, R.color.coinly_brand_navy))
+                strokeColor = ContextCompat.getColor(activity, R.color.coinly_accent)
+                strokeWidth = dp(activity, 2)
+                isClickable = true
+                isFocusable = true
+                contentDescription = "Abrir Coinly AI Assistant"
+
+                val logoIcon = ImageView(activity).apply {
+                    setImageResource(R.drawable.coinly_icon)
+                    scaleType = ImageView.ScaleType.FIT_CENTER
+                    setPadding(dp(activity, 10), dp(activity, 10), dp(activity, 10), dp(activity, 10))
+                }
+                addView(
+                    logoIcon,
+                    FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT
+                    )
+                )
+
+                setOnClickListener {
+                    CoinlyAiChatSheet.show(activity)
+                }
+            }
+
+            val fabParams = FrameLayout.LayoutParams(fabSize, fabSize).apply {
+                gravity = Gravity.BOTTOM or Gravity.END
+                marginEnd = dp(activity, 16)
+                bottomMargin = dp(activity, 16)
+            }
+            addView(fab, fabParams)
+        }
+
+        return ScreenFrame.wrap(activity, contentContainer, bar)
     }
 
     private fun dp(activity: Activity, value: Int) = (value * activity.resources.displayMetrics.density).toInt()

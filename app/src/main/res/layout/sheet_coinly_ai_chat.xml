@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/coinly_card">
+
+    <!-- Indicador de arrastre de la hoja -->
+    <View
+        android:layout_width="36dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/bg_sheet_handle"
+        android:importantForAccessibility="no" />
+
+    <!-- Encabezado del Chat -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/ivAiAvatarHeader"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/coinly_icon"
+            android:contentDescription="Icono de Coinly AI"
+            android:background="@drawable/bg_badge_info"
+            android:padding="6dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Coinly AI"
+                android:textAppearance="@style/TextAppearance.Coinly.Heading"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvAiStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Asistente Financiero con Gemini"
+                android:textAppearance="@style/TextAppearance.Coinly.Caption"
+                android:textColor="@color/coinly_accent"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnCloseChat"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/coinly_text_secondary"
+            android:padding="10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="Cerrar chat de Coinly AI" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/coinly_divider"
+        android:importantForAccessibility="no" />
+
+    <!-- Área del Historial de Conversación (Scrollable) -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/layoutChatMessages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Indicador de "Escribiendo..." -->
+    <LinearLayout
+        android:id="@+id/layoutTypingIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/coinly_accent" />
+
+        <TextView
+            android:id="@+id/tvTypingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="Coinly AI está escribiendo..."
+            android:textAppearance="@style/TextAppearance.Coinly.Caption"
+            android:textColor="@color/coinly_accent"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+    <!-- Sugerencias Rápidas -->
+    <HorizontalScrollView
+        android:id="@+id/scrollSuggestions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/layoutSuggestionsGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/coinly_divider"
+        android:importantForAccessibility="no" />
+
+    <!-- Campo de Entrada y Botón de Envío -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilChatMessage"
+            style="@style/Widget.Coinly.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Pregunta algo sobre tu dinero..."
+            app:errorEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etChatMessage"
+                style="@style/Widget.Coinly.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLines="3"
+                android:imeOptions="actionSend"
+                android:contentDescription="Escribe tu consulta financiera para Coinly AI" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/btnSendChat"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_send"
+            android:background="@drawable/bg_icon_btn_teal"
+            app:tint="@color/coinly_on_dark"
+            android:contentDescription="Enviar mensaje a Coinly AI"
+            android:clickable="true"
+            android:focusable="true" />
+    </LinearLayout>
+
+</LinearLayout>
