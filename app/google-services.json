@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1089180137775",
+    "project_id": "coinly-44f3b",
+    "storage_bucket": "coinly-44f3b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089180137775:android:5f80ff392642b53e5a49da",
+        "android_client_info": {
+          "package_name": "com.example.coinly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089180137775-pnmfb7uv781csb1lef1j4763f31km4ng.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDixmxJ84cngo50wa3DddPLSkV-VqljJu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089180137775-pnmfb7uv781csb1lef1j4763f31km4ng.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

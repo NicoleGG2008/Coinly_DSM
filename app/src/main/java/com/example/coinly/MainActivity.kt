@@ -53,9 +53,9 @@ class MainActivity : BaseActivity() {
         val income = movements.filter { it.isIncome }.sumOf { it.amount }
         val expense = movements.filter { !it.isIncome }.sumOf { it.amount }
 
-        findViewById<TextView>(R.id.tvBalance).text = Ui.money(this, income - expense)
-        findViewById<TextView>(R.id.tvIncomeTotal).text = "+" + Ui.money(this, income)
-        findViewById<TextView>(R.id.tvExpenseTotal).text = "−" + Ui.money(this, expense)
+        findViewById<TextView>(R.id.tvBalance).text = Ui.money(income - expense)
+        findViewById<TextView>(R.id.tvIncomeTotal).text = "+" + Ui.money(income)
+        findViewById<TextView>(R.id.tvExpenseTotal).text = "−" + Ui.money(expense)
         findViewById<FlowChartView>(R.id.flowChart).setData(movements)
 
         renderAlerts()
@@ -84,9 +84,9 @@ class MainActivity : BaseActivity() {
         }
         active.forEach { b ->
                 val message = if (b.status == BudgetStatus.DANGER)
-                    "Has excedido tu presupuesto de ${b.category}: gastaste ${Ui.money(this, b.spent)} de ${Ui.money(this, b.limit)}."
+                    "Has excedido tu presupuesto de ${b.category}: gastaste ${Ui.money(b.spent)} de ${Ui.money(b.limit)}."
                 else
-                    "Presupuesto de ${b.category} cercano al límite: ${Ui.money(this, b.spent)} de ${Ui.money(this, b.limit)}."
+                    "Presupuesto de ${b.category} cercano al límite: ${Ui.money(b.spent)} de ${Ui.money(b.limit)}."
                 Ui.banner(container, Ui.tone(b.status), message) {
                     budgetRepository.dismissAlert(b.id)
                     renderAlerts()
@@ -117,7 +117,7 @@ class MainActivity : BaseActivity() {
             Ui.bindStatusBadge(row.findViewById(R.id.tvBudgetStatusBadge), b)
             Ui.styleBudgetProgress(row.findViewById(R.id.progressBarBudget), b)
             row.findViewById<TextView>(R.id.tvBudgetSummary).text =
-                "${Ui.money(this, b.spent)} de ${Ui.money(this, b.limit)} · ${b.percent}%"
+                "${Ui.money(b.spent)} de ${Ui.money(b.limit)} · ${b.percent}%"
             row.setOnClickListener { go(PresupuestosActivity::class.java) }
             container.addView(row)
         }

@@ -5,6 +5,7 @@ import com.example.coinly.data.BudgetRepository
 import com.example.coinly.data.MovementRepository.MovementRepository
 import com.example.coinly.model.Budget
 import com.example.coinly.model.BudgetStatus
+import com.example.coinly.model.Movement
 import com.example.coinly.ui.Ui
 
 class RuleBasedAssistant(private val context: Context) {
@@ -71,21 +72,21 @@ class RuleBasedAssistant(private val context: Context) {
 
         if (balance > 0) {
             val savingsRate = if (income > 0) (balance / income * 100).toInt() else 0
-            sb.append("¡Vas por excelente camino! Tu balance actual es positivo: **+${Ui.money(context, balance)}** ")
+            sb.append("¡Vas por excelente camino! Tu balance actual es positivo: **+${Ui.money(balance)}** ")
             sb.append("(tienes un margen del **$savingsRate%** de tus ingresos).\n\n")
             if (income > 0) {
-                sb.append("• **Recomendación 50/30/20:** Para tus ingresos de ${Ui.money(context, income)}, se recomienda ahorrar un 20% (**${Ui.money(context, recommendedSavings)}**).\n")
+                sb.append("• **Recomendación 50/30/20:** Para tus ingresos de ${Ui.money(income)}, se recomienda ahorrar un 20% (**${Ui.money(recommendedSavings)}**).\n")
             }
-            sb.append("• Si separas **${Ui.money(context, balance * 0.5)}** hoy mismo a tu fondo de ahorro, mantendrás tus finanzas muy estables.")
+            sb.append("• Si separas **${Ui.money(balance * 0.5)}** hoy mismo a tu fondo de ahorro, mantendrás tus finanzas muy estables.")
         } else if (balance == 0.0 && income > 0) {
-            sb.append("Tus gastos igualan exactamente tus ingresos (${Ui.money(context, income)}). ")
+            sb.append("Tus gastos igualan exactamente tus ingresos (${Ui.money(income)}). ")
             sb.append("Para lograr ahorrar, necesitas reducir gastos no esenciales o generar ingresos adicionales.")
         } else {
-            sb.append("⚠️ **Atención:** Actualmente tus gastos (${Ui.money(context, expense)}) superan tus ingresos (${Ui.money(context, income)}), ")
-            sb.append("generando un déficit de **${Ui.money(context, -balance)}**.\n\n")
+            sb.append("⚠️ **Atención:** Actualmente tus gastos (${Ui.money(expense)}) superan tus ingresos (${Ui.money(income)}), ")
+            sb.append("generando un déficit de **${Ui.money(-balance)}**.\n\n")
             if (topCategory != null) {
-                sb.append("• Tu principal área de gasto es **${topCategory.first}** con **${Ui.money(context, topCategory.second)}**. ")
-                sb.append("Reducir un 15% en este rubro liberaría **${Ui.money(context, topCategory.second * 0.15)}** para estabilizar tu balance.")
+                sb.append("• Tu principal área de gasto es **${topCategory.first}** con **${Ui.money(topCategory.second)}**. ")
+                sb.append("Reducir un 15% en este rubro liberaría **${Ui.money(topCategory.second * 0.15)}** para estabilizar tu balance.")
             }
         }
         return sb.toString()
@@ -107,7 +108,7 @@ class RuleBasedAssistant(private val context: Context) {
             sb.append("🚨 **Presupuestos excedidos (${exceeded.size}):**\n")
             exceeded.forEach { b ->
                 val over = b.spent - b.limit
-                sb.append("• **${b.category}**: gastaste ${Ui.money(context, b.spent)} de un límite de ${Ui.money(context, b.limit)} (exceso de ${Ui.money(context, over)}).\n")
+                sb.append("• **${b.category}**: gastaste ${Ui.money(b.spent)} de un límite de ${Ui.money(b.limit)} (exceso de ${Ui.money(over)}).\n")
             }
             sb.append("\n")
         }
@@ -115,7 +116,7 @@ class RuleBasedAssistant(private val context: Context) {
         if (warning.isNotEmpty()) {
             sb.append("⚠️ **Cercanos al límite (${warning.size}):**\n")
             warning.forEach { b ->
-                sb.append("• **${b.category}**: ${Ui.money(context, b.spent)} de ${Ui.money(context, b.limit)} (${b.percent}% usado, te quedan ${Ui.money(context, b.available)}).\n")
+                sb.append("• **${b.category}**: ${Ui.money(b.spent)} de ${Ui.money(b.limit)} (${b.percent}% usado, te quedan ${Ui.money(b.available)}).\n")
             }
             sb.append("\n")
         }
@@ -123,7 +124,7 @@ class RuleBasedAssistant(private val context: Context) {
         if (success.isNotEmpty()) {
             sb.append("✅ **Presupuestos bajo control (${success.size}):**\n")
             success.forEach { b ->
-                sb.append("• **${b.category}**: ${Ui.money(context, b.spent)} de ${Ui.money(context, b.limit)} (${b.percent}% usado).\n")
+                sb.append("• **${b.category}**: ${Ui.money(b.spent)} de ${Ui.money(b.limit)} (${b.percent}% usado).\n")
             }
             sb.append("\n")
         }
@@ -149,36 +150,36 @@ class RuleBasedAssistant(private val context: Context) {
         val matchAmount = Regex("(\\d+([.,]\\d+)?)").find(query)?.value?.replace(",", ".")?.toDoubleOrNull()
         if (matchAmount != null && matchAmount > 0) {
             val matchingBudget = budgets.firstOrNull { query.contains(it.category.lowercase()) }
-            sb.append("💸 **Evaluación de Gasto (${Ui.money(context, matchAmount)}):**\n\n")
+            sb.append("💸 **Evaluación de Gasto (${Ui.money(matchAmount)}):**\n\n")
 
             if (matchingBudget != null) {
                 val available = matchingBudget.available
                 if (available >= matchAmount) {
-                    sb.append("✅ **¡Sí es viable!** En la categoría **${matchingBudget.category}** tienes un disponible de **${Ui.money(context, available)}**. ")
-                    sb.append("Después de este gasto te quedarán **${Ui.money(context, available - matchAmount)}**.")
+                    sb.append("✅ **¡Sí es viable!** En la categoría **${matchingBudget.category}** tienes un disponible de **${Ui.money(available)}**. ")
+                    sb.append("Después de este gasto te quedarán **${Ui.money(available - matchAmount)}**.")
                 } else if (available > 0) {
-                    sb.append("⚠️ **Atención:** En **${matchingBudget.category}** solo te quedan **${Ui.money(context, available)}**. ")
-                    sb.append("Gastar ${Ui.money(context, matchAmount)} excedería tu presupuesto por **${Ui.money(context, matchAmount - available)}**.")
+                    sb.append("⚠️ **Atención:** En **${matchingBudget.category}** solo te quedan **${Ui.money(available)}**. ")
+                    sb.append("Gastar ${Ui.money(matchAmount)} excedería tu presupuesto por **${Ui.money(matchAmount - available)}**.")
                 } else {
                     sb.append("🚨 **Gasto no recomendado:** Ya has superado tu presupuesto de **${matchingBudget.category}** ")
-                    sb.append("(excedido en ${Ui.money(context, -available)}). Realizar este gasto aumentará tu déficit.")
+                    sb.append("(excedido en ${Ui.money(-available)}). Realizar este gasto aumentará tu déficit.")
                 }
             } else {
-                sb.append("Has registrado un total de **${Ui.money(context, totalExpense)}** en gastos este mes. ")
-                sb.append("Evalúa si este gasto de **${Ui.money(context, matchAmount)}** encaja en tus prioridades antes de realizarlo.")
+                sb.append("Has registrado un total de **${Ui.money(totalExpense)}** en gastos este mes. ")
+                sb.append("Evalúa si este gasto de **${Ui.money(matchAmount)}** encaja en tus prioridades antes de realizarlo.")
             }
             return sb.toString()
         }
 
         // Resumen general de gastos por categoría
         sb.append("📊 **Desglose de Gastos Acumulados:**\n\n")
-        sb.append("Has gastado un total de **${Ui.money(context, totalExpense)}**.\n\n")
+        sb.append("Has gastado un total de **${Ui.money(totalExpense)}**.\n\n")
 
         if (expensesByCategory.isNotEmpty()) {
             sb.append("**Tus principales categorías de gasto son:**\n")
             expensesByCategory.take(4).forEach { (cat, amount) ->
                 val pct = if (totalExpense > 0) (amount / totalExpense * 100).toInt() else 0
-                sb.append("• **$cat**: ${Ui.money(context, amount)} ($pct% del total)\n")
+                sb.append("• **$cat**: ${Ui.money(amount)} ($pct% del total)\n")
             }
             sb.append("\n")
             val top = expensesByCategory.first()
@@ -202,12 +203,12 @@ class RuleBasedAssistant(private val context: Context) {
         val warningCount = budgets.count { it.status == BudgetStatus.WARNING }
 
         val sb = StringBuilder("📊 **Resumen Financiero Coinly:**\n\n")
-        sb.append("• **Balance neto:** ${if (balance >= 0) "+" else ""}${Ui.money(context, balance)}\n")
-        sb.append("• **Ingresos acumulados:** +${Ui.money(context, income)}\n")
-        sb.append("• **Gastos acumulados:** −${Ui.money(context, expense)}\n")
+        sb.append("• **Balance neto:** ${if (balance >= 0) "+" else ""}${Ui.money(balance)}\n")
+        sb.append("• **Ingresos acumulados:** +${Ui.money(income)}\n")
+        sb.append("• **Gastos acumulados:** −${Ui.money(expense)}\n")
 
         if (topCategory != null) {
-            sb.append("• **Mayor gasto en:** ${topCategory.first} (${Ui.money(context, topCategory.second)})\n")
+            sb.append("• **Mayor gasto en:** ${topCategory.first} (${Ui.money(topCategory.second)})\n")
         }
 
         if (budgets.isNotEmpty()) {

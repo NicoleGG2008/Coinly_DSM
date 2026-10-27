@@ -1,10 +1,15 @@
 package com.example.coinly
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.coinly.data.NewsRepository
+import com.example.coinly.ui.Tone
+import com.example.coinly.ui.Ui
 
 class NoticiaDetalleActivity : BaseActivity() {
 
@@ -25,8 +30,15 @@ class NoticiaDetalleActivity : BaseActivity() {
         findViewById<TextView>(R.id.tvDetailDate).text = news.date
         findViewById<TextView>(R.id.tvDetailBody).text = news.content
 
-        // El artículo se lee completo dentro de la app (se oculta búsqueda externa)
-        findViewById<View>(R.id.btnOpenArticle).visibility = View.GONE
+        // No hay URL propia por artículo: se abre una búsqueda con el título.
+        findViewById<View>(R.id.btnOpenArticle).setOnClickListener {
+            val url = "https://www.google.com/search?q=" + Uri.encode(news.title)
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+            } catch (e: ActivityNotFoundException) {
+                Ui.toast(findViewById(android.R.id.content), Tone.DANGER, "No se encontró un navegador para abrir el artículo.")
+            }
+        }
     }
 
     companion object {

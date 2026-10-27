@@ -16,7 +16,6 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import com.example.coinly.R
-import com.example.coinly.data.UserPrefs
 import com.example.coinly.model.Budget
 import com.example.coinly.model.BudgetStatus
 import com.example.coinly.model.Movement
@@ -51,34 +50,9 @@ object Ui {
     // ---------- Formatos ----------
     fun dp(context: Context, value: Int): Int = (value * context.resources.displayMetrics.density).toInt()
 
-    fun currencySymbol(code: String): String = when (code.uppercase()) {
-        "USD" -> "$"
-        "EUR" -> "€"
-        "MXN" -> "MXN$"
-        "COP" -> "COP$"
-        "ARS" -> "ARS$"
-        "PEN" -> "S/"
-        "CLP" -> "CLP$"
-        "BRL" -> "R$"
-        else -> if (code.isNotBlank()) "$code " else "$"
-    }
+    fun money(value: Double): String = "$" + String.format(Locale.US, "%,.2f", value)
 
-    fun money(value: Double, currencyCode: String = "USD"): String {
-        val symbol = currencySymbol(currencyCode)
-        val formatted = String.format(Locale.US, "%,.2f", value)
-        return if (symbol.endsWith("$") || symbol == "S/") "$symbol$formatted" else "$symbol $formatted"
-    }
-
-    fun money(context: Context, value: Double): String {
-        val code = UserPrefs(context).currency
-        return money(value, code)
-    }
-
-    fun signedMoney(m: Movement, currencyCode: String = "USD"): String =
-        (if (m.isIncome) "+" else "−") + money(m.amount, currencyCode)
-
-    fun signedMoney(context: Context, m: Movement): String =
-        (if (m.isIncome) "+" else "−") + money(context, m.amount)
+    fun signedMoney(m: Movement): String = (if (m.isIncome) "+" else "−") + money(m.amount)
 
     fun monthName(index: Int): String = MONTHS[index]
     fun monthShort(index: Int): String = MONTHS_SHORT[index]
@@ -149,12 +123,12 @@ object Ui {
         row.findViewById<TextView>(R.id.tvMovementDescription).text = m.description
         row.findViewById<TextView>(R.id.tvMovementSubDetails).text = "${m.category} · ${shortDate(m.date)}"
         row.findViewById<TextView>(R.id.tvMovementAmount).apply {
-            text = signedMoney(ctx, m)
+            text = signedMoney(m)
             setTextColor(color(ctx, amountColor))
         }
         val typeLabel = if (m.isIncome) "Ingreso" else "Gasto"
         row.findViewById<TextView>(R.id.tvMovementTypeLabel).text = typeLabel
-        row.contentDescription = "$typeLabel: ${m.description}, ${money(ctx, m.amount)}, ${m.category}, ${longDate(m.date)}"
+        row.contentDescription = "$typeLabel: ${m.description}, ${money(m.amount)}, ${m.category}, ${longDate(m.date)}"
         if (onClick != null) row.setOnClickListener { onClick(m) } else row.isClickable = false
     }
 
@@ -188,14 +162,14 @@ object Ui {
         row.findViewById<TextView>(R.id.tvBudgetPeriod).text = b.period
         bindStatusBadge(row.findViewById(R.id.tvBudgetStatusBadge), b)
         styleBudgetProgress(row.findViewById(R.id.progressBarBudget), b)
-        row.findViewById<TextView>(R.id.tvBudgetLimit).text = money(ctx, b.limit)
-        row.findViewById<TextView>(R.id.tvBudgetSpent).text = money(ctx, b.spent)
+        row.findViewById<TextView>(R.id.tvBudgetLimit).text = money(b.limit)
+        row.findViewById<TextView>(R.id.tvBudgetSpent).text = money(b.spent)
         row.findViewById<TextView>(R.id.tvBudgetAvailable).apply {
-            text = (if (b.available < 0) "−" else "") + money(ctx, kotlin.math.abs(b.available))
+            text = (if (b.available < 0) "−" else "") + money(kotlin.math.abs(b.available))
             setTextColor(color(ctx, if (b.available >= 0) R.color.coinly_green_text else R.color.coinly_danger_text))
         }
         val state = when (b.status) { BudgetStatus.SUCCESS -> "en orden"; BudgetStatus.WARNING -> "al límite"; BudgetStatus.DANGER -> "excedido" }
-        row.contentDescription = "Presupuesto de ${b.category}, $state. Límite ${money(ctx, b.limit)}, gastado ${money(ctx, b.spent)}, ${b.percent} por ciento usado."
+        row.contentDescription = "Presupuesto de ${b.category}, $state. Límite ${money(b.limit)}, gastado ${money(b.spent)}, ${b.percent} por ciento usado."
         if (onClick != null) row.setOnClickListener { onClick(b) }
     }
 

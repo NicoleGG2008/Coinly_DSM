@@ -1,7 +1,6 @@
 package com.example.coinly.ui
 
 import android.content.Context
-import android.content.res.Configuration
 import android.text.Html
 import android.text.Spanned
 import android.view.Gravity
@@ -27,16 +26,8 @@ import com.google.android.material.chip.Chip
 object CoinlyAiChatSheet {
 
     private val sessionHistory = mutableListOf<ChatMessage>()
-    var isShowing: Boolean = false
-        private set
-
-    private var activeDialog: BottomSheetDialog? = null
 
     fun show(context: Context) {
-        if (isShowing && activeDialog?.isShowing == true) {
-            activeDialog?.dismiss()
-        }
-
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.sheet_coinly_ai_chat, null)
 
@@ -45,25 +36,14 @@ object CoinlyAiChatSheet {
             window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         }
 
-        activeDialog = dialog
-        isShowing = true
-
-        dialog.setOnDismissListener {
-            isShowing = false
-            activeDialog = null
-        }
-
-        // Expandir la hoja según orientación (portrait/landscape/tablet)
+        // Expandir la hoja para aprovechar el espacio en pantalla
         dialog.setOnShowListener {
             val bottomSheet = dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
             bottomSheet?.let {
                 val behavior = BottomSheetBehavior.from(it)
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
                 behavior.skipCollapsed = true
-
-                val isLandscape = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-                val heightFactor = if (isLandscape) 0.95 else 0.88
-                it.layoutParams.height = (context.resources.displayMetrics.heightPixels * heightFactor).toInt()
+                it.layoutParams.height = (context.resources.displayMetrics.heightPixels * 0.88).toInt()
                 it.requestLayout()
             }
         }
