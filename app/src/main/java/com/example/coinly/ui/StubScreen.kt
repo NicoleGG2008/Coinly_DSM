@@ -1,4 +1,5 @@
 package com.example.coinly.ui
+import com.example.coinly.S
 
 import android.app.Activity
 import android.content.Intent
@@ -27,14 +28,14 @@ object StubScreen {
             setTextAppearance(R.style.TextAppearance_Coinly_Heading)
         })
         box.addView(TextView(activity).apply {
-            text = "Pantalla provisional.\nSe implementa en un commit posterior."
+            text = S.text(R.string.text_129)
             gravity = Gravity.CENTER
             setPadding(0, dp(activity, 8), 0, dp(activity, 24))
             setTextAppearance(R.style.TextAppearance_Coinly_Muted)
         })
         if (withHomeButton) {
             box.addView(MaterialButton(activity).apply {
-                text = "Ir al inicio"
+                text = S.text(R.string.text_130)
                 setOnClickListener {
                     activity.startActivity(Intent(activity, MainActivity::class.java))
                     activity.finish()

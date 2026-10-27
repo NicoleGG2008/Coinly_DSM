@@ -34,7 +34,7 @@
                 android:layout_gravity="center"
                 android:importantForAccessibility="no"
                 android:src="@drawable/ic_trash"
-                android:tint="@color/coinly_danger_text" />
+                app:tint="@color/coinly_danger_text" />
         </FrameLayout>
 
         <TextView
@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                android:text="Cancelar" />
+                android:text="@string/text_368" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnConfirmOk"
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                android:text="Eliminar" />
+                android:text="@string/text_060" />
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

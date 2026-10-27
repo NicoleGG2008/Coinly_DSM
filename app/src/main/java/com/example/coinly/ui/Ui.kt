@@ -1,4 +1,5 @@
 package com.example.coinly.ui
+import com.example.coinly.S
 
 import android.app.DatePickerDialog
 import android.content.Context
@@ -44,16 +45,27 @@ enum class Tone(
 
 object Ui {
 
-    private val MONTHS = listOf("enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre")
-    private val MONTHS_SHORT = listOf("Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
+    private val MONTHS = listOf(S.text(R.string.text_131), S.text(R.string.text_132), S.text(R.string.text_133), S.text(R.string.text_134), S.text(R.string.text_135), S.text(R.string.text_136), S.text(R.string.text_137), S.text(R.string.text_138), S.text(R.string.text_139), S.text(R.string.text_140), S.text(R.string.text_141), S.text(R.string.text_142))
+    private val MONTHS_SHORT = listOf(S.text(R.string.text_143), S.text(R.string.text_144), S.text(R.string.text_040), S.text(R.string.text_145), S.text(R.string.text_146), S.text(R.string.text_147), S.text(R.string.text_148), S.text(R.string.text_149), S.text(R.string.text_150), S.text(R.string.text_151), S.text(R.string.text_152), S.text(R.string.text_153))
 
     // ---------- Formatos ----------
     fun dp(context: Context, value: Int): Int = (value * context.resources.displayMetrics.density).toInt()
 
-    fun money(value: Double): String = "$" + String.format(Locale.US, "%,.2f", value)
+    fun money(value: Double): String {
+        val currency = com.example.coinly.data.UserPrefs(S.context).currency
+        return java.text.NumberFormat.getCurrencyInstance(Locale.US).apply {
+            this.currency = java.util.Currency.getInstance(currency)
+        }.format(value)
+    }
 
     fun signedMoney(m: Movement): String = (if (m.isIncome) "+" else "−") + money(m.amount)
 
+    fun periodLabel(period: String): String {
+        val pieces = period.split("-")
+        val month = pieces.getOrNull(1)?.toIntOrNull() ?: return period
+        if (month !in 1..12) return period
+        return S.text(R.string.period_label, MONTHS[month-1].replaceFirstChar { it.uppercase() }, pieces[0])
+    }
     fun monthName(index: Int): String = MONTHS[index]
     fun monthShort(index: Int): String = MONTHS_SHORT[index]
 
@@ -66,13 +78,13 @@ object Ui {
     fun shortDate(date: String): String = parts(date)?.let { "${it.third} ${MONTHS_SHORT[it.second]}" } ?: date
 
     /** "2026-08-10" → "10 de agosto de 2026" */
-    fun longDate(date: String): String = parts(date)?.let { "${it.third} de ${MONTHS[it.second]} de ${it.first}" } ?: date
+    fun longDate(date: String): String = parts(date)?.let { S.text(R.string.text_154, it.third, MONTHS[it.second], it.first) } ?: date
 
     fun todayIso(): String = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Date())
 
     fun greeting(): String {
         val h = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
-        return if (h < 12) "Buenos días" else if (h < 18) "Buenas tardes" else "Buenas noches"
+        return if (h < 12) S.text(R.string.text_155) else if (h < 18) S.text(R.string.text_156) else S.text(R.string.text_157)
     }
 
     fun tone(status: BudgetStatus): Tone = when (status) {
@@ -121,12 +133,12 @@ object Ui {
             imageTintList = ColorStateList.valueOf(color(ctx, tint))
         }
         row.findViewById<TextView>(R.id.tvMovementDescription).text = m.description
-        row.findViewById<TextView>(R.id.tvMovementSubDetails).text = "${m.category} · ${shortDate(m.date)}"
+        row.findViewById<TextView>(R.id.tvMovementSubDetails).text = S.text(R.string.movement_details, m.category, shortDate(m.date))
         row.findViewById<TextView>(R.id.tvMovementAmount).apply {
             text = signedMoney(m)
             setTextColor(color(ctx, amountColor))
         }
-        val typeLabel = if (m.isIncome) "Ingreso" else "Gasto"
+        val typeLabel = if (m.isIncome) S.text(R.string.text_070) else S.text(R.string.text_071)
         row.findViewById<TextView>(R.id.tvMovementTypeLabel).text = typeLabel
         row.contentDescription = "$typeLabel: ${m.description}, ${money(m.amount)}, ${m.category}, ${longDate(m.date)}"
         if (onClick != null) row.setOnClickListener { onClick(m) } else row.isClickable = false
@@ -145,8 +157,8 @@ object Ui {
     fun bindStatusBadge(badge: TextView, budget: Budget) {
         val tone = tone(budget.status)
         val (text, icon) = when (budget.status) {
-            BudgetStatus.SUCCESS -> "En orden" to R.drawable.ic_check
-            BudgetStatus.WARNING -> "Al límite" to R.drawable.ic_warning
+            BudgetStatus.SUCCESS -> S.text(R.string.text_158) to R.drawable.ic_check
+            BudgetStatus.WARNING -> S.text(R.string.text_159) to R.drawable.ic_warning
             BudgetStatus.DANGER -> "Excedido" to R.drawable.ic_x_circle
         }
         badge.text = text
@@ -159,7 +171,7 @@ object Ui {
     fun bindBudgetRow(row: View, b: Budget, onClick: ((Budget) -> Unit)? = null) {
         val ctx = row.context
         row.findViewById<TextView>(R.id.tvBudgetCategory).text = b.category
-        row.findViewById<TextView>(R.id.tvBudgetPeriod).text = b.period
+        row.findViewById<TextView>(R.id.tvBudgetPeriod).text = periodLabel(b.period)
         bindStatusBadge(row.findViewById(R.id.tvBudgetStatusBadge), b)
         styleBudgetProgress(row.findViewById(R.id.progressBarBudget), b)
         row.findViewById<TextView>(R.id.tvBudgetLimit).text = money(b.limit)
@@ -168,8 +180,8 @@ object Ui {
             text = (if (b.available < 0) "−" else "") + money(kotlin.math.abs(b.available))
             setTextColor(color(ctx, if (b.available >= 0) R.color.coinly_green_text else R.color.coinly_danger_text))
         }
-        val state = when (b.status) { BudgetStatus.SUCCESS -> "en orden"; BudgetStatus.WARNING -> "al límite"; BudgetStatus.DANGER -> "excedido" }
-        row.contentDescription = "Presupuesto de ${b.category}, $state. Límite ${money(b.limit)}, gastado ${money(b.spent)}, ${b.percent} por ciento usado."
+        val state = when (b.status) { BudgetStatus.SUCCESS -> S.text(R.string.text_160); BudgetStatus.WARNING -> S.text(R.string.text_161); BudgetStatus.DANGER -> "excedido" }
+        row.contentDescription = S.text(R.string.text_162, b.category, state, money(b.limit), money(b.spent), b.percent)
         if (onClick != null) row.setOnClickListener { onClick(b) }
     }
 
@@ -181,6 +193,19 @@ object Ui {
     /** Quita el error de un campo en cuanto la persona vuelve a escribir. */
     fun clearErrorOnType(layout: TextInputLayout, edit: EditText) {
         edit.doAfterTextChanged { if (layout.error != null) layout.error = null }
+    }
+
+    fun choices(field: com.google.android.material.textfield.MaterialAutoCompleteTextView, values: Array<String>) {
+        field.setSimpleItems(values)
+        val show = {
+            com.google.android.material.dialog.MaterialAlertDialogBuilder(field.context)
+                .setItems(values) { _, index ->
+                    field.setText(values[index], false)
+                    ((field.parent as? View)?.parent as? TextInputLayout)?.error = null
+                }.show()
+        }
+        field.setOnClickListener { show() }
+        ((field.parent as? View)?.parent as? TextInputLayout)?.setEndIconOnClickListener { show() }
     }
 
     val CURRENCIES = arrayOf("USD", "EUR", "MXN", "COP", "ARS", "PEN", "CLP", "BRL")

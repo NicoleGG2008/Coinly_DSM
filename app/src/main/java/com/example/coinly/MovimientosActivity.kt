@@ -33,7 +33,7 @@ class MovimientosActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_movimientos, null), "Movimientos"))
+        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_movimientos, null), S.text(R.string.text_014)))
 
         list = findViewById(R.id.layoutMovements)
         search = findViewById(R.id.etSearch)
@@ -43,6 +43,14 @@ class MovimientosActivity : BaseActivity() {
         etFrom = findViewById(R.id.etDateFrom)
         etTo = findViewById(R.id.etDateTo)
 
+        savedInstanceState?.let {
+            typeFilter = it.getString("filterType", "all")
+            categoryFilter = it.getString("filterCategory", ALL)
+            minAmount = it.getDouble("filterMin", 0.0)
+            maxAmount = it.getDouble("filterMax", Double.MAX_VALUE)
+            dateFrom = it.getString("filterFrom", "")
+            dateTo = it.getString("filterTo", "")
+        }
         // Filtro por tipo
         findViewById<ChipGroup>(R.id.chipGroupFilter).setOnCheckedStateChangeListener { _, ids ->
             typeFilter = when (ids.firstOrNull()) {
@@ -59,7 +67,7 @@ class MovimientosActivity : BaseActivity() {
         toggle.setOnClickListener {
             val show = panel.visibility != View.VISIBLE
             panel.visibility = if (show) View.VISIBLE else View.GONE
-            toggle.contentDescription = if (show) "Ocultar filtros avanzados" else "Mostrar filtros avanzados"
+            toggle.contentDescription = if (show) S.text(R.string.text_033) else S.text(R.string.text_034)
         }
         Ui.bindDateField(this, etFrom)
         Ui.bindDateField(this, etTo)
@@ -87,11 +95,23 @@ class MovimientosActivity : BaseActivity() {
         render()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("filterType", typeFilter)
+        outState.putString("filterCategory", categoryFilter)
+        outState.putDouble("filterMin", minAmount)
+        outState.putDouble("filterMax", maxAmount)
+        outState.putString("filterFrom", dateFrom)
+        outState.putString("filterTo", dateTo)
+    }
+
     private fun setupCategories() {
         val categories = listOf(ALL) + repository.getMovements().map { it.category }.distinct().sorted()
-        acCategory.setSimpleItems(categories.toTypedArray())
+        Ui.choices(acCategory, categories.toTypedArray())
         if (acCategory.text.isNullOrBlank() || acCategory.text.toString() !in categories) acCategory.setText(ALL, false)
     }
+
+    override fun onCloudChanged() { render() }
 
     private fun render() {
         list.removeAllViews()
@@ -102,14 +122,14 @@ class MovimientosActivity : BaseActivity() {
                 m.amount in minAmount..maxAmount &&
                 (dateFrom.isEmpty() || m.date >= dateFrom) &&
                 (dateTo.isEmpty() || m.date <= dateTo) &&
-                (query.isEmpty() || m.description.lowercase().contains(query) || m.category.lowercase().contains(query))
+                (query.isEmpty() || m.description.lowercase().contains(query) || m.category.lowercase().contains(query) || (query.removePrefix("#").isNotBlank() && m.tags.any { it.lowercase().contains(query.removePrefix("#")) }))
         }
         findViewById<TextView>(R.id.tvMovementCount).text =
-            if (movements.size == 1) "1 movimiento" else "${movements.size} movimientos"
+            if (movements.size == 1) S.text(R.string.text_035) else S.text(R.string.text_036, movements.size)
 
         if (movements.isEmpty()) {
             list.addView(TextView(this).apply {
-                text = "No hay movimientos con estos filtros."
+                text = S.text(R.string.text_037)
                 gravity = android.view.Gravity.CENTER
                 setPadding(Ui.dp(context, 20), Ui.dp(context, 32), Ui.dp(context, 20), Ui.dp(context, 32))
                 setTextAppearance(R.style.TextAppearance_Coinly_Muted)
@@ -146,6 +166,6 @@ class MovimientosActivity : BaseActivity() {
     }
 
     private companion object {
-        const val ALL = "Todas"
+        val ALL get() = S.text(R.string.filter_all)
     }
 }

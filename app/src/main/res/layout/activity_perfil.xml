@@ -47,7 +47,7 @@
                     android:layout_width="96dp"
                     android:layout_height="96dp"
                     android:layout_gravity="center"
-                    android:contentDescription="Foto de perfil"
+                    android:contentDescription="@string/text_336"
                     android:scaleType="centerCrop"
                     android:visibility="gone"
                     app:shapeAppearanceOverlay="@style/ShapeAppearance.Coinly.Circle"
@@ -62,11 +62,11 @@
                     android:layout_marginEnd="-6dp"
                     android:layout_marginBottom="-6dp"
                     android:background="@drawable/bg_camera_badge"
-                    android:contentDescription="Cambiar foto de perfil"
+                    android:contentDescription="@string/text_337"
                     android:padding="13dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_camera"
-                    android:tint="@color/coinly_on_dark" />
+                    app:tint="@color/coinly_on_dark" />
             </FrameLayout>
 
             <TextView
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Información personal" />
+                android:text="@string/text_338" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -139,7 +139,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nombre completo"
+                    android:text="@string/text_279"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -166,7 +166,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Correo electrónico"
+                    android:text="@string/text_281"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -192,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Información académica" />
+                android:text="@string/text_339" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -205,7 +205,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Universidad"
+                    android:text="@string/text_164"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -232,7 +232,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Carrera"
+                    android:text="@string/text_284"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -258,7 +258,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Preferencias" />
+                android:text="@string/text_340" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Moneda local"
+                    android:text="@string/text_286"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -296,7 +296,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Accesibilidad y tema" />
+                    android:text="@string/text_341" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -313,13 +313,13 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tamaño de letra"
+                            android:text="@string/text_342"
                             android:textAppearance="@style/TextAppearance.Coinly.BodyStrong" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Ajusta la lectura de la aplicación"
+                            android:text="@string/text_343"
                             android:textAppearance="@style/TextAppearance.Coinly.Caption" />
                     </LinearLayout>
 
@@ -336,8 +336,8 @@
                         style="@style/Widget.Coinly.Button.Toggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="Letra pequeña"
-                        android:text="A−"
+                        android:contentDescription="@string/text_344"
+                        android:text="@string/text_345"
                          />
 
                     <com.google.android.material.button.MaterialButton
@@ -345,8 +345,8 @@
                         style="@style/Widget.Coinly.Button.Toggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="Letra normal"
-                        android:text="A"
+                        android:contentDescription="@string/text_346"
+                        android:text="@string/text_347"
                         android:checked="true" />
 
                     <com.google.android.material.button.MaterialButton
@@ -354,8 +354,8 @@
                         style="@style/Widget.Coinly.Button.Toggle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="Letra grande"
-                        android:text="A+"
+                        android:contentDescription="@string/text_348"
+                        android:text="@string/text_349"
                          />
                     </com.google.android.material.button.MaterialButtonToggleGroup>
                 </LinearLayout>
@@ -385,14 +385,14 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tema oscuro"
+                            android:text="@string/text_350"
                             android:textAppearance="@style/TextAppearance.Coinly.BodyStrong" />
 
                         <TextView
                             android:id="@+id/tvThemeStatus"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Claro activado"
+                            android:text="@string/text_054"
                             android:textAppearance="@style/TextAppearance.Coinly.Caption" />
                     </LinearLayout>
 
@@ -402,7 +402,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:contentDescription="Tema oscuro" />
+                        android:contentDescription="@string/text_350" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -412,7 +412,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Editar perfil"
+                android:text="@string/text_277"
                 app:icon="@drawable/ic_edit"
                 app:iconGravity="textStart" />
 
@@ -422,7 +422,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:text="Cambiar contraseña"
+                android:text="@string/text_268"
                 app:icon="@drawable/ic_lock"
                 app:iconGravity="textStart" />
 
@@ -431,7 +431,7 @@
                 style="@style/Widget.Coinly.Button.Danger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cerrar sesión" />
+                android:text="@string/text_351" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

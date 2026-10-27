@@ -1,0 +1,6 @@
+<resources>
+<style name="Coinly.Text.Section" parent="">
+ <item name="android:textAppearance">@style/TextAppearance.Coinly.Section</item>
+ <item name="android:accessibilityHeading">true</item>
+</style>
+</resources>

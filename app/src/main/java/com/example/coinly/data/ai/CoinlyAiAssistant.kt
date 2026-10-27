@@ -1,4 +1,6 @@
 package com.example.coinly.data.ai
+import com.example.coinly.S
+import com.example.coinly.R
 
 import android.content.Context
 import android.os.Handler
@@ -60,9 +62,9 @@ class CoinlyAiAssistant(private val context: Context) {
     }
 
     private fun buildFinancialContext(): String {
-        val name = userPrefs.name.ifBlank { "Usuario" }
-        val career = userPrefs.career.ifBlank { "Estudiante" }
-        val university = userPrefs.university.ifBlank { "Universidad" }
+        val name = userPrefs.name.ifBlank { S.text(R.string.text_110) }
+        val career = userPrefs.career.ifBlank { S.text(R.string.text_163) }
+        val university = userPrefs.university.ifBlank { S.text(R.string.text_164) }
 
         val movements = movementRepository.getMovements()
         val budgets = budgetRepository.getBudgets()
@@ -76,40 +78,40 @@ class CoinlyAiAssistant(private val context: Context) {
             .mapValues { it.value.sumOf { m -> m.amount } }
 
         val sb = StringBuilder()
-        sb.append("Eres Coinly AI, el asistente virtual inteligente de finanzas personales dentro de la app Coinly. ")
-        sb.append("Responde siempre en español, de forma amable, empática, clara y muy concisa (máximo 2 a 3 párrafos o puntos clave).\n\n")
+        sb.append(S.text(R.string.text_165))
+        sb.append(S.text(R.string.text_166))
 
-        sb.append("DATOS FINANCIEROS REALES DEL USUARIO DENTRO DE COINLY:\n")
-        sb.append("• Nombre: $name ($career en $university)\n")
-        sb.append("• Balance Neto Actual: ${Ui.money(balance)}\n")
-        sb.append("• Ingresos Totales: +${Ui.money(income)}\n")
-        sb.append("• Gastos Totales: −${Ui.money(expense)}\n\n")
+        sb.append(S.text(R.string.text_167))
+        sb.append(S.text(R.string.text_168, name, career, university))
+        sb.append(S.text(R.string.text_169, Ui.money(balance)))
+        sb.append(S.text(R.string.text_170, Ui.money(income)))
+        sb.append(S.text(R.string.text_171, Ui.money(expense)))
 
         if (expenseByCat.isNotEmpty()) {
-            sb.append("• Desglose de Gastos por Categoría:\n")
+            sb.append(S.text(R.string.text_172))
             expenseByCat.forEach { (cat, amt) ->
                 sb.append("  - $cat: ${Ui.money(amt)}\n")
             }
             sb.append("\n")
         } else {
-            sb.append("• No registra gastos en este período.\n\n")
+            sb.append(S.text(R.string.text_173))
         }
 
         if (budgets.isNotEmpty()) {
-            sb.append("• Presupuestos Configurados:\n")
+            sb.append(S.text(R.string.text_174))
             budgets.forEach { b ->
                 val statusText = when (b.status) {
-                    com.example.coinly.model.BudgetStatus.DANGER -> "EXCEDIDO (${Ui.money(b.spent - b.limit)} sobre el límite)"
-                    com.example.coinly.model.BudgetStatus.WARNING -> "CERCA DEL LÍMITE (${b.percent}% usado)"
-                    com.example.coinly.model.BudgetStatus.SUCCESS -> "EN RANGO (${b.percent}% usado)"
+                    com.example.coinly.model.BudgetStatus.DANGER -> S.text(R.string.text_175, Ui.money(b.spent - b.limit))
+                    com.example.coinly.model.BudgetStatus.WARNING -> S.text(R.string.text_176, b.percent)
+                    com.example.coinly.model.BudgetStatus.SUCCESS -> S.text(R.string.text_177, b.percent)
                 }
-                sb.append("  - ${b.category}: Límite ${Ui.money(b.limit)} | Gastado ${Ui.money(b.spent)} | Estado: $statusText\n")
+                sb.append(S.text(R.string.text_178, b.category, Ui.money(b.limit), Ui.money(b.spent), statusText))
             }
         } else {
-            sb.append("• No tiene presupuestos creados aún.\n")
+            sb.append(S.text(R.string.text_179))
         }
 
-        sb.append("\nInstrucciones adicionales: Da consejos personalizados usando exactamente los valores numéricos anteriores cuando corresponda. Si te preguntan si pueden gastar x cantidad en x categoría, evalúa con sus presupuestos y saldo disponible.")
+        sb.append(S.text(R.string.text_180))
         return sb.toString()
     }
 }

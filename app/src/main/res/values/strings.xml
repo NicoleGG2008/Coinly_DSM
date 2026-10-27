@@ -1,3 +1,403 @@
 <resources>
     <string name="app_name">Coinly</string>
+    <string name="text_001" formatted="false">"Sin conexión. Revisa tu red e inténtalo de nuevo."</string>
+    <string name="text_002" formatted="false">"Demasiados intentos. Espera unos minutos y vuelve a intentar."</string>
+    <string name="text_003" formatted="false">"Ese correo ya está registrado. Inicia sesión o recupera tu contraseña."</string>
+    <string name="text_004" formatted="false">"Usa una contraseña de al menos 6 caracteres."</string>
+    <string name="text_005" formatted="false">"Ingresa un correo válido."</string>
+    <string name="text_006" formatted="false">"El acceso por correo no está habilitado en Firebase Authentication."</string>
+    <string name="text_007" formatted="false">"La cuenta está deshabilitada."</string>
+    <string name="text_008" formatted="false">"No se pudo verificar la cuenta. Revisa tus datos e inténtalo de nuevo."</string>
+    <string name="text_009" formatted="false">"No se pudo completar la operación. Revisa la conexión e inténtalo de nuevo."</string>
+    <string name="text_010" formatted="false">"Guardando cambios…"</string>
+    <string name="text_011" formatted="false">"Cargando tus datos…"</string>
+    <string name="text_012" formatted="false">"Sin conexión con el servidor. Mostrando datos disponibles. Toca para reintentar."</string>
+    <string name="text_013" formatted="false">"Inicio"</string>
+    <string name="text_014" formatted="false">"Movimientos"</string>
+    <string name="text_015" formatted="false">"Presupuestos"</string>
+    <string name="text_016" formatted="false">"Noticias"</string>
+    <string name="text_017" formatted="false">"Perfil"</string>
+    <string name="text_018" formatted="false">"Seleccionado"</string>
+    <string name="text_019" formatted="false">"Abrir Coinly AI Assistant"</string>
+    <string name="text_020" formatted="false">"Completa este campo."</string>
+    <string name="text_021" formatted="false">"Mínimo 6 caracteres."</string>
+    <string name="text_022" formatted="false">"Las contraseñas no coinciden."</string>
+    <string name="text_023" formatted="false">"Contraseña actualizada correctamente."</string>
+    <string name="text_024" formatted="false">"El correo identifica tu cuenta y se administra con Authentication."</string>
+    <string name="text_025" formatted="false">"Perfil actualizado correctamente."</string>
+    <string name="text_026" formatted="false">"Cómo ahorrar siendo estudiante universitario"</string>
+    <string name="text_027" formatted="false">"Guía básica de inversiones para jóvenes"</string>
+    <string name="text_028" formatted="false">"Errores comunes al crear tu primer presupuesto"</string>
+    <string name="text_029">"Abriendo: %1$s"</string>
+    <string name="text_030">"Has excedido tu presupuesto de %1$s: gastaste %2$s de %3$s."</string>
+    <string name="text_031">"Presupuesto de %1$s cercano al límite: %2$s de %3$s."</string>
+    <string name="text_032">"%1$s de %2$s · %3$s%%"</string>
+    <string name="text_033" formatted="false">"Ocultar filtros avanzados"</string>
+    <string name="text_034" formatted="false">"Mostrar filtros avanzados"</string>
+    <string name="text_035" formatted="false">"1 movimiento"</string>
+    <string name="text_036">"%1$s movimientos"</string>
+    <string name="text_037" formatted="false">"No hay movimientos con estos filtros."</string>
+    <string name="text_038" formatted="false">"No se encontró un navegador para abrir el artículo."</string>
+    <string name="text_039" formatted="false">"No hay noticias en esta categoría."</string>
+    <string name="text_040" formatted="false">"Mar"</string>
+    <string name="text_041" formatted="false">"Mié"</string>
+    <string name="text_042" formatted="false">"miércoles"</string>
+    <string name="text_043" formatted="false">"Sáb"</string>
+    <string name="text_044" formatted="false">"sábado"</string>
+    <string name="text_045">"%1$s de %2$s"</string>
+    <string name="text_046" formatted="false">", hoy"</string>
+    <string name="text_047">"Eventos de %1$s"</string>
+    <string name="text_048">"Eventos del %1$s de %2$s"</string>
+    <string name="text_049" formatted="false">"este mes"</string>
+    <string name="text_050" formatted="false">"este día"</string>
+    <string name="text_051">"No hay eventos %1$s."</string>
+    <string name="text_052" formatted="false">"Foto de perfil actualizada."</string>
+    <string name="text_053" formatted="false">"Oscuro activado"</string>
+    <string name="text_054" formatted="false">"Claro activado"</string>
+    <string name="text_055">"Presupuesto de %1$s cercano al límite."</string>
+    <string name="text_056" formatted="false">"Aún no tienes presupuestos. Toca + para crear el primero."</string>
+    <string name="text_057">"%1$s%% usado"</string>
+    <string name="text_058" formatted="false">"Eliminar presupuesto"</string>
+    <string name="text_059">"¿Deseas eliminar el presupuesto de %1$s?"</string>
+    <string name="text_060" formatted="false">"Eliminar"</string>
+    <string name="text_061" formatted="false">"Presupuesto eliminado."</string>
+    <string name="text_062" formatted="false">"Editar presupuesto"</string>
+    <string name="text_063" formatted="false">"Selecciona una categoría."</string>
+    <string name="text_064" formatted="false">"Ingresa un monto válido."</string>
+    <string name="text_065" formatted="false">"Guardar"</string>
+    <string name="text_066" formatted="false">"Presupuesto guardado correctamente."</string>
+    <string name="text_067" formatted="false">"Selecciona una moneda."</string>
+    <string name="text_068" formatted="false">"Editar movimiento"</string>
+    <string name="text_069" formatted="false">"Selecciona una fecha."</string>
+    <string name="text_070" formatted="false">"Ingreso"</string>
+    <string name="text_071" formatted="false">"Gasto"</string>
+    <string name="text_072" formatted="false">"Categoría"</string>
+    <string name="text_073" formatted="false">"Fecha"</string>
+    <string name="text_074" formatted="false">"Método de pago"</string>
+    <string name="text_075" formatted="false">"Etiquetas"</string>
+    <string name="text_076" formatted="false">"Eliminar movimiento"</string>
+    <string name="text_077">"¿Deseas eliminar \"%1$s\"? Esta acción no se puede deshacer."</string>
+    <string name="text_078" formatted="false">"La base de datos está tardando en responder. Reintenta."</string>
+    <string name="text_079" formatted="false">"Inicia sesión para continuar."</string>
+    <string name="text_080" formatted="false">"No hay permiso para acceder a la base de datos. Revisa las reglas de Firestore."</string>
+    <string name="text_081" formatted="false">"No se pudo conectar con la base de datos. Reintenta."</string>
+    <string name="text_082" formatted="false">"No se pudo completar la operación. Reintenta."</string>
+    <string name="text_083" formatted="false">"Finanzas personales"</string>
+    <string name="text_084" formatted="false">"Inversión"</string>
+    <string name="text_085" formatted="false">"Educación financiera"</string>
+    <string name="text_086" formatted="false">"5 estrategias para ahorrar siendo estudiante universitario"</string>
+    <string name="text_087" formatted="false">"Aprende cómo maximizar tu ahorro con ingresos limitados aplicando técnicas simples en tu día a día."</string>
+    <string name="text_088" formatted="false">"12 Ago 2026"</string>
+    <string name="text_089" formatted="false">"Ahorrar siendo estudiante puede parecer difícil, pero con los hábitos correctos es completamente posible. La regla 50/30/20 es un buen punto de partida: destina el 50% de tus ingresos a necesidades básicas, el 30% a deseos y el 20% al ahorro. Registrar cada gasto te dará claridad sobre dónde va tu dinero y te permitirá tomar mejores decisiones."</string>
+    <string name="text_090" formatted="false">"Cómo crear un presupuesto mensual que realmente funcione"</string>
+    <string name="text_091" formatted="false">"Guía práctica para estudiantes que quieren tomar el control de sus finanzas personales este semestre."</string>
+    <string name="text_092" formatted="false">"10 Ago 2026"</string>
+    <string name="text_093" formatted="false">"Un presupuesto efectivo no es solo una lista de gastos, es un plan de acción. Empieza por identificar tus ingresos fijos: becas, trabajo part-time, apoyo familiar. Luego lista tus gastos obligatorios y finalmente asigna lo restante a categorías discrecionales. Revisa y ajusta cada mes."</string>
+    <string name="text_094" formatted="false">"Inversión básica para jóvenes: por dónde empezar"</string>
+    <string name="text_095" formatted="false">"La educación financiera temprana puede cambiar tu futuro. Descubre las opciones de inversión accesibles para estudiantes."</string>
+    <string name="text_096" formatted="false">"8 Ago 2026"</string>
+    <string name="text_097" formatted="false">"Invertir no requiere grandes sumas de dinero. Con tan solo $10 al mes puedes comenzar a construir un hábito de inversión. Los fondos de inversión indexados son una excelente opción para principiantes por su bajo costo y diversificación automática. La clave está en empezar temprano y ser constante."</string>
+    <string name="text_098" formatted="false">"Becas universitarias: cómo aprovecharlas al máximo"</string>
+    <string name="text_099" formatted="false">"Convierte tu beca en una herramienta de crecimiento financiero y académico con estos consejos clave."</string>
+    <string name="text_100" formatted="false">"5 Ago 2026"</string>
+    <string name="text_101" formatted="false">"Una beca es mucho más que dinero gratuito; es una inversión en tu futuro. Para aprovecharla al máximo: crea un presupuesto específico para la beca, separa una parte para materiales académicos, considera ahorrar un pequeño porcentaje y mantén tus calificaciones para renovarla."</string>
+    <string name="text_102" formatted="false">"Fecha límite matrícula"</string>
+    <string name="text_103" formatted="false">"Pago servicios estudiantiles"</string>
+    <string name="text_104" formatted="false">"Examen parcial Cálculo"</string>
+    <string name="text_105" formatted="false">"Inicio semana de proyectos"</string>
+    <string name="text_106" formatted="false">"Cobro beca universitaria"</string>
+    <string name="text_107" formatted="false">"Feria de empleo universitaria"</string>
+    <string name="text_108" formatted="false">"Entrega proyecto final"</string>
+    <string name="text_109" formatted="false">"Pago alquiler habitación"</string>
+    <string name="text_110" formatted="false">"Usuario"</string>
+    <string name="text_111" formatted="false">"Académico"</string>
+    <string name="text_112">"¡Hola, **%1$s**! 👋 Soy **Coinly AI**, tu asistente financiero personal.\n\n"</string>
+    <string name="text_113" formatted="false">"¿En qué te puedo ayudar hoy? Toca una sugerencia rápida o escribe tu consulta."</string>
+    <string name="text_114" formatted="false">"Coinly AI está procesando tu consulta..."</string>
+    <string name="text_115" formatted="false">"Asistente con Gemini AI"</string>
+    <string name="text_116" formatted="false">"Asistente local (Modo respaldo)"</string>
+    <string name="text_117" formatted="false">"Respuesta de Coinly AI: "</string>
+    <string name="text_118" formatted="false">"¿Cómo va mi presupuesto?"</string>
+    <string name="text_119" formatted="false">"¿En qué he gastado más?"</string>
+    <string name="text_120" formatted="false">"Consejos para ahorrar"</string>
+    <string name="text_121" formatted="false">"¿Puedo gastar $50 en ocio?"</string>
+    <string name="text_122">"Sugerencia: %1$s"</string>
+    <string name="text_123" formatted="false">"Coinly AI ✨"</string>
+    <string name="text_124" formatted="false">"Coinly AI · Modo local 🛡️"</string>
+    <string name="text_125" formatted="false">"Sin movimientos para graficar"</string>
+    <string name="text_126">"Evolución de ingresos y gastos de los últimos %1$s días con movimientos. "</string>
+    <string name="text_127">"Mayor ingreso: %1$s el día %2$s. "</string>
+    <string name="text_128">"Mayor gasto: %1$s el día %2$s."</string>
+    <string name="text_129" formatted="false">"Pantalla provisional.\nSe implementa en un commit posterior."</string>
+    <string name="text_130" formatted="false">"Ir al inicio"</string>
+    <string name="text_131" formatted="false">"enero"</string>
+    <string name="text_132" formatted="false">"febrero"</string>
+    <string name="text_133" formatted="false">"marzo"</string>
+    <string name="text_134" formatted="false">"abril"</string>
+    <string name="text_135" formatted="false">"mayo"</string>
+    <string name="text_136" formatted="false">"junio"</string>
+    <string name="text_137" formatted="false">"julio"</string>
+    <string name="text_138" formatted="false">"agosto"</string>
+    <string name="text_139" formatted="false">"septiembre"</string>
+    <string name="text_140" formatted="false">"octubre"</string>
+    <string name="text_141" formatted="false">"noviembre"</string>
+    <string name="text_142" formatted="false">"diciembre"</string>
+    <string name="text_143" formatted="false">"Ene"</string>
+    <string name="text_144" formatted="false">"Feb"</string>
+    <string name="text_145" formatted="false">"Abr"</string>
+    <string name="text_146" formatted="false">"May"</string>
+    <string name="text_147" formatted="false">"Jun"</string>
+    <string name="text_148" formatted="false">"Jul"</string>
+    <string name="text_149" formatted="false">"Ago"</string>
+    <string name="text_150" formatted="false">"Sep"</string>
+    <string name="text_151" formatted="false">"Oct"</string>
+    <string name="text_152" formatted="false">"Nov"</string>
+    <string name="text_153" formatted="false">"Dic"</string>
+    <string name="text_154">"%1$s de %2$s de %3$s"</string>
+    <string name="text_155" formatted="false">"Buenos días"</string>
+    <string name="text_156" formatted="false">"Buenas tardes"</string>
+    <string name="text_157" formatted="false">"Buenas noches"</string>
+    <string name="text_158" formatted="false">"En orden"</string>
+    <string name="text_159" formatted="false">"Al límite"</string>
+    <string name="text_160" formatted="false">"en orden"</string>
+    <string name="text_161" formatted="false">"al límite"</string>
+    <string name="text_162">"Presupuesto de %1$s, %2$s. Límite %3$s, gastado %4$s, %5$s por ciento usado."</string>
+    <string name="text_163" formatted="false">"Estudiante"</string>
+    <string name="text_164" formatted="false">"Universidad"</string>
+    <string name="text_165" formatted="false">"Eres Coinly AI, el asistente virtual inteligente de finanzas personales dentro de la app Coinly. "</string>
+    <string name="text_166" formatted="false">"Responde siempre en español, de forma amable, empática, clara y muy concisa (máximo 2 a 3 párrafos o puntos clave).\n\n"</string>
+    <string name="text_167" formatted="false">"DATOS FINANCIEROS REALES DEL USUARIO DENTRO DE COINLY:\n"</string>
+    <string name="text_168">"• Nombre: %1$s (%2$s en %3$s)\n"</string>
+    <string name="text_169">"• Balance Neto Actual: %1$s\n"</string>
+    <string name="text_170">"• Ingresos Totales: +%1$s\n"</string>
+    <string name="text_171">"• Gastos Totales: −%1$s\n\n"</string>
+    <string name="text_172" formatted="false">"• Desglose de Gastos por Categoría:\n"</string>
+    <string name="text_173" formatted="false">"• No registra gastos en este período.\n\n"</string>
+    <string name="text_174" formatted="false">"• Presupuestos Configurados:\n"</string>
+    <string name="text_175">"EXCEDIDO (%1$s sobre el límite)"</string>
+    <string name="text_176">"CERCA DEL LÍMITE (%1$s%% usado)"</string>
+    <string name="text_177">"EN RANGO (%1$s%% usado)"</string>
+    <string name="text_178">"  - %1$s: Límite %2$s | Gastado %3$s | Estado: %4$s\n"</string>
+    <string name="text_179" formatted="false">"• No tiene presupuestos creados aún.\n"</string>
+    <string name="text_180" formatted="false">"\nInstrucciones adicionales: Da consejos personalizados usando exactamente los valores numéricos anteriores cuando corresponda. Si te preguntan si pueden gastar x cantidad en x categoría, evalúa con sus presupuestos y saldo disponible."</string>
+    <string name="text_181" formatted="false">"API key de Gemini no configurada."</string>
+    <string name="text_182" formatted="false">"Error desconocido al llamar a la API de Gemini."</string>
+    <string name="text_183">"HTTP %1$s"</string>
+    <string name="text_184">"Error en respuesta de Gemini (HTTP %1$s): %2$s"</string>
+    <string name="text_185" formatted="false">"Respuesta vacía o formato inesperado de Gemini."</string>
+    <string name="text_186" formatted="false">"Sin respuesta devuelta por Gemini."</string>
+    <string name="text_187" formatted="false">"Respuesta sin nodo de contenido."</string>
+    <string name="text_188" formatted="false">"Respuesta sin partes de texto."</string>
+    <string name="text_189" formatted="false">"Texto de respuesta vacío."</string>
+    <string name="text_190" formatted="false">"¡Hola! 👋 Aún no tienes movimientos ni presupuestos registrados en Coinly.\n\n"</string>
+    <string name="text_191" formatted="false">" Para ayudarte mejor, empieza por registrar tu primer ingreso o gasto desde la pantalla de Inicio o Movimientos (+). "</string>
+    <string name="text_192" formatted="false">"También puedes configurar límites en la sección de Presupuestos.\n\n"</string>
+    <string name="text_193" formatted="false">"💡 **Consejo rápido:** Aplica la regla 50/30/20: 50% para necesidades básicas, 30% para gustos personales y 20% directo a tu ahorro."</string>
+    <string name="text_194" formatted="false">"cuanto guardar"</string>
+    <string name="text_195" formatted="false">"límite"</string>
+    <string name="text_196" formatted="false">"puedo gastar"</string>
+    <string name="text_197" formatted="false">"en que"</string>
+    <string name="text_198" formatted="false">"en qué"</string>
+    <string name="text_199" formatted="false">"💡 **Análisis de Ahorro Coinly:**\n\n"</string>
+    <string name="text_200">"¡Vas por excelente camino! Tu balance actual es positivo: **+%1$s** "</string>
+    <string name="text_201">"(tienes un margen del **%1$s%%** de tus ingresos).\n\n"</string>
+    <string name="text_202">"• **Recomendación 50/30/20:** Para tus ingresos de %1$s, se recomienda ahorrar un 20%% (**%2$s**).\n"</string>
+    <string name="text_203">"• Si separas **%1$s** hoy mismo a tu fondo de ahorro, mantendrás tus finanzas muy estables."</string>
+    <string name="text_204">"Tus gastos igualan exactamente tus ingresos (%1$s). "</string>
+    <string name="text_205" formatted="false">"Para lograr ahorrar, necesitas reducir gastos no esenciales o generar ingresos adicionales."</string>
+    <string name="text_206">"⚠️ **Atención:** Actualmente tus gastos (%1$s) superan tus ingresos (%2$s), "</string>
+    <string name="text_207">"generando un déficit de **%1$s**.\n\n"</string>
+    <string name="text_208">"• Tu principal área de gasto es **%1$s** con **%2$s**. "</string>
+    <string name="text_209">"Reducir un 15%% en este rubro liberaría **%1$s** para estabilizar tu balance."</string>
+    <string name="text_210" formatted="false">"📋 **Presupuestos:**\n\nNo tienes presupuestos configurados en este momento. "</string>
+    <string name="text_211" formatted="false">"Puedes crear metas mensuales en la pestaña **Presupuestos** para evitar gastos excesivos."</string>
+    <string name="text_212" formatted="false">"📋 **Estado de tus Presupuestos:**\n\n"</string>
+    <string name="text_213">"🚨 **Presupuestos excedidos (%1$s):**\n"</string>
+    <string name="text_214">"• **%1$s**: gastaste %2$s de un límite de %3$s (exceso de %4$s).\n"</string>
+    <string name="text_215">"⚠️ **Cercanos al límite (%1$s):**\n"</string>
+    <string name="text_216">"• **%1$s**: %2$s de %3$s (%4$s%% usado, te quedan %5$s).\n"</string>
+    <string name="text_217">"✅ **Presupuestos bajo control (%1$s):**\n"</string>
+    <string name="text_218">"• **%1$s**: %2$s de %3$s (%4$s%% usado).\n"</string>
+    <string name="text_219" formatted="false">"💡 **Sugerencia:** Reasigna fondos de las categorías en verde para cubrir los excesos."</string>
+    <string name="text_220" formatted="false">"👍 ¡Excelente disciplina financiera! Todos tus presupuestos están dentro del límite planeado."</string>
+    <string name="text_221">"💸 **Evaluación de Gasto (%1$s):**\n\n"</string>
+    <string name="text_222">"✅ **¡Sí es viable!** En la categoría **%1$s** tienes un disponible de **%2$s**. "</string>
+    <string name="text_223">"Después de este gasto te quedarán **%1$s**."</string>
+    <string name="text_224">"⚠️ **Atención:** En **%1$s** solo te quedan **%2$s**. "</string>
+    <string name="text_225">"Gastar %1$s excedería tu presupuesto por **%2$s**."</string>
+    <string name="text_226">"🚨 **Gasto no recomendado:** Ya has superado tu presupuesto de **%1$s** "</string>
+    <string name="text_227">"(excedido en %1$s). Realizar este gasto aumentará tu déficit."</string>
+    <string name="text_228">"Has registrado un total de **%1$s** en gastos este mes. "</string>
+    <string name="text_229">"Evalúa si este gasto de **%1$s** encaja en tus prioridades antes de realizarlo."</string>
+    <string name="text_230" formatted="false">"📊 **Desglose de Gastos Acumulados:**\n\n"</string>
+    <string name="text_231">"Has gastado un total de **%1$s**.\n\n"</string>
+    <string name="text_232" formatted="false">"**Tus principales categorías de gasto son:**\n"</string>
+    <string name="text_233">"• **%1$s**: %2$s (%3$s%% del total)\n"</string>
+    <string name="text_234">"💡 **Tip de optimización:** Revisa tus gastos en **%1$s**, ya que representan casi el "</string>
+    <string name="text_235">"%1$s%% de todas tus salidas."</string>
+    <string name="text_236" formatted="false">"No hay gastos registrados en este período."</string>
+    <string name="text_237" formatted="false">"📊 **Resumen Financiero Coinly:**\n\n"</string>
+    <string name="text_238">"• **Balance neto:** %1$s%2$s\n"</string>
+    <string name="text_239">"• **Ingresos acumulados:** +%1$s\n"</string>
+    <string name="text_240">"• **Gastos acumulados:** −%1$s\n"</string>
+    <string name="text_241">"• **Mayor gasto en:** %1$s (%2$s)\n"</string>
+    <string name="text_242">"• **Presupuestos:** %1$s activos "</string>
+    <string name="text_243">"(%1$s en alerta, %2$s cercanos al límite)"</string>
+    <string name="text_244" formatted="false">"(todos al día)"</string>
+    <string name="text_245" formatted="false">"\n💬 *¿En qué puedo ayudarte hoy? Puedes preguntarme sobre tus presupuestos, hábitos de ahorro o análisis de gastos.*"</string>
+    <string name="text_246" formatted="false">"Salario"</string>
+    <string name="text_247" formatted="false">"Beca"</string>
+    <string name="text_248" formatted="false">"Freelance"</string>
+    <string name="text_249" formatted="false">"Regalo"</string>
+    <string name="text_250" formatted="false">"Otros"</string>
+    <string name="text_251" formatted="false">"Alimentación"</string>
+    <string name="text_252" formatted="false">"Transporte"</string>
+    <string name="text_253" formatted="false">"Ocio"</string>
+    <string name="text_254" formatted="false">"Servicios"</string>
+    <string name="text_255" formatted="false">"Educación"</string>
+    <string name="text_256" formatted="false">"Salud"</string>
+    <string name="text_257" formatted="false">"Ropa"</string>
+    <string name="text_258" formatted="false">"Efectivo"</string>
+    <string name="text_259" formatted="false">"Tarjeta"</string>
+    <string name="text_260" formatted="false">"Transferencia"</string>
+    <string name="text_261" formatted="false">"Otro"</string>
+    <string name="text_262" formatted="false">"Logotipo de Coinly. Toca para revelar el nombre."</string>
+    <string name="text_263" formatted="false">"No se trata de manejar grandes sumas, sino de construir buenos hábitos financieros, una moneda a la vez."</string>
+    <string name="text_264" formatted="false">"Toca el logo para descubrir"</string>
+    <string name="text_265" formatted="false">"Crear cuenta"</string>
+    <string name="text_266" formatted="false">"Iniciar sesión"</string>
+    <string name="text_267" formatted="false">"Volver"</string>
+    <string name="text_268" formatted="false">"Cambiar contraseña"</string>
+    <string name="text_269" formatted="false">"Elige una contraseña segura"</string>
+    <string name="text_270" formatted="false">"Contraseña actual"</string>
+    <string name="text_271" formatted="false">"Tu contraseña actual"</string>
+    <string name="text_272" formatted="false">"Nueva contraseña"</string>
+    <string name="text_273" formatted="false">"Mínimo 6 caracteres"</string>
+    <string name="text_274" formatted="false">"Confirmar nueva contraseña"</string>
+    <string name="text_275" formatted="false">"Repite la nueva contraseña"</string>
+    <string name="text_276" formatted="false">"Guardar contraseña"</string>
+    <string name="text_277" formatted="false">"Editar perfil"</string>
+    <string name="text_278" formatted="false">"Actualiza tus datos personales"</string>
+    <string name="text_279" formatted="false">"Nombre completo"</string>
+    <string name="text_280" formatted="false">"Tu nombre"</string>
+    <string name="text_281" formatted="false">"Correo electrónico"</string>
+    <string name="text_282" formatted="false">"tu@email.com"</string>
+    <string name="text_283" formatted="false">"Tu universidad"</string>
+    <string name="text_284" formatted="false">"Carrera"</string>
+    <string name="text_285" formatted="false">"Tu carrera"</string>
+    <string name="text_286" formatted="false">"Moneda local"</string>
+    <string name="text_287" formatted="false">"Selecciona una moneda"</string>
+    <string name="text_288" formatted="false">"Guardar cambios"</string>
+    <string name="text_289" formatted="false">"Recuperar contraseña"</string>
+    <string name="text_290" formatted="false">"Te enviaremos un enlace de recuperación"</string>
+    <string name="text_291" formatted="false">"Enviar enlace de recuperación"</string>
+    <string name="text_292" formatted="false">"Correo enviado"</string>
+    <string name="text_293" formatted="false">"Revisa tu bandeja de entrada y sigue las instrucciones para restablecer tu contraseña."</string>
+    <string name="text_294" formatted="false">"Volver al inicio de sesión"</string>
+    <string name="text_295" formatted="false">"Bienvenido de vuelta"</string>
+    <string name="text_296" formatted="false">"Inicia sesión para continuar"</string>
+    <string name="text_297" formatted="false">"Contraseña"</string>
+    <string name="text_298" formatted="false">"Tu contraseña"</string>
+    <string name="text_299" formatted="false">"Recordar sesión"</string>
+    <string name="text_300" formatted="false">"¿Olvidaste tu contraseña?"</string>
+    <string name="text_301" formatted="false">"¿No tienes cuenta?"</string>
+    <string name="text_302" formatted="false">"Ir a mi perfil"</string>
+    <string name="text_303" formatted="false">"Saldo disponible"</string>
+    <string name="text_304" formatted="false">"Ingresos"</string>
+    <string name="text_305" formatted="false">"Gastos"</string>
+    <string name="text_306" formatted="false">"Acciones rápidas"</string>
+    <string name="text_307" formatted="false">"Agregar ingreso"</string>
+    <string name="text_308" formatted="false">"Agregar gasto"</string>
+    <string name="text_309" formatted="false">"Historial"</string>
+    <string name="text_310" formatted="false">"Alertas"</string>
+    <string name="text_311" formatted="false">"Limpiar todas"</string>
+    <string name="text_312" formatted="false">"Movimientos recientes"</string>
+    <string name="text_313" formatted="false">"Ver todos"</string>
+    <string name="text_314" formatted="false">"Presupuestos del mes"</string>
+    <string name="text_315" formatted="false">"Mostrar u ocultar filtros avanzados"</string>
+    <string name="text_316" formatted="false">"Agregar movimiento"</string>
+    <string name="text_317" formatted="false">"Buscar movimientos..."</string>
+    <string name="text_318" formatted="false">"Todos"</string>
+    <string name="text_319" formatted="false">"Filtros avanzados"</string>
+    <string name="text_320" formatted="false">"Todas"</string>
+    <string name="text_321" formatted="false">"Monto mínimo"</string>
+    <string name="text_322" formatted="false">"0.00"</string>
+    <string name="text_323" formatted="false">"Monto máximo"</string>
+    <string name="text_324" formatted="false">"Desde"</string>
+    <string name="text_325" formatted="false">"Elegir"</string>
+    <string name="text_326" formatted="false">"Hasta"</string>
+    <string name="text_327" formatted="false">"Limpiar"</string>
+    <string name="text_328" formatted="false">"Aplicar"</string>
+    <string name="text_329" formatted="false">"Noticias y calendario"</string>
+    <string name="text_330" formatted="false">"Calendario"</string>
+    <string name="text_331" formatted="false">"Mes anterior"</string>
+    <string name="text_332" formatted="false">"Mes siguiente"</string>
+    <string name="text_333" formatted="false">"Próximos eventos"</string>
+    <string name="text_334" formatted="false">"Artículo"</string>
+    <string name="text_335" formatted="false">"Abrir artículo completo"</string>
+    <string name="text_336" formatted="false">"Foto de perfil"</string>
+    <string name="text_337" formatted="false">"Cambiar foto de perfil"</string>
+    <string name="text_338" formatted="false">"Información personal"</string>
+    <string name="text_339" formatted="false">"Información académica"</string>
+    <string name="text_340" formatted="false">"Preferencias"</string>
+    <string name="text_341" formatted="false">"Accesibilidad y tema"</string>
+    <string name="text_342" formatted="false">"Tamaño de letra"</string>
+    <string name="text_343" formatted="false">"Ajusta la lectura de la aplicación"</string>
+    <string name="text_344" formatted="false">"Letra pequeña"</string>
+    <string name="text_345" formatted="false">"A−"</string>
+    <string name="text_346" formatted="false">"Letra normal"</string>
+    <string name="text_347" formatted="false">"A"</string>
+    <string name="text_348" formatted="false">"Letra grande"</string>
+    <string name="text_349" formatted="false">"A+"</string>
+    <string name="text_350" formatted="false">"Tema oscuro"</string>
+    <string name="text_351" formatted="false">"Cerrar sesión"</string>
+    <string name="text_352" formatted="false">"Crear presupuesto"</string>
+    <string name="text_353" formatted="false">"Tus presupuestos"</string>
+    <string name="text_354" formatted="false">"Regístrate para empezar"</string>
+    <string name="text_355" formatted="false">"Confirmar contraseña"</string>
+    <string name="text_356" formatted="false">"Repite tu contraseña"</string>
+    <string name="text_357" formatted="false">"¿Ya tienes cuenta?"</string>
+    <string name="text_358" formatted="false">"Descartar alerta"</string>
+    <string name="text_359" formatted="false">"No tienes ninguna alerta pendiente"</string>
+    <string name="text_360" formatted="false">"Todo está bajo control por ahora."</string>
+    <string name="text_361" formatted="false">"Presupuesto"</string>
+    <string name="text_362" formatted="false">"Gastado"</string>
+    <string name="text_363" formatted="false">"Disponible"</string>
+    <string name="text_364" formatted="false">"Editar"</string>
+    <string name="text_365" formatted="false">"Nuevo presupuesto"</string>
+    <string name="text_366" formatted="false">"Selecciona una categoría"</string>
+    <string name="text_367" formatted="false">"Monto límite"</string>
+    <string name="text_368" formatted="false">"Cancelar"</string>
+    <string name="text_369" formatted="false">"Icono de Coinly AI"</string>
+    <string name="text_370" formatted="false">"Coinly AI"</string>
+    <string name="text_371" formatted="false">"Asistente Financiero con Gemini"</string>
+    <string name="text_372" formatted="false">"Cerrar chat de Coinly AI"</string>
+    <string name="text_373" formatted="false">"Coinly AI está escribiendo..."</string>
+    <string name="text_374" formatted="false">"Pregunta algo sobre tu dinero..."</string>
+    <string name="text_375" formatted="false">"Escribe tu consulta financiera para Coinly AI"</string>
+    <string name="text_376" formatted="false">"Enviar mensaje a Coinly AI"</string>
+    <string name="text_377" formatted="false">"Tipo de movimiento"</string>
+    <string name="text_378" formatted="false">"Monto"</string>
+    <string name="text_379" formatted="false">"Descripción"</string>
+    <string name="text_380" formatted="false">"Ej. Almuerzo en cafetería"</string>
+    <string name="text_381" formatted="false">"Selecciona una fecha"</string>
+    <string name="text_382" formatted="false">"Método de pago (opcional)"</string>
+    <string name="text_383" formatted="false">"Selecciona un método"</string>
+    <string name="text_384" formatted="false">"Etiquetas (opcional)"</string>
+    <string name="text_385" formatted="false">"trabajo, libros"</string>
+<string name="processing">Procesando…</string>
+<string name="saving">Guardando…</string>
+<string name="filter_all">Todas</string>
+<string name="empty_movements">Aún no tienes movimientos. Registra tu primer ingreso o gasto.</string>
+<string name="empty_budgets">Aún no tienes presupuestos. Crea el primero en Presupuestos.</string>
+<string name="name_greeting">%1$s 👋</string>
+<string name="profile_study">%1$s · %2$s</string>
+<string name="movement_details">%1$s · %2$s</string>
+<string name="auth_recent">Por seguridad, cierra sesión y vuelve a entrar antes de cambiar estos datos.</string>
+<string name="tags_limit">Usa hasta 20 etiquetas de máximo 50 caracteres.</string>
+<string name="period_label">%1$s %2$s</string>
+<string name="login_required">Inicia sesión para continuar.</string>
+<string name="email_verify_help">Si cambias el correo, debes verificar la nueva dirección para actualizar tu cuenta.</string>
+<string name="email_verification_sent">Te enviamos un enlace al nuevo correo. Verifícalo y vuelve a iniciar sesión.</string>
+<string name="offline_test">Mostrando datos disponibles sin conexión</string>
 </resources>

@@ -14,6 +14,11 @@ class BienvenidaActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
         setContentView(R.layout.activity_bienvenida)
         padForSystemBars(findViewById(R.id.welcomeRoot))
 

@@ -25,19 +25,21 @@ class PerfilActivity : BaseActivity() {
             runCatching { contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION) }
             prefs.avatarUri = uri.toString()
             renderAvatar()
-            Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, "Foto de perfil actualizada.")
+            Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, S.text(R.string.text_052))
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_perfil, null), "Perfil"))
+        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_perfil, null), S.text(R.string.text_017)))
         prefs = UserPrefs(this)
 
         findViewById<View>(R.id.btnChangeAvatar).setOnClickListener { pickImage.launch(arrayOf("image/*")) }
         findViewById<View>(R.id.btnEditProfile).setOnClickListener { startActivity(Intent(this, EditProfileActivity::class.java)) }
         findViewById<View>(R.id.btnChangePassword).setOnClickListener { startActivity(Intent(this, ChangePasswordActivity::class.java)) }
         findViewById<MaterialButton>(R.id.btnLogout).setOnClickListener {
+            com.example.coinly.data.AuthSession.logout()
+            CoinlyApp.applyTheme(false)
             startActivity(Intent(this, LoginActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             })
@@ -48,10 +50,10 @@ class PerfilActivity : BaseActivity() {
         val themeSwitch = findViewById<MaterialSwitch>(R.id.switchDarkTheme)
         val themeStatus = findViewById<TextView>(R.id.tvThemeStatus)
         themeSwitch.isChecked = prefs.darkMode
-        themeStatus.text = if (prefs.darkMode) "Oscuro activado" else "Claro activado"
+        themeStatus.text = if (prefs.darkMode) S.text(R.string.text_053) else S.text(R.string.text_054)
         themeSwitch.setOnCheckedChangeListener { _, isChecked ->
             prefs.darkMode = isChecked
-            themeStatus.text = if (isChecked) "Oscuro activado" else "Claro activado"
+            themeStatus.text = if (isChecked) S.text(R.string.text_053) else S.text(R.string.text_054)
             CoinlyApp.applyTheme(isChecked) // recrea la pantalla con el tema nuevo
         }
         findViewById<View>(R.id.rowDarkTheme).setOnClickListener { themeSwitch.toggle() }
@@ -81,10 +83,12 @@ class PerfilActivity : BaseActivity() {
         bindProfile()
     }
 
+    override fun onCloudChanged() { bindProfile() }
+
     private fun bindProfile() {
         findViewById<TextView>(R.id.tvProfileName).text = prefs.name
         findViewById<TextView>(R.id.tvProfileEmail).text = prefs.email
-        findViewById<TextView>(R.id.tvProfileCareerUni).text = "${prefs.career} · ${prefs.university}"
+        findViewById<TextView>(R.id.tvProfileCareerUni).text = S.text(R.string.profile_study, prefs.career, prefs.university)
         findViewById<TextView>(R.id.tvInfoName).text = prefs.name
         findViewById<TextView>(R.id.tvInfoEmail).text = prefs.email
         findViewById<TextView>(R.id.tvInfoUniversity).text = prefs.university

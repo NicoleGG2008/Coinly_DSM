@@ -1,0 +1,15 @@
+{
+  "name": "coinly-firebase-tests",
+  "private": true,
+  "scripts": {
+    "firebase:login": "firebase login",
+    "deploy:rules": "firebase deploy --only firestore:rules",
+    "emulators": "firebase emulators:start --only auth,firestore",
+    "test": "firebase emulators:exec --only firestore \"node tests/firestore-rules.cjs\""
+  },
+  "devDependencies": {
+    "firebase-tools": "15.34.1",
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.19.0"
+  }
+}

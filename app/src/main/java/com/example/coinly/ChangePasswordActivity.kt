@@ -34,15 +34,23 @@ class ChangePasswordActivity : BaseActivity() {
             val confirm = etConfirm.text.toString()
             var valid = true
 
-            if (current.isEmpty()) { tilCurrent.error = "Completa este campo."; valid = false }
-            else if (!prefs.checkPassword(current)) { tilCurrent.error = "La contraseña actual no es correcta."; valid = false }
-            if (new.length < 6) { tilNew.error = "Mínimo 6 caracteres."; valid = false }
-            if (new != confirm) { tilConfirm.error = "Las contraseñas no coinciden."; valid = false }
+            if (current.isEmpty()) { tilCurrent.error = S.text(R.string.text_020); valid = false }
+
+            if (new.length < 6) { tilNew.error = S.text(R.string.text_021); valid = false }
+            if (new != confirm) { tilConfirm.error = S.text(R.string.text_022); valid = false }
             if (!valid) return
 
-            prefs.setPassword(new)
-            Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, "Contraseña actualizada correctamente.")
-            findViewById<View>(R.id.btnSavePassword).postDelayed({ finish() }, 900)
+            val user = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser ?: return
+            AuthUi.run(this, findViewById(R.id.btnSavePassword), {
+                user.reauthenticate(com.google.firebase.auth.EmailAuthProvider.getCredential(user.email.orEmpty(), current))
+                    .continueWithTask { result ->
+                        if (!result.isSuccessful) throw result.exception ?: IllegalStateException()
+                        user.updatePassword(new)
+                    }
+            }) {
+                Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, S.text(R.string.text_023))
+                finish()
+            }
         }
         findViewById<MaterialButton>(R.id.btnSavePassword).setOnClickListener { save() }
         etConfirm.setOnEditorActionListener { _, _, _ -> save(); true }

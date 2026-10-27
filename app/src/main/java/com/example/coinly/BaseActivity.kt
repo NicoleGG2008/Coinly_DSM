@@ -19,6 +19,72 @@ import com.example.coinly.ui.ScreenFrame
  * y escala de texto elegida por la persona en Perfil › Accesibilidad.
  */
 open class BaseActivity : AppCompatActivity() {
+    private var unsubscribe: (() -> Unit)? = null
+    private var cloudStatus: android.widget.TextView? = null
+    protected open fun onCloudChanged() {}
+    private val publicScreen get() = this is BienvenidaActivity || this is LoginActivity ||
+        this is RegisterActivity || this is ForgotPasswordActivity
+    override fun onStart() {
+        super.onStart()
+        if (publicScreen) return
+        if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser == null) {
+            startActivity(android.content.Intent(this, LoginActivity::class.java).apply {
+                flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+            })
+            finish(); return
+        }
+        com.example.coinly.data.CloudStore.start()
+        unsubscribe = com.example.coinly.data.CloudStore.observe {
+            val store = com.example.coinly.data.CloudStore
+            cloudStatus?.apply {
+                text = when {
+                    store.error != null -> store.error + " · " + "Reintentar"
+                    store.pending > 0 -> S.text(R.string.text_010)
+                    store.loading -> S.text(R.string.text_011)
+                    store.cached -> S.text(R.string.text_012)
+                    else -> ""
+                }
+                visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
+            }
+            onCloudChanged()
+        }
+    }
+    override fun onStop() { unsubscribe?.invoke(); unsubscribe = null; super.onStop() }
+    override fun setContentView(layoutResID: Int) { setContentView(layoutInflater.inflate(layoutResID, null)) }
+    override fun setContentView(view: View?) {
+        val content = requireNotNull(view)
+        val column = android.widget.LinearLayout(this).apply { orientation = android.widget.LinearLayout.VERTICAL }
+        if (!publicScreen) {
+            cloudStatus = android.widget.TextView(this).apply {
+                setPadding(24, 16, 24, 16)
+                androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(this) { v, insets ->
+                    val top = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.statusBars()).top
+                    v.setPadding(24, top + 16, 24, 16)
+                    insets
+                }
+                setTextColor(getColor(R.color.coinly_text_primary))
+                setBackgroundResource(R.drawable.bg_banner_info)
+                setOnClickListener { com.example.coinly.data.CloudStore.start(true) }
+                accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
+            }
+            column.addView(cloudStatus, android.widget.LinearLayout.LayoutParams(-1, -2))
+        }
+        column.addView(content, android.widget.LinearLayout.LayoutParams(-1, 0, 1f))
+        val frame = android.widget.FrameLayout(this)
+        frame.addView(column, android.widget.FrameLayout.LayoutParams(-1, -1, android.view.Gravity.CENTER))
+        super.setContentView(frame)
+        fun adapt() {
+            val width = resources.displayMetrics.widthPixels
+            val max = ((if (publicScreen) 600 else 1000) * resources.displayMetrics.density).toInt()
+            column.layoutParams = android.widget.FrameLayout.LayoutParams(minOf(width, max), -1, android.view.Gravity.CENTER)
+        }
+        adapt()
+        content.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            val desired = minOf(resources.displayMetrics.widthPixels, ((if (publicScreen) 600 else 1000) * resources.displayMetrics.density).toInt())
+            if (column.layoutParams.width != desired) adapt()
+        }
+    }
+
 
     override fun attachBaseContext(newBase: Context) {
         val factor = UserPrefs(newBase).fontFactor
@@ -53,6 +119,7 @@ open class BaseActivity : AppCompatActivity() {
             else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
         )
         super.onCreate(savedInstanceState)
+        if (android.os.Build.VERSION.SDK_INT < 26) window.navigationBarColor = getColor(R.color.coinly_brand_navy)
     }
 
     /** Infla [layout] dentro del marco que respeta las barras del sistema. */

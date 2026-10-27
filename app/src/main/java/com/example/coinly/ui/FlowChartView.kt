@@ -1,4 +1,5 @@
 package com.example.coinly.ui
+import com.example.coinly.S
 
 import android.content.Context
 import android.graphics.Canvas
@@ -55,10 +56,10 @@ class FlowChartView @JvmOverloads constructor(
         }
         val peakIncome = days.maxByOrNull { it.income }
         val peakExpense = days.maxByOrNull { it.expense }
-        contentDescription = if (days.isEmpty()) "Sin movimientos para graficar" else
-            "Evolución de ingresos y gastos de los últimos ${days.size} días con movimientos. " +
-                "Mayor ingreso: ${Ui.money(peakIncome?.income ?: 0.0)} el día ${peakIncome?.label}. " +
-                "Mayor gasto: ${Ui.money(peakExpense?.expense ?: 0.0)} el día ${peakExpense?.label}."
+        contentDescription = if (days.isEmpty()) S.text(R.string.text_125) else
+            S.text(R.string.text_126, days.size) +
+                S.text(R.string.text_127, Ui.money(peakIncome?.income ?: 0.0), peakIncome?.label) +
+                S.text(R.string.text_128, Ui.money(peakExpense?.expense ?: 0.0), peakExpense?.label)
         invalidate()
     }
 

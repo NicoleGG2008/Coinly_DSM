@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:accessibilityHeading="true"
-            android:text="Educación financiera"
+            android:text="@string/text_085"
             android:textAppearance="@style/TextAppearance.Coinly.TopBarTitle" />
     </LinearLayout>
 

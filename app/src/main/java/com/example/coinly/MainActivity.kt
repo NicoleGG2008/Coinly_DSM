@@ -21,11 +21,11 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_main, null), "Inicio"))
+        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_main, null), S.text(R.string.text_013)))
 
         val prefs = UserPrefs(this)
         findViewById<TextView>(R.id.tvGreeting).text = Ui.greeting()
-        findViewById<TextView>(R.id.tvUserName).text = "${prefs.name} 👋"
+        findViewById<TextView>(R.id.tvUserName).text = S.text(R.string.name_greeting, prefs.name)
         findViewById<TextView>(R.id.btnProfile).text = prefs.initial
 
         // Navegación
@@ -48,6 +48,13 @@ class MainActivity : BaseActivity() {
         finish()
     }
 
+    override fun onCloudChanged() {
+        val prefs = UserPrefs(this)
+        findViewById<TextView>(R.id.tvUserName).text = S.text(R.string.name_greeting, prefs.name)
+        findViewById<TextView>(R.id.btnProfile).text = prefs.initial
+        render()
+    }
+
     private fun render() {
         val movements = movementRepository.getMovements()
         val income = movements.filter { it.isIncome }.sumOf { it.amount }
@@ -56,7 +63,10 @@ class MainActivity : BaseActivity() {
         findViewById<TextView>(R.id.tvBalance).text = Ui.money(income - expense)
         findViewById<TextView>(R.id.tvIncomeTotal).text = "+" + Ui.money(income)
         findViewById<TextView>(R.id.tvExpenseTotal).text = "−" + Ui.money(expense)
-        findViewById<FlowChartView>(R.id.flowChart).setData(movements)
+        findViewById<FlowChartView>(R.id.flowChart).apply {
+            visibility = if (movements.isEmpty()) View.GONE else View.VISIBLE
+            setData(movements)
+        }
 
         renderAlerts()
         renderRecentMovements(movements)
@@ -84,9 +94,9 @@ class MainActivity : BaseActivity() {
         }
         active.forEach { b ->
                 val message = if (b.status == BudgetStatus.DANGER)
-                    "Has excedido tu presupuesto de ${b.category}: gastaste ${Ui.money(b.spent)} de ${Ui.money(b.limit)}."
+                    S.text(R.string.text_030, b.category, Ui.money(b.spent), Ui.money(b.limit))
                 else
-                    "Presupuesto de ${b.category} cercano al límite: ${Ui.money(b.spent)} de ${Ui.money(b.limit)}."
+                    S.text(R.string.text_031, b.category, Ui.money(b.spent), Ui.money(b.limit))
                 Ui.banner(container, Ui.tone(b.status), message) {
                     budgetRepository.dismissAlert(b.id)
                     renderAlerts()
@@ -97,6 +107,11 @@ class MainActivity : BaseActivity() {
     private fun renderRecentMovements(movements: List<Movement>) {
         val container = findViewById<LinearLayout>(R.id.layoutRecentMovements)
         container.removeAllViews()
+        if (movements.isEmpty()) container.addView(TextView(this).apply {
+            text = S.text(R.string.empty_movements)
+            setPadding(20, 24, 20, 24)
+            setTextColor(getColor(R.color.coinly_text_secondary))
+        })
         movements.take(4).forEachIndexed { i, m ->
             if (i > 0) container.addView(View(this).apply {
                 setBackgroundColor(getColor(R.color.coinly_divider))
@@ -111,13 +126,18 @@ class MainActivity : BaseActivity() {
     private fun renderBudgets() {
         val container = findViewById<LinearLayout>(R.id.layoutBudgetsSummary)
         container.removeAllViews()
+        if (budgetRepository.getBudgets().isEmpty()) container.addView(TextView(this).apply {
+            text = S.text(R.string.empty_budgets)
+            setPadding(20, 24, 20, 24)
+            setTextColor(getColor(R.color.coinly_text_secondary))
+        })
         budgetRepository.getBudgets().take(3).forEach { b ->
             val row = layoutInflater.inflate(R.layout.item_budget_mini, container, false)
             row.findViewById<TextView>(R.id.tvBudgetCategory).text = b.category
             Ui.bindStatusBadge(row.findViewById(R.id.tvBudgetStatusBadge), b)
             Ui.styleBudgetProgress(row.findViewById(R.id.progressBarBudget), b)
             row.findViewById<TextView>(R.id.tvBudgetSummary).text =
-                "${Ui.money(b.spent)} de ${Ui.money(b.limit)} · ${b.percent}%"
+                S.text(R.string.text_032, Ui.money(b.spent), Ui.money(b.limit), b.percent)
             row.setOnClickListener { go(PresupuestosActivity::class.java) }
             container.addView(row)
         }

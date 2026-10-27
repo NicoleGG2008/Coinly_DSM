@@ -7,6 +7,19 @@ import com.example.coinly.data.UserPrefs
 class CoinlyApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        S.context = applicationContext
+        com.example.coinly.data.AuthSession.context = applicationContext
+        com.example.coinly.data.CloudStore.context = applicationContext
+        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        db.firestoreSettings = com.google.firebase.firestore.FirebaseFirestoreSettings.Builder()
+            .setLocalCacheSettings(com.google.firebase.firestore.MemoryCacheSettings.newBuilder().build()).build()
+        if (BuildConfig.FIREBASE_EMULATOR) {
+            auth.useEmulator("10.0.2.2", 9199)
+            db.useEmulator("10.0.2.2", 8180)
+        }
+        if (!com.example.coinly.data.AuthSession.remember) auth.signOut()
+        auth.addAuthStateListener { com.example.coinly.data.CloudStore.start() }
         applyTheme(UserPrefs(this).darkMode)
     }
 

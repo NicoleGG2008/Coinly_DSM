@@ -35,7 +35,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/bg_row_ripple"
-        android:contentDescription="Descartar alerta"
+        android:contentDescription="@string/text_358"
         android:src="@drawable/ic_close"
-        android:tint="@color/coinly_text_secondary" />
+        app:tint="@color/coinly_text_secondary" />
 </LinearLayout>

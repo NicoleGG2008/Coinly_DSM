@@ -1,72 +1,29 @@
 package com.example.coinly.data
-
 import android.content.Context
 import com.example.coinly.model.Budget
-import org.json.JSONArray
-import org.json.JSONObject
-
-/** Presupuestos y alertas descartadas, compartidos entre Inicio y Presupuestos. */
-class BudgetRepository(private val context: Context) {
-
-    private val prefs get() = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-
-    fun getBudgets(): List<Budget> {
-        val saved = prefs.getString(KEY, null) ?: return sample().also { save(it) }
-        return runCatching {
-            val array = JSONArray(saved)
-            (0 until array.length()).map { i ->
-                val o = array.getJSONObject(i)
-                Budget(o.getString("id"), o.getString("category"), o.getDouble("limit"), o.getDouble("spent"), o.getString("period"))
-            }
-        }.getOrElse { sample() }
+import com.google.android.gms.tasks.Task
+import java.text.SimpleDateFormat
+import java.util.Locale
+class BudgetRepository(context: Context) {
+    private val uid = CloudStore.auth.currentUser?.uid ?: "signed_out"
+    private val prefs = context.getSharedPreferences("coinly_alerts_$uid", Context.MODE_PRIVATE)
+    fun getBudgets(): List<Budget> = CloudStore.budgets.map { b ->
+        val period = b.period
+        val spent = CloudStore.movements.filter { m ->
+            !m.isIncome && m.category == b.category && m.date.take(7) == period
+        }.sumOf { it.amount }
+        b.copy(spent = spent)
     }
-
-    fun upsert(budget: Budget) {
-        val all = getBudgets()
-        val exists = all.any { it.id == budget.id }
-        save(if (exists) all.map { if (it.id == budget.id) budget else it } else all + budget)
-        restoreAlert(budget.id)
-    }
-
-    fun delete(id: String) {
-        save(getBudgets().filterNot { it.id == id })
-        restoreAlert(id)
-    }
-
-    // ----- Alertas -----
-    fun dismissedAlerts(): Set<String> = prefs.getStringSet(KEY_DISMISSED, emptySet()) ?: emptySet()
-
-    fun dismissAlert(id: String) {
-        prefs.edit().putStringSet(KEY_DISMISSED, dismissedAlerts() + id).apply()
-    }
-
-    fun dismissAll(ids: Collection<String>) {
-        prefs.edit().putStringSet(KEY_DISMISSED, dismissedAlerts() + ids).apply()
-    }
-
-    private fun restoreAlert(id: String) {
-        prefs.edit().putStringSet(KEY_DISMISSED, dismissedAlerts() - id).apply()
-    }
-
-    private fun save(items: List<Budget>) {
-        val array = JSONArray()
-        items.forEach {
-            array.put(JSONObject().put("id", it.id).put("category", it.category).put("limit", it.limit).put("spent", it.spent).put("period", it.period))
-        }
-        prefs.edit().putString(KEY, array.toString()).apply()
-    }
-
-    private fun sample() = listOf(
-        Budget("1", "Alimentación", 200.0, 145.0, "Agosto 2026"),
-        Budget("2", "Transporte", 80.0, 25.0, "Agosto 2026"),
-        Budget("3", "Ocio", 60.0, 55.0, "Agosto 2026"),
-        Budget("4", "Educación", 100.0, 80.0, "Agosto 2026"),
-        Budget("5", "Servicios", 70.0, 72.0, "Agosto 2026")
-    )
-
-    companion object {
-        private const val PREFS = "coinly"
-        private const val KEY = "budgets_v2"
-        private const val KEY_DISMISSED = "dismissed_alerts"
-    }
+    fun upsert(b: Budget): Task<Void> = CloudStore.write {
+        CloudStore.userRef().collection("presupuestos").document(b.id).set(mapOf(
+            "id" to b.id, "category" to b.category, "limit" to b.limit, "period" to b.period
+        ))
+    }.addOnSuccessListener { restoreAlert(b.id) }
+    fun delete(id: String): Task<Void> = CloudStore.write {
+        CloudStore.userRef().collection("presupuestos").document(id).delete()
+    }.addOnSuccessListener { restoreAlert(id) }
+    fun dismissedAlerts(): Set<String> = prefs.getStringSet("dismissed", emptySet()).orEmpty()
+    fun dismissAlert(id: String) = dismissAll(listOf(id))
+    fun dismissAll(ids: Collection<String>) { prefs.edit().putStringSet("dismissed", dismissedAlerts() + ids).apply() }
+    private fun restoreAlert(id: String) { prefs.edit().putStringSet("dismissed", dismissedAlerts() - id).apply() }
 }

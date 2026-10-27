@@ -13,14 +13,14 @@ class EducacionActivity : BaseActivity() {
         val listView = findViewById<ListView>(R.id.listViewNews)
 
         val articulos = arrayOf(
-            "Cómo ahorrar siendo estudiante universitario",
-            "Guía básica de inversiones para jóvenes",
-            "Errores comunes al crear tu primer presupuesto"
+            S.text(R.string.text_026),
+            S.text(R.string.text_027),
+            S.text(R.string.text_028)
         )
 
         listView.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, articulos)
         listView.setOnItemClickListener { _, _, position, _ ->
-            Toast.makeText(this, "Abriendo: ${articulos[position]}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, S.text(R.string.text_029, articulos[position]), Toast.LENGTH_SHORT).show()
         }
     }
 }

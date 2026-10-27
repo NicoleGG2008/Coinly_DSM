@@ -50,11 +50,11 @@ object TransactionDialog {
 
         fun refreshCategories() {
             val list = if (isIncome()) MovementRepository.INCOME_CATEGORIES else MovementRepository.EXPENSE_CATEGORIES
-            acCategory.setSimpleItems(list.toTypedArray())
+            Ui.choices(acCategory, list.toTypedArray())
             if (acCategory.text.toString() !in list) acCategory.setText("", false)
         }
 
-        acPayment.setSimpleItems(MovementRepository.PAYMENT_METHODS.toTypedArray())
+        Ui.choices(acPayment, MovementRepository.PAYMENT_METHODS.toTypedArray())
         Ui.bindDateField(context, etDate) { tilDate.error = null }
         tilDate.setEndIconOnClickListener { etDate.performClick() }
         Ui.clearErrorOnType(tilAmount, etAmount)
@@ -76,7 +76,7 @@ object TransactionDialog {
         etDate.setText(existing?.date ?: Ui.todayIso())
 
         if (existing != null) {
-            title.text = "Editar movimiento"
+            title.text = S.text(R.string.text_068)
             etAmount.setText(existing.amount.toString())
             acCategory.setText(existing.category, false)
             etDescription.setText(existing.description)
@@ -92,10 +92,10 @@ object TransactionDialog {
             val date = etDate.text.toString().trim()
             var valid = true
 
-            if (amount == null || amount <= 0) { tilAmount.error = "Ingresa un monto válido."; valid = false }
-            if (category.isEmpty()) { tilCategory.error = "Selecciona una categoría."; valid = false }
-            if (description.isEmpty()) { tilDescription.error = "Completa este campo."; valid = false }
-            if (date.isEmpty()) { tilDate.error = "Selecciona una fecha."; valid = false }
+            if (amount == null || !amount.isFinite() || amount <= 0 || amount > 1000000000) { tilAmount.error = S.text(R.string.text_064); valid = false }
+            if (category.isEmpty()) { tilCategory.error = S.text(R.string.text_063); valid = false }
+            if (description.isEmpty() || description.length > 500) { tilDescription.error = S.text(R.string.text_020); valid = false }
+            if (date.isEmpty()) { tilDate.error = S.text(R.string.text_069); valid = false }
             if (!valid) return@setOnClickListener
 
             val movement = Movement(
@@ -108,10 +108,20 @@ object TransactionDialog {
                 paymentMethod = acPayment.text.toString().trim(),
                 tags = etTags.text.toString().split(",").map { it.trim() }.filter { it.isNotEmpty() }
             )
+            if (movement.tags.size > 20 || movement.tags.any { it.length > 50 }) {
+                etTags.error = S.text(R.string.tags_limit)
+                return@setOnClickListener
+            }
             val repo = MovementRepository(context)
-            if (existing == null) repo.addMovement(movement) else repo.updateMovement(movement)
-            dialog.dismiss()
-            onSaved()
+            saveButton.isEnabled = false
+            saveButton.text = S.text(R.string.saving)
+            val task = if (existing == null) repo.addMovement(movement) else repo.updateMovement(movement)
+            task.addOnCompleteListener {
+                saveButton.isEnabled = true
+                saveButton.text = S.text(R.string.text_065)
+                if (it.isSuccessful) { dialog.dismiss(); onSaved() }
+                else Ui.toast(view, Tone.DANGER, com.example.coinly.data.CloudStore.message(it.exception ?: IllegalStateException()))
+            }
         }
         dialog.show()
     }
@@ -136,7 +146,7 @@ object TransactionDialog {
         }
         view.findViewById<TextView>(R.id.tvDetailDescription).text = movement.description
         view.findViewById<TextView>(R.id.tvDetailType).apply {
-            text = if (income) "Ingreso" else "Gasto"
+            text = if (income) S.text(R.string.text_070) else S.text(R.string.text_071)
             setBackgroundResource(tone.badge)
             val c = ContextCompat.getColor(context, tone.text)
             setTextColor(c)
@@ -146,10 +156,10 @@ object TransactionDialog {
 
         val rows = view.findViewById<LinearLayout>(R.id.layoutDetailRows)
         val details = listOfNotNull(
-            "Categoría" to movement.category,
-            "Fecha" to Ui.longDate(movement.date),
-            movement.paymentMethod.takeIf { it.isNotBlank() }?.let { "Método de pago" to it },
-            movement.tags.takeIf { it.isNotEmpty() }?.let { "Etiquetas" to it.joinToString(", ") }
+            S.text(R.string.text_072) to movement.category,
+            S.text(R.string.text_073) to Ui.longDate(movement.date),
+            movement.paymentMethod.takeIf { it.isNotBlank() }?.let { S.text(R.string.text_074) to it },
+            movement.tags.takeIf { it.isNotEmpty() }?.let { S.text(R.string.text_075) to it.joinToString(", ") }
         )
         details.forEachIndexed { i, (label, value) ->
             if (i > 0) rows.addView(View(context).apply {
@@ -168,9 +178,12 @@ object TransactionDialog {
         }
         view.findViewById<View>(R.id.btnDetailDelete).setOnClickListener {
             dialog.dismiss()
-            Ui.confirm(context, "Eliminar movimiento", "¿Deseas eliminar \"${movement.description}\"? Esta acción no se puede deshacer.", "Eliminar") {
-                MovementRepository(context).deleteMovement(movement.id)
-                onChanged()
+            Ui.confirm(context, S.text(R.string.text_076), S.text(R.string.text_077, movement.description), S.text(R.string.text_060)) {
+                MovementRepository(context).deleteMovement(movement.id).addOnCompleteListener {
+                    if (it.isSuccessful) onChanged()
+                    else Ui.toast((context as android.app.Activity).findViewById(android.R.id.content), Tone.DANGER,
+                        com.example.coinly.data.CloudStore.message(it.exception ?: IllegalStateException()))
+                }
             }
         }
         dialog.show()

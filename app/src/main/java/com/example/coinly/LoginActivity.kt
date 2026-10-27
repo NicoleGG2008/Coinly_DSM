@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import com.example.coinly.data.UserPrefs
+import com.example.coinly.data.AuthSession
+import com.example.coinly.data.CloudStore
+import com.google.firebase.auth.FirebaseAuth
+import android.widget.CheckBox
 import com.example.coinly.ui.Ui
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -20,7 +24,7 @@ class LoginActivity : BaseActivity() {
         val etEmail = findViewById<TextInputEditText>(R.id.etEmailLogin)
         val etPassword = findViewById<TextInputEditText>(R.id.etPasswordLogin)
         val btnLogin = findViewById<MaterialButton>(R.id.btnLogin)
-        val prefs = UserPrefs(this)
+        findViewById<CheckBox>(R.id.cbRemember).isChecked = AuthSession.remember
 
         Ui.clearErrorOnType(tilEmail, etEmail)
         Ui.clearErrorOnType(tilPassword, etPassword)
@@ -30,24 +34,25 @@ class LoginActivity : BaseActivity() {
             val password = etPassword.text.toString()
             var valid = true
 
-            if (email.isEmpty()) { tilEmail.error = "Completa este campo."; valid = false }
-            else if (!Ui.isEmail(email)) { tilEmail.error = "Ingresa un correo válido."; valid = false }
-            if (password.isEmpty()) { tilPassword.error = "Completa este campo."; valid = false }
+            if (email.isEmpty()) { tilEmail.error = S.text(R.string.text_020); valid = false }
+            else if (!Ui.isEmail(email)) { tilEmail.error = S.text(R.string.text_005); valid = false }
+            if (password.isEmpty()) { tilPassword.error = S.text(R.string.text_020); valid = false }
             if (!valid) return
 
-            if (!prefs.login(email, password)) {
-                tilPassword.error = "Correo o contraseña incorrectos."
-                return
-            }
-
-            btnLogin.isEnabled = false
-            btnLogin.text = "Ingresando..."
-            btnLogin.postDelayed({
+            AuthUi.run(this, btnLogin, {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).continueWithTask { result ->
+                    if (!result.isSuccessful) throw result.exception ?: IllegalStateException()
+                    CloudStore.ensureProfile()
+                }
+            }) {
+                AuthSession.remember = findViewById<CheckBox>(R.id.cbRemember).isChecked
+                CloudStore.start()
+                CoinlyApp.applyTheme(UserPrefs(this).darkMode)
                 startActivity(Intent(this, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 })
                 finish()
-            }, 500)
+            }
         }
 
         btnLogin.setOnClickListener { submit() }

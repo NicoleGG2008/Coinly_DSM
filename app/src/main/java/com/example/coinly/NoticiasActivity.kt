@@ -29,7 +29,7 @@ class NoticiasActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_noticias, null), "Noticias"))
+        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_noticias, null), S.text(R.string.text_016)))
 
         tabNews = findViewById(R.id.btnTabNews)
         tabCalendar = findViewById(R.id.btnTabCalendar)
@@ -54,8 +54,8 @@ class NoticiasActivity : BaseActivity() {
         findViewById<View>(R.id.indicatorCalendar).visibility = if (news) View.INVISIBLE else View.VISIBLE
         tabNews.setTextColor(getColor(if (news) R.color.coinly_on_dark else R.color.coinly_on_dark_muted))
         tabCalendar.setTextColor(getColor(if (news) R.color.coinly_on_dark_muted else R.color.coinly_on_dark))
-        ViewCompat.setStateDescription(tabNews, if (news) "Seleccionado" else null)
-        ViewCompat.setStateDescription(tabCalendar, if (news) null else "Seleccionado")
+        ViewCompat.setStateDescription(tabNews, if (news) S.text(R.string.text_018) else null)
+        ViewCompat.setStateDescription(tabCalendar, if (news) null else S.text(R.string.text_018))
     }
 
     // ---------------- Noticias ----------------
@@ -93,7 +93,7 @@ class NoticiasActivity : BaseActivity() {
             list.addView(card)
         }
         if (list.childCount == 0) list.addView(TextView(this).apply {
-            text = "No hay noticias en esta categoría."
+            text = S.text(R.string.text_039)
             gravity = Gravity.CENTER
             setPadding(Ui.dp(context, 20), Ui.dp(context, 32), Ui.dp(context, 20), Ui.dp(context, 32))
             setTextAppearance(R.style.TextAppearance_Coinly_Muted)
@@ -102,7 +102,7 @@ class NoticiasActivity : BaseActivity() {
     }
 
     // ---------------- Calendario ----------------
-    private val weekdays = listOf("Dom" to "domingo", "Lun" to "lunes", "Mar" to "martes", "Mié" to "miércoles", "Jue" to "jueves", "Vie" to "viernes", "Sáb" to "sábado")
+    private val weekdays = listOf("Dom" to "domingo", "Lun" to "lunes", S.text(R.string.text_040) to "martes", S.text(R.string.text_041) to S.text(R.string.text_042), "Jue" to "jueves", "Vie" to "viernes", S.text(R.string.text_043) to S.text(R.string.text_044))
 
     private fun setupCalendar() {
         val header = findViewById<LinearLayout>(R.id.layoutWeekdays)
@@ -187,10 +187,10 @@ class NoticiasActivity : BaseActivity() {
             isClickable = true
             isFocusable = true
             setBackgroundResource(R.drawable.bg_nav_item)
-            contentDescription = "$day de ${Ui.monthName(month)}" +
+            contentDescription = S.text(R.string.text_045, day, Ui.monthName(month)) +
                 (if (events.isEmpty()) "" else ", ${events.size} ${if (events.size == 1) "evento" else "eventos"}") +
-                (if (isToday) ", hoy" else "")
-            ViewCompat.setStateDescription(this, if (selected) "Seleccionado" else null)
+                (if (isToday) S.text(R.string.text_046) else "")
+            ViewCompat.setStateDescription(this, if (selected) S.text(R.string.text_018) else null)
             setOnClickListener { selectedDay = if (selected) null else day; renderCalendar() }
         }
         val number = TextView(this).apply {
@@ -223,11 +223,11 @@ class NoticiasActivity : BaseActivity() {
         val day = selectedDay
         val shown = if (day == null) monthEvents else monthEvents.filter { dayOf(it) == day }
         findViewById<TextView>(R.id.tvEventsTitle).text =
-            if (day == null) "Eventos de ${Ui.monthName(month)}" else "Eventos del $day de ${Ui.monthName(month)}"
+            if (day == null) S.text(R.string.text_047, Ui.monthName(month)) else S.text(R.string.text_048, day, Ui.monthName(month))
 
         if (shown.isEmpty()) {
             list.addView(TextView(this).apply {
-                text = "No hay eventos ${if (day == null) "este mes" else "este día"}."
+                text = S.text(R.string.text_051, if (day == null) S.text(R.string.text_049) else S.text(R.string.text_050))
                 gravity = Gravity.CENTER
                 setPadding(Ui.dp(context, 20), Ui.dp(context, 24), Ui.dp(context, 20), Ui.dp(context, 24))
                 setTextAppearance(R.style.TextAppearance_Coinly_Muted)

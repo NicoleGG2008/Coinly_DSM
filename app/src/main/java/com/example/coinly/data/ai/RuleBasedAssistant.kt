@@ -1,4 +1,6 @@
 package com.example.coinly.data.ai
+import com.example.coinly.S
+import com.example.coinly.R
 
 import android.content.Context
 import com.example.coinly.data.BudgetRepository
@@ -20,10 +22,10 @@ class RuleBasedAssistant(private val context: Context) {
 
         // Caso límite: Usuario sin datos
         if (movements.isEmpty() && budgets.isEmpty()) {
-            return "¡Hola! 👋 Aún no tienes movimientos ni presupuestos registrados en Coinly.\n\n" +
-                " Para ayudarte mejor, empieza por registrar tu primer ingreso o gasto desde la pantalla de Inicio o Movimientos (+). " +
-                "También puedes configurar límites en la sección de Presupuestos.\n\n" +
-                "💡 **Consejo rápido:** Aplica la regla 50/30/20: 50% para necesidades básicas, 30% para gustos personales y 20% directo a tu ahorro."
+            return S.text(R.string.text_190) +
+                S.text(R.string.text_191) +
+                S.text(R.string.text_192) +
+                S.text(R.string.text_193)
         }
 
         val incomeMovements = movements.filter { it.isIncome }
@@ -51,13 +53,13 @@ class RuleBasedAssistant(private val context: Context) {
     }
 
     private fun isSavingsQuery(q: String) =
-        q.contains("ahorr") || q.contains("guardar") || q.contains("meta") || q.contains("fondo") || q.contains("inver") || q.contains("cuanto guardar")
+        q.contains("ahorr") || q.contains("guardar") || q.contains("meta") || q.contains("fondo") || q.contains("inver") || q.contains(S.text(R.string.text_194))
 
     private fun isBudgetQuery(q: String) =
-        q.contains("presupuesto") || q.contains("limite") || q.contains("límite") || q.contains("alerta") || q.contains("exced") || q.contains("disponible")
+        q.contains("presupuesto") || q.contains("limite") || q.contains(S.text(R.string.text_195)) || q.contains("alerta") || q.contains("exced") || q.contains("disponible")
 
     private fun isExpenseQuery(q: String) =
-        q.contains("gasto") || q.contains("compr") || q.contains("pag") || q.contains("puedo gastar") || q.contains("salida") || q.contains("comida") || q.contains("en que") || q.contains("en qué")
+        q.contains("gasto") || q.contains("compr") || q.contains("pag") || q.contains(S.text(R.string.text_196)) || q.contains("salida") || q.contains("comida") || q.contains(S.text(R.string.text_197)) || q.contains(S.text(R.string.text_198))
 
     private fun buildSavingsResponse(
         income: Double,
@@ -68,25 +70,25 @@ class RuleBasedAssistant(private val context: Context) {
         val recommendedSavings = if (income > 0) income * 0.20 else 0.0
         val sb = StringBuilder()
 
-        sb.append("💡 **Análisis de Ahorro Coinly:**\n\n")
+        sb.append(S.text(R.string.text_199))
 
         if (balance > 0) {
             val savingsRate = if (income > 0) (balance / income * 100).toInt() else 0
-            sb.append("¡Vas por excelente camino! Tu balance actual es positivo: **+${Ui.money(balance)}** ")
-            sb.append("(tienes un margen del **$savingsRate%** de tus ingresos).\n\n")
+            sb.append(S.text(R.string.text_200, Ui.money(balance)))
+            sb.append(S.text(R.string.text_201, savingsRate))
             if (income > 0) {
-                sb.append("• **Recomendación 50/30/20:** Para tus ingresos de ${Ui.money(income)}, se recomienda ahorrar un 20% (**${Ui.money(recommendedSavings)}**).\n")
+                sb.append(S.text(R.string.text_202, Ui.money(income), Ui.money(recommendedSavings)))
             }
-            sb.append("• Si separas **${Ui.money(balance * 0.5)}** hoy mismo a tu fondo de ahorro, mantendrás tus finanzas muy estables.")
+            sb.append(S.text(R.string.text_203, Ui.money(balance * 0.5)))
         } else if (balance == 0.0 && income > 0) {
-            sb.append("Tus gastos igualan exactamente tus ingresos (${Ui.money(income)}). ")
-            sb.append("Para lograr ahorrar, necesitas reducir gastos no esenciales o generar ingresos adicionales.")
+            sb.append(S.text(R.string.text_204, Ui.money(income)))
+            sb.append(S.text(R.string.text_205))
         } else {
-            sb.append("⚠️ **Atención:** Actualmente tus gastos (${Ui.money(expense)}) superan tus ingresos (${Ui.money(income)}), ")
-            sb.append("generando un déficit de **${Ui.money(-balance)}**.\n\n")
+            sb.append(S.text(R.string.text_206, Ui.money(expense), Ui.money(income)))
+            sb.append(S.text(R.string.text_207, Ui.money(-balance)))
             if (topCategory != null) {
-                sb.append("• Tu principal área de gasto es **${topCategory.first}** con **${Ui.money(topCategory.second)}**. ")
-                sb.append("Reducir un 15% en este rubro liberaría **${Ui.money(topCategory.second * 0.15)}** para estabilizar tu balance.")
+                sb.append(S.text(R.string.text_208, topCategory.first, Ui.money(topCategory.second)))
+                sb.append(S.text(R.string.text_209, Ui.money(topCategory.second * 0.15)))
             }
         }
         return sb.toString()
@@ -94,45 +96,45 @@ class RuleBasedAssistant(private val context: Context) {
 
     private fun buildBudgetResponse(budgets: List<Budget>): String {
         if (budgets.isEmpty()) {
-            return "📋 **Presupuestos:**\n\nNo tienes presupuestos configurados en este momento. " +
-                "Puedes crear metas mensuales en la pestaña **Presupuestos** para evitar gastos excesivos."
+            return S.text(R.string.text_210) +
+                S.text(R.string.text_211)
         }
 
         val exceeded = budgets.filter { it.status == BudgetStatus.DANGER }
         val warning = budgets.filter { it.status == BudgetStatus.WARNING }
         val success = budgets.filter { it.status == BudgetStatus.SUCCESS }
 
-        val sb = StringBuilder("📋 **Estado de tus Presupuestos:**\n\n")
+        val sb = StringBuilder(S.text(R.string.text_212))
 
         if (exceeded.isNotEmpty()) {
-            sb.append("🚨 **Presupuestos excedidos (${exceeded.size}):**\n")
+            sb.append(S.text(R.string.text_213, exceeded.size))
             exceeded.forEach { b ->
                 val over = b.spent - b.limit
-                sb.append("• **${b.category}**: gastaste ${Ui.money(b.spent)} de un límite de ${Ui.money(b.limit)} (exceso de ${Ui.money(over)}).\n")
+                sb.append(S.text(R.string.text_214, b.category, Ui.money(b.spent), Ui.money(b.limit), Ui.money(over)))
             }
             sb.append("\n")
         }
 
         if (warning.isNotEmpty()) {
-            sb.append("⚠️ **Cercanos al límite (${warning.size}):**\n")
+            sb.append(S.text(R.string.text_215, warning.size))
             warning.forEach { b ->
-                sb.append("• **${b.category}**: ${Ui.money(b.spent)} de ${Ui.money(b.limit)} (${b.percent}% usado, te quedan ${Ui.money(b.available)}).\n")
+                sb.append(S.text(R.string.text_216, b.category, Ui.money(b.spent), Ui.money(b.limit), b.percent, Ui.money(b.available)))
             }
             sb.append("\n")
         }
 
         if (success.isNotEmpty()) {
-            sb.append("✅ **Presupuestos bajo control (${success.size}):**\n")
+            sb.append(S.text(R.string.text_217, success.size))
             success.forEach { b ->
-                sb.append("• **${b.category}**: ${Ui.money(b.spent)} de ${Ui.money(b.limit)} (${b.percent}% usado).\n")
+                sb.append(S.text(R.string.text_218, b.category, Ui.money(b.spent), Ui.money(b.limit), b.percent))
             }
             sb.append("\n")
         }
 
         if (exceeded.isNotEmpty()) {
-            sb.append("💡 **Sugerencia:** Reasigna fondos de las categorías en verde para cubrir los excesos.")
+            sb.append(S.text(R.string.text_219))
         } else {
-            sb.append("👍 ¡Excelente disciplina financiera! Todos tus presupuestos están dentro del límite planeado.")
+            sb.append(S.text(R.string.text_220))
         }
 
         return sb.toString()
@@ -150,43 +152,43 @@ class RuleBasedAssistant(private val context: Context) {
         val matchAmount = Regex("(\\d+([.,]\\d+)?)").find(query)?.value?.replace(",", ".")?.toDoubleOrNull()
         if (matchAmount != null && matchAmount > 0) {
             val matchingBudget = budgets.firstOrNull { query.contains(it.category.lowercase()) }
-            sb.append("💸 **Evaluación de Gasto (${Ui.money(matchAmount)}):**\n\n")
+            sb.append(S.text(R.string.text_221, Ui.money(matchAmount)))
 
             if (matchingBudget != null) {
                 val available = matchingBudget.available
                 if (available >= matchAmount) {
-                    sb.append("✅ **¡Sí es viable!** En la categoría **${matchingBudget.category}** tienes un disponible de **${Ui.money(available)}**. ")
-                    sb.append("Después de este gasto te quedarán **${Ui.money(available - matchAmount)}**.")
+                    sb.append(S.text(R.string.text_222, matchingBudget.category, Ui.money(available)))
+                    sb.append(S.text(R.string.text_223, Ui.money(available - matchAmount)))
                 } else if (available > 0) {
-                    sb.append("⚠️ **Atención:** En **${matchingBudget.category}** solo te quedan **${Ui.money(available)}**. ")
-                    sb.append("Gastar ${Ui.money(matchAmount)} excedería tu presupuesto por **${Ui.money(matchAmount - available)}**.")
+                    sb.append(S.text(R.string.text_224, matchingBudget.category, Ui.money(available)))
+                    sb.append(S.text(R.string.text_225, Ui.money(matchAmount), Ui.money(matchAmount - available)))
                 } else {
-                    sb.append("🚨 **Gasto no recomendado:** Ya has superado tu presupuesto de **${matchingBudget.category}** ")
-                    sb.append("(excedido en ${Ui.money(-available)}). Realizar este gasto aumentará tu déficit.")
+                    sb.append(S.text(R.string.text_226, matchingBudget.category))
+                    sb.append(S.text(R.string.text_227, Ui.money(-available)))
                 }
             } else {
-                sb.append("Has registrado un total de **${Ui.money(totalExpense)}** en gastos este mes. ")
-                sb.append("Evalúa si este gasto de **${Ui.money(matchAmount)}** encaja en tus prioridades antes de realizarlo.")
+                sb.append(S.text(R.string.text_228, Ui.money(totalExpense)))
+                sb.append(S.text(R.string.text_229, Ui.money(matchAmount)))
             }
             return sb.toString()
         }
 
         // Resumen general de gastos por categoría
-        sb.append("📊 **Desglose de Gastos Acumulados:**\n\n")
-        sb.append("Has gastado un total de **${Ui.money(totalExpense)}**.\n\n")
+        sb.append(S.text(R.string.text_230))
+        sb.append(S.text(R.string.text_231, Ui.money(totalExpense)))
 
         if (expensesByCategory.isNotEmpty()) {
-            sb.append("**Tus principales categorías de gasto son:**\n")
+            sb.append(S.text(R.string.text_232))
             expensesByCategory.take(4).forEach { (cat, amount) ->
                 val pct = if (totalExpense > 0) (amount / totalExpense * 100).toInt() else 0
-                sb.append("• **$cat**: ${Ui.money(amount)} ($pct% del total)\n")
+                sb.append(S.text(R.string.text_233, cat, Ui.money(amount), pct))
             }
             sb.append("\n")
             val top = expensesByCategory.first()
-            sb.append("💡 **Tip de optimización:** Revisa tus gastos en **${top.first}**, ya que representan casi el ")
-            sb.append("${(top.second / totalExpense * 100).toInt()}% de todas tus salidas.")
+            sb.append(S.text(R.string.text_234, top.first))
+            sb.append(S.text(R.string.text_235, (top.second / totalExpense * 100).toInt()))
         } else {
-            sb.append("No hay gastos registrados en este período.")
+            sb.append(S.text(R.string.text_236))
         }
 
         return sb.toString()
@@ -202,26 +204,26 @@ class RuleBasedAssistant(private val context: Context) {
         val exceededCount = budgets.count { it.status == BudgetStatus.DANGER }
         val warningCount = budgets.count { it.status == BudgetStatus.WARNING }
 
-        val sb = StringBuilder("📊 **Resumen Financiero Coinly:**\n\n")
-        sb.append("• **Balance neto:** ${if (balance >= 0) "+" else ""}${Ui.money(balance)}\n")
-        sb.append("• **Ingresos acumulados:** +${Ui.money(income)}\n")
-        sb.append("• **Gastos acumulados:** −${Ui.money(expense)}\n")
+        val sb = StringBuilder(S.text(R.string.text_237))
+        sb.append(S.text(R.string.text_238, if (balance >= 0) "+" else "", Ui.money(balance)))
+        sb.append(S.text(R.string.text_239, Ui.money(income)))
+        sb.append(S.text(R.string.text_240, Ui.money(expense)))
 
         if (topCategory != null) {
-            sb.append("• **Mayor gasto en:** ${topCategory.first} (${Ui.money(topCategory.second)})\n")
+            sb.append(S.text(R.string.text_241, topCategory.first, Ui.money(topCategory.second)))
         }
 
         if (budgets.isNotEmpty()) {
-            sb.append("• **Presupuestos:** ${budgets.size} activos ")
+            sb.append(S.text(R.string.text_242, budgets.size))
             if (exceededCount > 0 || warningCount > 0) {
-                sb.append("($exceededCount en alerta, $warningCount cercanos al límite)")
+                sb.append(S.text(R.string.text_243, exceededCount, warningCount))
             } else {
-                sb.append("(todos al día)")
+                sb.append(S.text(R.string.text_244))
             }
             sb.append("\n")
         }
 
-        sb.append("\n💬 *¿En qué puedo ayudarte hoy? Puedes preguntarme sobre tus presupuestos, hábitos de ahorro o análisis de gastos.*")
+        sb.append(S.text(R.string.text_245))
         return sb.toString()
     }
 }

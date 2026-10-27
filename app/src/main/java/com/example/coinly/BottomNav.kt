@@ -23,11 +23,11 @@ object BottomNav {
     private class Item(val label: String, val icon: Int, val target: Class<out Activity>)
 
     private val items = listOf(
-        Item("Inicio", R.drawable.ic_home, MainActivity::class.java),
-        Item("Movimientos", R.drawable.ic_dollar, MovimientosActivity::class.java),
-        Item("Presupuestos", R.drawable.ic_pie, PresupuestosActivity::class.java),
-        Item("Noticias", R.drawable.ic_news, NoticiasActivity::class.java),
-        Item("Perfil", R.drawable.ic_user, PerfilActivity::class.java)
+        Item(S.text(R.string.text_013), R.drawable.ic_home, MainActivity::class.java),
+        Item(S.text(R.string.text_014), R.drawable.ic_dollar, MovimientosActivity::class.java),
+        Item(S.text(R.string.text_015), R.drawable.ic_pie, PresupuestosActivity::class.java),
+        Item(S.text(R.string.text_016), R.drawable.ic_news, NoticiasActivity::class.java),
+        Item(S.text(R.string.text_017), R.drawable.ic_user, PerfilActivity::class.java)
     )
 
     fun wrap(activity: Activity, content: View, selected: String): View {
@@ -52,7 +52,7 @@ object BottomNav {
                 isClickable = true
                 isFocusable = true
                 contentDescription = item.label
-                ViewCompat.setStateDescription(this, if (isSelected) "Seleccionado" else null)
+                ViewCompat.setStateDescription(this, if (isSelected) S.text(R.string.text_018) else null)
             }
 
             // Indicador superior de la pestaña activa
@@ -75,11 +75,11 @@ object BottomNav {
                 text = item.label
                 setTextColor(color)
                 setTypeface(typeface, if (isSelected) Typeface.BOLD else Typeface.NORMAL)
-                maxLines = 1
+                maxLines = 2
                 gravity = Gravity.CENTER
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
                 // Ajusta el tamaño para que "Presupuestos" quepa en cualquier pantalla
-                TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(this, 10, 12, 1, TypedValue.COMPLEX_UNIT_SP)
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
             }
             cell.addView(label, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
                 topMargin = dp(activity, 2)
@@ -117,7 +117,7 @@ object BottomNav {
                 strokeWidth = dp(activity, 2)
                 isClickable = true
                 isFocusable = true
-                contentDescription = "Abrir Coinly AI Assistant"
+                contentDescription = S.text(R.string.text_019)
 
                 val logoIcon = ImageView(activity).apply {
                     setImageResource(R.drawable.coinly_icon)

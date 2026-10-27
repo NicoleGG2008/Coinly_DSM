@@ -25,9 +25,10 @@ class EditProfileActivity : BaseActivity() {
         val etCareer = findViewById<TextInputEditText>(R.id.etProfileCareer)
         val acCurrency = findViewById<MaterialAutoCompleteTextView>(R.id.acProfileCurrency)
 
-        acCurrency.setSimpleItems(Ui.CURRENCIES)
-        etName.setText(prefs.name)
+        Ui.choices(acCurrency, Ui.CURRENCIES)
+        if (savedInstanceState == null) etName.setText(prefs.name)
         etEmail.setText(prefs.email)
+        tilEmail.helperText = S.text(R.string.email_verify_help)
         etUniversity.setText(prefs.university)
         etCareer.setText(prefs.career)
         acCurrency.setText(prefs.currency, false)
@@ -40,17 +41,35 @@ class EditProfileActivity : BaseActivity() {
             val name = etName.text.toString().trim()
             val email = etEmail.text.toString().trim()
             var valid = true
-            if (name.isEmpty()) { tilName.error = "Completa este campo."; valid = false }
-            if (!Ui.isEmail(email)) { tilEmail.error = "Ingresa un correo válido."; valid = false }
+            if (name.isEmpty()) { tilName.error = S.text(R.string.text_020); valid = false }
+            if (!Ui.isEmail(email)) { tilEmail.error = S.text(R.string.text_005); valid = false }
             if (!valid) return
 
-            prefs.name = name
-            prefs.email = email
-            prefs.university = etUniversity.text.toString().trim()
-            prefs.career = etCareer.text.toString().trim()
-            prefs.currency = acCurrency.text.toString().ifBlank { prefs.currency }
-            Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, "Perfil actualizado correctamente.")
-            findViewById<View>(R.id.btnSaveProfile).postDelayed({ finish() }, 900)
+            val user = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser ?: return
+            val emailChanged = email != user.email
+            val profile = mapOf("name" to name, "email" to user.email.orEmpty(),
+                "university" to etUniversity.text.toString().trim(),
+                "career" to etCareer.text.toString().trim(),
+                "currency" to acCurrency.text.toString().ifBlank { prefs.currency })
+            AuthUi.run(this, findViewById(R.id.btnSaveProfile), {
+                val saveProfile = {
+                    com.example.coinly.data.CloudStore.write {
+                        com.example.coinly.data.CloudStore.userRef().set(profile, com.google.firebase.firestore.SetOptions.merge())
+                    }
+                }
+                if (emailChanged) user.verifyBeforeUpdateEmail(email).continueWithTask { result ->
+                    if (!result.isSuccessful) throw result.exception ?: IllegalStateException()
+                    saveProfile()
+                } else saveProfile()
+            }) {
+                prefs.cacheProfile(profile)
+                if (emailChanged) {
+                    Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, S.text(R.string.email_verification_sent))
+                    finish(); return@run
+                }
+                Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, S.text(R.string.text_025))
+                finish()
+            }
         }
         findViewById<MaterialButton>(R.id.btnSaveProfile).setOnClickListener { save() }
     }

@@ -29,15 +29,32 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
+        buildConfigField("String", "GEMINI_API_KEY", "\"\"")
+        buildConfigField("boolean", "FIREBASE_EMULATOR", providers.gradleProperty("firebaseEmulator").orElse("false").get())
     }
 
     buildFeatures {
         buildConfig = true
     }
 
+    val signingProperties = Properties()
+    val signingFile = rootProject.file("signing.properties")
+    if (signingFile.exists()) signingFile.inputStream().use { signingProperties.load(it) }
+    signingConfigs {
+        create("coinlyRelease") {
+            if (signingFile.exists()) {
+                storeFile = rootProject.file(signingProperties.getProperty("storeFile"))
+                storePassword = signingProperties.getProperty("storePassword")
+                keyAlias = signingProperties.getProperty("keyAlias")
+                keyPassword = signingProperties.getProperty("keyPassword")
+            }
+        }
+    }
     buildTypes {
         release {
+            isDebuggable = false
+            buildConfigField("boolean", "FIREBASE_EMULATOR", "false")
+            signingConfig = signingConfigs.getByName("coinlyRelease")
             optimization {
                 enable = false
             }
@@ -56,9 +73,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.material)
     implementation(libs.firebase.auth)
-    implementation(libs.androidx.credentials)
-    implementation(libs.androidx.credentials.play.services.auth)
-    implementation(libs.googleid)
     implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

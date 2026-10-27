@@ -28,13 +28,13 @@
             android:layout_marginBottom="16dp"
             android:accessibilityHeading="true"
             android:textAppearance="@style/TextAppearance.Coinly.Heading"
-            android:text="Agregar movimiento" />
+            android:text="@string/text_316" />
 
         <TextView
             style="@style/Coinly.Text.FieldLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tipo de movimiento" />
+            android:text="@string/text_377" />
 
         <LinearLayout
             android:id="@+id/toggleType"
@@ -51,7 +51,7 @@
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
                 android:checkable="true"
-                android:text="Ingreso"
+                android:text="@string/text_070"
                 app:icon="@drawable/ic_arrow_up" />
 
             <com.google.android.material.button.MaterialButton
@@ -63,7 +63,7 @@
                 android:layout_weight="1"
                 android:checkable="true"
                 android:checked="true"
-                android:text="Gasto"
+                android:text="@string/text_071"
                 app:icon="@drawable/ic_arrow_down" />
         </LinearLayout>
 
@@ -72,7 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/etAmount"
-            android:text="Monto" />
+            android:text="@string/text_378" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilAmount"
@@ -86,7 +86,7 @@
                 style="@style/Widget.Coinly.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="0.00"
+                android:hint="@string/text_322"
                 android:inputType="numberDecimal"
                 android:imeOptions="actionNext" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -96,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/acCategory"
-            android:text="Categoría" />
+            android:text="@string/text_072" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilCategory"
@@ -108,7 +108,7 @@
                 android:id="@+id/acCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Selecciona una categoría"
+                android:hint="@string/text_366"
                 android:inputType="none"
                 android:minHeight="52dp"
                 android:textSize="16sp"
@@ -120,7 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/etDescription"
-            android:text="Descripción" />
+            android:text="@string/text_379" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDescription"
@@ -134,7 +134,7 @@
                 style="@style/Widget.Coinly.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ej. Almuerzo en cafetería"
+                android:hint="@string/text_380"
                 android:inputType="textCapSentences"
                 android:imeOptions="actionNext" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -144,7 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/etDate"
-            android:text="Fecha" />
+            android:text="@string/text_073" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDate"
@@ -160,7 +160,7 @@
                 style="@style/Widget.Coinly.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Selecciona una fecha"
+                android:hint="@string/text_381"
                 android:inputType="none"
                 android:cursorVisible="false" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -170,7 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/acPayment"
-            android:text="Método de pago (opcional)" />
+            android:text="@string/text_382" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilPayment"
@@ -182,7 +182,7 @@
                 android:id="@+id/acPayment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Selecciona un método"
+                android:hint="@string/text_383"
                 android:inputType="none"
                 android:minHeight="52dp"
                 android:textSize="16sp"
@@ -194,7 +194,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:labelFor="@+id/etTags"
-            android:text="Etiquetas (opcional)" />
+            android:text="@string/text_384" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilTags"
@@ -208,7 +208,7 @@
                 style="@style/Widget.Coinly.EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="trabajo, libros"
+                android:hint="@string/text_385"
                 android:inputType="text"
                 android:imeOptions="actionDone" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -226,7 +226,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                android:text="Cancelar" />
+                android:text="@string/text_368" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSheetSave"
@@ -235,7 +235,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                android:text="Guardar" />
+                android:text="@string/text_065" />
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

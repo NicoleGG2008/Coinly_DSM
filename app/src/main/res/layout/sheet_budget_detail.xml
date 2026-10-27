@@ -98,7 +98,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Presupuesto"
+                    android:text="@string/text_361"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -120,7 +120,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gastado"
+                    android:text="@string/text_362"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -142,7 +142,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Disponible"
+                    android:text="@string/text_363"
                     android:textAppearance="@style/TextAppearance.Coinly.Caption" />
 
                 <TextView
@@ -168,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
-                android:text="Editar" />
+                android:text="@string/text_364" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnBdDelete"
@@ -177,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
                 android:layout_weight="1"
-                android:text="Eliminar" />
+                android:text="@string/text_060" />
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

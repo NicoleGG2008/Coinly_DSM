@@ -22,11 +22,15 @@ class ForgotPasswordActivity : BaseActivity() {
 
         fun send() {
             if (!Ui.isEmail(et.text.toString().trim())) {
-                til.error = "Ingresa un correo válido."
+                til.error = S.text(R.string.text_005)
                 return
             }
-            findViewById<View>(R.id.layoutForgotForm).visibility = View.GONE
-            findViewById<View>(R.id.layoutForgotSent).visibility = View.VISIBLE
+            AuthUi.run(this, findViewById(R.id.btnSendReset), {
+                com.google.firebase.auth.FirebaseAuth.getInstance().sendPasswordResetEmail(et.text.toString().trim())
+            }) {
+                findViewById<View>(R.id.layoutForgotForm).visibility = View.GONE
+                findViewById<View>(R.id.layoutForgotSent).visibility = View.VISIBLE
+            }
         }
         findViewById<MaterialButton>(R.id.btnSendReset).setOnClickListener { send() }
         et.setOnEditorActionListener { _, _, _ -> send(); true }

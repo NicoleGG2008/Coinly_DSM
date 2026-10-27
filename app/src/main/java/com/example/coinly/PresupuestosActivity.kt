@@ -23,7 +23,7 @@ class PresupuestosActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_presupuestos, null), "Presupuestos"))
+        setContentView(BottomNav.wrap(this, layoutInflater.inflate(R.layout.activity_presupuestos, null), S.text(R.string.text_015)))
 
         findViewById<View>(R.id.tvClearAlerts).setOnClickListener {
             repository.dismissAll(repository.getBudgets().map { it.id })
@@ -32,6 +32,8 @@ class PresupuestosActivity : BaseActivity() {
         findViewById<View>(R.id.btnCreateBudgetAction).setOnClickListener { editBudget(null) }
         render()
     }
+
+    override fun onCloudChanged() { render() }
 
     private fun render() {
         val alerts = findViewById<LinearLayout>(R.id.layoutAlertsContainer)
@@ -49,9 +51,9 @@ class PresupuestosActivity : BaseActivity() {
         } else {
             active.forEach { b ->
                 val message = if (b.status == BudgetStatus.DANGER)
-                    "Has excedido tu presupuesto de ${b.category}: gastaste ${Ui.money(b.spent)} de ${Ui.money(b.limit)}."
+                    S.text(R.string.text_030, b.category, Ui.money(b.spent), Ui.money(b.limit))
                 else
-                    "Presupuesto de ${b.category} cercano al límite."
+                    S.text(R.string.text_055, b.category)
                 Ui.banner(alerts, Ui.tone(b.status), message) {
                     repository.dismissAlert(b.id)
                     render()
@@ -62,7 +64,7 @@ class PresupuestosActivity : BaseActivity() {
         // 2. Tarjetas de presupuesto
         if (budgets.isEmpty()) {
             budgetsContainer.addView(TextView(this).apply {
-                text = "Aún no tienes presupuestos. Toca + para crear el primero."
+                text = S.text(R.string.text_056)
                 gravity = android.view.Gravity.CENTER
                 setPadding(Ui.dp(context, 20), Ui.dp(context, 32), Ui.dp(context, 20), Ui.dp(context, 32))
                 setTextAppearance(R.style.TextAppearance_Coinly_Muted)
@@ -81,9 +83,9 @@ class PresupuestosActivity : BaseActivity() {
         val dialog = Ui.sheet(this, view)
 
         view.findViewById<TextView>(R.id.tvBdTitle).text = b.category
-        view.findViewById<TextView>(R.id.tvBdPeriod).text = b.period
+        view.findViewById<TextView>(R.id.tvBdPeriod).text = Ui.periodLabel(b.period)
         Ui.bindStatusBadge(view.findViewById(R.id.tvBdBadge), b)
-        view.findViewById<TextView>(R.id.tvBdPercent).text = "${b.percent}% usado"
+        view.findViewById<TextView>(R.id.tvBdPercent).text = S.text(R.string.text_057, b.percent)
         Ui.styleBudgetProgress(view.findViewById(R.id.progressBd), b)
         view.findViewById<TextView>(R.id.tvBdLimit).text = Ui.money(b.limit)
         view.findViewById<TextView>(R.id.tvBdSpent).text = Ui.money(b.spent)
@@ -95,10 +97,14 @@ class PresupuestosActivity : BaseActivity() {
         view.findViewById<View>(R.id.btnBdEdit).setOnClickListener { dialog.dismiss(); editBudget(b) }
         view.findViewById<View>(R.id.btnBdDelete).setOnClickListener {
             dialog.dismiss()
-            Ui.confirm(this, "Eliminar presupuesto", "¿Deseas eliminar el presupuesto de ${b.category}?", "Eliminar") {
-                repository.delete(b.id)
-                render()
-                Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, "Presupuesto eliminado.")
+            Ui.confirm(this, S.text(R.string.text_058), S.text(R.string.text_059, b.category), S.text(R.string.text_060)) {
+                repository.delete(b.id).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        render()
+                        Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, S.text(R.string.text_061))
+                    } else Ui.toast(findViewById(android.R.id.content), Tone.DANGER,
+                        com.example.coinly.data.CloudStore.message(it.exception ?: IllegalStateException()))
+                }
             }
         }
         dialog.show()
@@ -112,12 +118,12 @@ class PresupuestosActivity : BaseActivity() {
         val acCategory = view.findViewById<MaterialAutoCompleteTextView>(R.id.acBudgetCategory)
         val etLimit = view.findViewById<TextInputEditText>(R.id.etBudgetLimit)
 
-        acCategory.setSimpleItems(MovementRepository.EXPENSE_CATEGORIES.toTypedArray())
+        Ui.choices(acCategory, MovementRepository.EXPENSE_CATEGORIES.toTypedArray())
         Ui.clearErrorOnType(tilLimit, etLimit)
         acCategory.setOnItemClickListener { _, _, _, _ -> tilCategory.error = null }
 
         if (b != null) {
-            view.findViewById<TextView>(R.id.tvBudgetSheetTitle).text = "Editar presupuesto"
+            view.findViewById<TextView>(R.id.tvBudgetSheetTitle).text = S.text(R.string.text_062)
             acCategory.setText(b.category, false)
             etLimit.setText(b.limit.toString())
         }
@@ -127,23 +133,30 @@ class PresupuestosActivity : BaseActivity() {
             val category = acCategory.text.toString().trim()
             val limit = etLimit.text.toString().toDoubleOrNull()
             var valid = true
-            if (category.isEmpty()) { tilCategory.error = "Selecciona una categoría."; valid = false }
-            if (limit == null || limit <= 0) { tilLimit.error = "Ingresa un monto válido."; valid = false }
+            if (category.isEmpty()) { tilCategory.error = S.text(R.string.text_063); valid = false }
+            if (limit == null || !limit.isFinite() || limit <= 0 || limit > 1000000000) { tilLimit.error = S.text(R.string.text_064); valid = false }
             if (!valid) return@setOnClickListener
 
+            val saveButton = view.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnBudgetSave)
+            saveButton.isEnabled = false
+            saveButton.text = S.text(R.string.saving)
             repository.upsert(
                 b?.copy(category = category, limit = limit!!)
                     ?: Budget(System.currentTimeMillis().toString(), category, limit!!, 0.0, currentPeriod(this))
-            )
-            dialog.dismiss()
-            render()
-            Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, "Presupuesto guardado correctamente.")
+            ).addOnCompleteListener {
+                saveButton.isEnabled = true
+                saveButton.text = S.text(R.string.text_065)
+                if (it.isSuccessful) {
+                    dialog.dismiss(); render()
+                    Ui.toast(findViewById(android.R.id.content), Tone.SUCCESS, S.text(R.string.text_066))
+                } else Ui.toast(view, Tone.DANGER,
+                    com.example.coinly.data.CloudStore.message(it.exception ?: IllegalStateException()))
+            }
         }
         dialog.show()
     }
 
     private fun currentPeriod(context: Context): String {
-        val cal = Calendar.getInstance()
-        return Ui.monthName(cal.get(Calendar.MONTH)).replaceFirstChar { it.uppercase() } + " " + cal.get(Calendar.YEAR)
+        return java.text.SimpleDateFormat("yyyy-MM", java.util.Locale.US).format(java.util.Date())
     }
 }

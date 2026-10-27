@@ -1,4 +1,6 @@
 package com.example.coinly.data.ai
+import com.example.coinly.S
+import com.example.coinly.R
 
 import com.example.coinly.BuildConfig
 import com.example.coinly.model.ChatMessage
@@ -21,7 +23,7 @@ class GeminiService {
     ): String {
         val apiKey = BuildConfig.GEMINI_API_KEY
         if (apiKey.isBlank() || apiKey == "your_gemini_api_key_here") {
-            throw GeminiException("API key de Gemini no configurada.")
+            throw GeminiException(S.text(R.string.text_181))
         }
 
         val endpoints = listOf(
@@ -40,7 +42,7 @@ class GeminiService {
             }
         }
 
-        throw lastException ?: GeminiException("Error desconocido al llamar a la API de Gemini.")
+        throw lastException ?: GeminiException(S.text(R.string.text_182))
     }
 
     private fun executeApiCall(
@@ -106,26 +108,26 @@ class GeminiService {
             val errorStream = conn.errorStream
             val errorMsg = if (errorStream != null) {
                 BufferedReader(InputStreamReader(errorStream, "UTF-8")).use { it.readText() }
-            } else "HTTP $statusCode"
-            throw GeminiException("Error en respuesta de Gemini (HTTP $statusCode): $errorMsg")
+            } else S.text(R.string.text_183, statusCode)
+            throw GeminiException(S.text(R.string.text_184, statusCode, errorMsg))
         }
 
         val responseText = BufferedReader(InputStreamReader(conn.inputStream, "UTF-8")).use { it.readText() }
         val responseJson = JSONObject(responseText)
 
         val candidates = responseJson.optJSONArray("candidates")
-            ?: throw GeminiException("Respuesta vacía o formato inesperado de Gemini.")
+            ?: throw GeminiException(S.text(R.string.text_185))
 
         if (candidates.length() == 0) {
-            throw GeminiException("Sin respuesta devuelta por Gemini.")
+            throw GeminiException(S.text(R.string.text_186))
         }
 
         val candidate = candidates.getJSONObject(0)
         val content = candidate.optJSONObject("content")
-            ?: throw GeminiException("Respuesta sin nodo de contenido.")
+            ?: throw GeminiException(S.text(R.string.text_187))
 
         val parts = content.optJSONArray("parts")
-            ?: throw GeminiException("Respuesta sin partes de texto.")
+            ?: throw GeminiException(S.text(R.string.text_188))
 
         val textBuilder = StringBuilder()
         for (i in 0 until parts.length()) {
@@ -135,7 +137,7 @@ class GeminiService {
 
         val result = textBuilder.toString().trim()
         if (result.isBlank()) {
-            throw GeminiException("Texto de respuesta vacío.")
+            throw GeminiException(S.text(R.string.text_189))
         }
 
         return result

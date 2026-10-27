@@ -1,0 +1,2 @@
+PASS unchecked Recordar sesi�n requires login after process restart
+CAPTURE 14_login

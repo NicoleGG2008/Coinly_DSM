@@ -1,4 +1,5 @@
 package com.example.coinly.ui
+import com.example.coinly.S
 
 import android.content.Context
 import android.text.Html
@@ -25,9 +26,13 @@ import com.google.android.material.chip.Chip
 
 object CoinlyAiChatSheet {
 
+    private var historyOwner: String? = null
     private val sessionHistory = mutableListOf<ChatMessage>()
+    fun clearSession() { historyOwner = null; sessionHistory.clear() }
 
     fun show(context: Context) {
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: return
+        if (historyOwner != uid) { sessionHistory.clear(); historyOwner = uid }
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.sheet_coinly_ai_chat, null)
 
@@ -65,8 +70,8 @@ object CoinlyAiChatSheet {
         // Mensaje inicial de bienvenida si la sesión está limpia
         if (sessionHistory.isEmpty()) {
             val userName = prefs.name.ifBlank { "amigo" }
-            val welcomeText = "¡Hola, **$userName**! 👋 Soy **Coinly AI**, tu asistente financiero personal.\n\n" +
-                "¿En qué te puedo ayudar hoy? Toca una sugerencia rápida o escribe tu consulta."
+            val welcomeText = S.text(R.string.text_112, userName) +
+                S.text(R.string.text_113)
             sessionHistory.add(
                 ChatMessage(
                     text = welcomeText,
@@ -102,25 +107,27 @@ object CoinlyAiChatSheet {
 
             // Mostrar estado de escribiendo...
             typingIndicator.visibility = View.VISIBLE
-            typingIndicator.announceForAccessibility("Coinly AI está procesando tu consulta...")
+            typingIndicator.announceForAccessibility(S.text(R.string.text_114))
             scrollChat.post { scrollChat.fullScroll(ScrollView.FOCUS_DOWN) }
 
             btnSend.isEnabled = false
 
-            assistant.ask(cleanText, sessionHistory) { responseMsg ->
+            assistant.ask(cleanText, sessionHistory.toList()) { responseMsg ->
+                if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid != uid ||
+                    historyOwner != uid || !dialog.isShowing) return@ask
                 sessionHistory.add(responseMsg)
                 typingIndicator.visibility = View.GONE
                 btnSend.isEnabled = true
 
                 // Actualizar badge de origen (Gemini real vs Modo Local por reglas)
                 tvStatus.text = if (responseMsg.source == ChatSource.GEMINI)
-                    "Asistente con Gemini AI"
+                    S.text(R.string.text_115)
                 else
-                    "Asistente local (Modo respaldo)"
+                    S.text(R.string.text_116)
 
                 renderMessages()
 
-                messagesContainer.announceForAccessibility("Respuesta de Coinly AI: " + responseMsg.text)
+                messagesContainer.announceForAccessibility(S.text(R.string.text_117) + responseMsg.text)
             }
         }
 
@@ -135,10 +142,10 @@ object CoinlyAiChatSheet {
 
         // Configurar Sugerencias Rápidas
         val suggestions = listOf(
-            "¿Cómo va mi presupuesto?",
-            "¿En qué he gastado más?",
-            "Consejos para ahorrar",
-            "¿Puedo gastar $50 en ocio?"
+            S.text(R.string.text_118),
+            S.text(R.string.text_119),
+            S.text(R.string.text_120),
+            S.text(R.string.text_121)
         )
 
         suggestionsGroup.removeAllViews()
@@ -151,7 +158,7 @@ object CoinlyAiChatSheet {
                 setTextColor(ContextCompat.getColor(context, R.color.coinly_accent))
                 setChipStrokeColorResource(R.color.coinly_accent)
                 chipStrokeWidth = dp(context, 1).toFloat()
-                contentDescription = "Sugerencia: $prompt"
+                contentDescription = S.text(R.string.text_122, prompt)
                 setOnClickListener { sendMessage(prompt) }
             }
             val lp = LinearLayout.LayoutParams(
@@ -192,7 +199,7 @@ object CoinlyAiChatSheet {
         // Encabezado pequeño dentro de la burbuja para la AI
         if (!msg.isUser) {
             val headerLabel = TextView(context).apply {
-                val tag = if (msg.source == ChatSource.GEMINI) "Coinly AI ✨" else "Coinly AI · Modo local 🛡️"
+                val tag = if (msg.source == ChatSource.GEMINI) S.text(R.string.text_123) else S.text(R.string.text_124)
                 text = tag
                 setTextAppearance(R.style.TextAppearance_Coinly_Caption)
                 setTextColor(ContextCompat.getColor(context, R.color.coinly_accent))

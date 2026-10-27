@@ -118,7 +118,6 @@
     </style>
     <style name="Coinly.Text.Section" parent="">
         <item name="android:textAppearance">@style/TextAppearance.Coinly.Section</item>
-        <item name="android:accessibilityHeading">true</item>
     </style>
     <style name="Coinly.Text.Link" parent="">
         <item name="android:textAppearance">@style/TextAppearance.Coinly.Link</item>

@@ -17,7 +17,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
-            android:contentDescription="Volver"
+            android:contentDescription="@string/text_267"
             android:src="@drawable/ic_back" />
 
         <TextView
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:accessibilityHeading="true"
-            android:text="Artículo"
+            android:text="@string/text_334"
             android:textAppearance="@style/TextAppearance.Coinly.TopBarTitle" />
     </LinearLayout>
 
@@ -101,7 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:text="Abrir artículo completo"
+                    android:text="@string/text_335"
                     app:icon="@drawable/ic_external"
                     app:iconGravity="textStart" />
             </LinearLayout>

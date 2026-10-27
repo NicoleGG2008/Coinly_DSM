@@ -33,7 +33,7 @@
             android:layout_marginTop="16dp"
             android:accessibilityHeading="true"
             android:fontFamily="sans-serif-medium"
-            android:text="Crear cuenta"
+            android:text="@string/text_265"
             android:textColor="@color/coinly_on_dark"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Regístrate para empezar"
+            android:text="@string/text_354"
             android:textColor="@color/coinly_on_dark_muted"
             android:textSize="15sp" />
     </LinearLayout>
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etNameRegister"
-                android:text="Nombre completo" />
+                android:text="@string/text_279" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilNameRegister"
@@ -75,7 +75,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tu nombre"
+                    android:hint="@string/text_280"
                     android:inputType="textPersonName|textCapWords"
                     android:autofillHints="name"
                     android:imeOptions="actionNext" />
@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etEmailRegister"
-                android:text="Correo electrónico" />
+                android:text="@string/text_281" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmailRegister"
@@ -100,7 +100,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="tu@email.com"
+                    android:hint="@string/text_282"
                     android:inputType="textEmailAddress"
                     android:autofillHints="emailAddress"
                     android:imeOptions="actionNext" />
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etPasswordRegister"
-                android:text="Contraseña" />
+                android:text="@string/text_297" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilPasswordRegister"
@@ -126,7 +126,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Mínimo 6 caracteres"
+                    android:hint="@string/text_273"
                     android:inputType="textPassword"
                     android:autofillHints="newPassword"
                     android:imeOptions="actionNext" />
@@ -137,7 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etConfirmRegister"
-                android:text="Confirmar contraseña" />
+                android:text="@string/text_355" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilConfirmRegister"
@@ -152,7 +152,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Repite tu contraseña"
+                    android:hint="@string/text_356"
                     android:inputType="textPassword"
                     android:autofillHints="newPassword"
                     android:imeOptions="actionDone" />
@@ -163,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/acCurrency"
-                android:text="Moneda local" />
+                android:text="@string/text_286" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilCurrency"
@@ -175,7 +175,7 @@
                     android:id="@+id/acCurrency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Selecciona una moneda"
+                    android:hint="@string/text_287"
                     android:inputType="none"
                     android:minHeight="52dp"
                     android:textSize="16sp"
@@ -188,7 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Crear cuenta" />
+                android:text="@string/text_265" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -200,7 +200,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¿Ya tienes cuenta?"
+                    android:text="@string/text_357"
                     android:textAppearance="@style/TextAppearance.Coinly.Muted" />
 
                 <TextView
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="6dp"
                     android:paddingEnd="6dp"
-                    android:text="Iniciar sesión" />
+                    android:text="@string/text_266" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

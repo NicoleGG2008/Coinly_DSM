@@ -36,7 +36,7 @@ class NoticiaDetalleActivity : BaseActivity() {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
             } catch (e: ActivityNotFoundException) {
-                Ui.toast(findViewById(android.R.id.content), Tone.DANGER, "No se encontró un navegador para abrir el artículo.")
+                Ui.toast(findViewById(android.R.id.content), Tone.DANGER, S.text(R.string.text_038))
             }
         }
     }

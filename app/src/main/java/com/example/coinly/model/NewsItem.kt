@@ -1,4 +1,6 @@
 package com.example.coinly.model
+import com.example.coinly.S
+import com.example.coinly.R
 
 import androidx.annotation.DrawableRes
 
@@ -13,7 +15,7 @@ data class NewsItem(
 )
 
 enum class EventType(val label: String) {
-    ACADEMIC("Académico"), FINANCIAL("Financiero"), EVENT("Evento")
+    ACADEMIC(S.text(R.string.text_111)), FINANCIAL("Financiero"), EVENT("Evento")
 }
 
 data class CalendarEvent(

@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function owner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function shortText(value, max) {
+      return value is string && value.size() <= max;
+    }
+    match /usuarios/{uid} {
+      allow read, delete: if owner(uid);
+      allow create, update: if owner(uid)
+        && request.resource.data.keys().hasOnly(['name', 'email', 'university', 'career', 'currency', 'avatarUrl'])
+        && request.resource.data.keys().hasAll(['name', 'email', 'currency', 'university', 'career'])
+        && shortText(request.resource.data.name, 100)
+        && request.resource.data.name.size() > 0
+        && request.resource.data.email == request.auth.token.email
+        && shortText(request.resource.data.university, 200)
+        && shortText(request.resource.data.career, 200)
+        && (!('avatarUrl' in request.resource.data) || shortText(request.resource.data.avatarUrl, 2000))
+        && request.resource.data.currency in ['USD', 'EUR', 'MXN', 'COP', 'ARS', 'PEN', 'CLP', 'BRL'];
+      match /movimientos/{id} {
+        allow read, delete: if owner(uid);
+        allow create, update: if owner(uid)
+          && request.resource.data.keys().hasOnly(['id', 'description', 'amount', 'type', 'category', 'date', 'paymentMethod', 'tags'])
+          && request.resource.data.keys().hasAll(['id', 'description', 'amount', 'type', 'category', 'date', 'paymentMethod', 'tags'])
+          && request.resource.data.id == id
+          && shortText(request.resource.data.description, 500)
+          && request.resource.data.description.size() > 0
+          && request.resource.data.amount is number
+          && request.resource.data.amount > 0 && request.resource.data.amount <= 1000000000
+          && request.resource.data.type in ['income', 'expense']
+          && shortText(request.resource.data.category, 100)
+          && request.resource.data.category.size() > 0
+          && request.resource.data.date is string
+          && request.resource.data.date.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$')
+          && shortText(request.resource.data.paymentMethod, 100)
+          && request.resource.data.tags is list
+          && request.resource.data.tags.size() <= 20;
+      }
+      match /presupuestos/{id} {
+        allow read, delete: if owner(uid);
+        allow create, update: if owner(uid)
+          && request.resource.data.keys().hasOnly(['id', 'category', 'limit', 'period'])
+          && request.resource.data.keys().hasAll(['id', 'category', 'limit', 'period'])
+          && request.resource.data.id == id
+          && shortText(request.resource.data.category, 100)
+          && request.resource.data.category.size() > 0
+          && request.resource.data.limit is number
+          && request.resource.data.limit > 0 && request.resource.data.limit <= 1000000000
+          && request.resource.data.period is string
+          && request.resource.data.period.matches('^[0-9]{4}-(0[1-9]|1[0-2])$');
+      }
+    }
+  }
+}

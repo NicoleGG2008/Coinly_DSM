@@ -62,7 +62,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/bg_avatar_glass"
-                    android:contentDescription="Ir a mi perfil"
+                    android:contentDescription="@string/text_302"
                     android:fontFamily="sans-serif-medium"
                     android:gravity="center"
                     android:textColor="@color/coinly_on_dark"
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Saldo disponible"
+                    android:text="@string/text_303"
                     android:textAppearance="@style/TextAppearance.Coinly.Overline"
                     android:textColor="@color/coinly_on_dark_muted" />
 
@@ -115,7 +115,7 @@
                             android:drawablePadding="4dp"
                             android:drawableTint="@color/coinly_success"
                             android:gravity="center_vertical"
-                            android:text="Ingresos"
+                            android:text="@string/text_304"
                             android:textColor="@color/coinly_on_dark_muted"
                             android:textSize="13sp" />
 
@@ -150,7 +150,7 @@
                             android:drawablePadding="4dp"
                             android:drawableTint="@color/coinly_chart_expense"
                             android:gravity="center_vertical"
-                            android:text="Gastos"
+                            android:text="@string/text_305"
                             android:textColor="@color/coinly_on_dark_muted"
                             android:textSize="13sp" />
 
@@ -189,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:text="Acciones rápidas" />
+                android:text="@string/text_306" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -203,7 +203,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Agregar ingreso"
+                    android:text="@string/text_307"
                     app:icon="@drawable/ic_arrow_up" />
                 <Space android:layout_width="8dp" android:layout_height="0dp" />
 
@@ -213,7 +213,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Agregar gasto"
+                    android:text="@string/text_308"
                     app:icon="@drawable/ic_arrow_down" />
             </LinearLayout>
 
@@ -228,7 +228,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Historial"
+                    android:text="@string/text_309"
                     app:icon="@drawable/ic_dollar" />
                 <Space android:layout_width="8dp" android:layout_height="0dp" />
 
@@ -238,7 +238,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Presupuestos"
+                    android:text="@string/text_015"
                     app:icon="@drawable/ic_pie" />
             </LinearLayout>
 
@@ -257,7 +257,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Alertas" />
+                    android:text="@string/text_310" />
 
                 <TextView
                     android:id="@+id/tvClearAlertsHome"
@@ -266,7 +266,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="Limpiar todas" />
+                    android:text="@string/text_311" />
             </LinearLayout>
 
             <LinearLayout
@@ -291,7 +291,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Movimientos recientes" />
+                    android:text="@string/text_312" />
 
                 <TextView
                     android:id="@+id/tvViewAllMovements"
@@ -300,7 +300,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="Ver todos" />
+                    android:text="@string/text_313" />
             </LinearLayout>
 
             <LinearLayout
@@ -326,7 +326,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Presupuestos del mes" />
+                    android:text="@string/text_314" />
 
                 <TextView
                     android:id="@+id/tvViewAllBudgets"
@@ -335,7 +335,7 @@
                     android:layout_height="wrap_content"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
-                    android:text="Ver todos" />
+                    android:text="@string/text_313" />
             </LinearLayout>
 
             <LinearLayout

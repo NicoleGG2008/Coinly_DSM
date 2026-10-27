@@ -28,7 +28,7 @@
             style="@style/Widget.Coinly.IconButton"
             android:layout_marginStart="-8dp"
             android:layout_marginBottom="12dp"
-            android:contentDescription="Volver"
+            android:contentDescription="@string/text_267"
             android:src="@drawable/ic_back" />
 
         <TextView
@@ -37,7 +37,7 @@
             android:layout_marginTop="0dp"
             android:accessibilityHeading="true"
             android:fontFamily="sans-serif-medium"
-            android:text="Editar perfil"
+            android:text="@string/text_277"
             android:textColor="@color/coinly_on_dark"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Actualiza tus datos personales"
+            android:text="@string/text_278"
             android:textColor="@color/coinly_on_dark_muted"
             android:textSize="15sp" />
     </LinearLayout>
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etProfileName"
-                android:text="Nombre completo" />
+                android:text="@string/text_279" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilProfileName"
@@ -79,7 +79,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tu nombre"
+                    android:hint="@string/text_280"
                     android:inputType="textPersonName|textCapWords"
                     android:autofillHints="name"
                     android:imeOptions="actionNext" />
@@ -90,7 +90,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etProfileEmail"
-                android:text="Correo electrónico" />
+                android:text="@string/text_281" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilProfileEmail"
@@ -104,7 +104,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="tu@email.com"
+                    android:hint="@string/text_282"
                     android:inputType="textEmailAddress"
                     android:autofillHints="emailAddress"
                     android:imeOptions="actionNext" />
@@ -115,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etProfileUniversity"
-                android:text="Universidad" />
+                android:text="@string/text_164" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilProfileUniversity"
@@ -129,7 +129,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tu universidad"
+                    android:hint="@string/text_283"
                     android:inputType="textCapWords"
                     android:imeOptions="actionNext" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -139,7 +139,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/etProfileCareer"
-                android:text="Carrera" />
+                android:text="@string/text_284" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilProfileCareer"
@@ -153,7 +153,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Tu carrera"
+                    android:hint="@string/text_285"
                     android:inputType="textCapWords"
                     android:imeOptions="actionDone" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -163,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:labelFor="@+id/acProfileCurrency"
-                android:text="Moneda local" />
+                android:text="@string/text_286" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilProfileCurrency"
@@ -175,7 +175,7 @@
                     android:id="@+id/acProfileCurrency"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Selecciona una moneda"
+                    android:hint="@string/text_287"
                     android:inputType="none"
                     android:minHeight="52dp"
                     android:textSize="16sp"
@@ -188,7 +188,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Guardar cambios" />
+                android:text="@string/text_288" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

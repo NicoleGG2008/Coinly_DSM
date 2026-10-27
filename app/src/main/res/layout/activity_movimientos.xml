@@ -18,7 +18,7 @@
             android:accessibilityHeading="true"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Historial"
+            android:text="@string/text_309"
             android:textAppearance="@style/TextAppearance.Coinly.TopBarTitle" />
 
         <ImageButton
@@ -27,7 +27,7 @@
             android:id="@+id/btnToggleFilters"
             style="@style/Widget.Coinly.IconButton"
             android:layout_marginStart="8dp"
-            android:contentDescription="Mostrar u ocultar filtros avanzados"
+            android:contentDescription="@string/text_315"
             android:src="@drawable/ic_filter" />
         <ImageButton
             android:layout_width="48dp"
@@ -35,7 +35,7 @@
             android:id="@+id/btnAddMovement"
             style="@style/Widget.Coinly.IconButton.Teal"
             android:layout_marginStart="8dp"
-            android:contentDescription="Agregar movimiento"
+            android:contentDescription="@string/text_316"
             android:src="@drawable/ic_plus" />
     </LinearLayout>
 
@@ -66,7 +66,7 @@
                     style="@style/Widget.Coinly.EditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Buscar movimientos..."
+                    android:hint="@string/text_317"
                     android:imeOptions="actionSearch"
                     android:inputType="text"
                     android:singleLine="true" />
@@ -82,13 +82,13 @@
 
                 <com.google.android.material.chip.Chip android:id="@+id/chipAll" style="@style/Widget.Coinly.Chip"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:checkable="true" android:checked="true" android:text="Todos" />
+                    android:checkable="true" android:checked="true" android:text="@string/text_318" />
                 <com.google.android.material.chip.Chip android:id="@+id/chipIncome" style="@style/Widget.Coinly.Chip"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:checkable="true" android:text="Ingresos" />
+                    android:checkable="true" android:text="@string/text_304" />
                 <com.google.android.material.chip.Chip android:id="@+id/chipExpense" style="@style/Widget.Coinly.Chip"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:checkable="true" android:text="Gastos" />
+                    android:checkable="true" android:text="@string/text_305" />
             </com.google.android.material.chip.ChipGroup>
 
             <LinearLayout
@@ -104,14 +104,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
-                    android:text="Filtros avanzados" />
+                    android:text="@string/text_319" />
 
                 <TextView
                     style="@style/Coinly.Text.FieldLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:labelFor="@+id/acFilterCategory"
-                    android:text="Categoría" />
+                    android:text="@string/text_072" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilFilterCategory"
@@ -123,7 +123,7 @@
                         android:id="@+id/acFilterCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Todas"
+                        android:hint="@string/text_320"
                         android:inputType="none"
                         android:minHeight="52dp"
                         android:textSize="16sp"
@@ -142,7 +142,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/etMinAmount"
-                            android:text="Monto mínimo" />
+                            android:text="@string/text_321" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilMinAmount"
@@ -156,7 +156,7 @@
                                 style="@style/Widget.Coinly.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="0.00"
+                                android:hint="@string/text_322"
                                 android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
@@ -168,7 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/etMaxAmount"
-                            android:text="Monto máximo" />
+                            android:text="@string/text_323" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilMaxAmount"
@@ -182,7 +182,7 @@
                                 style="@style/Widget.Coinly.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="0.00"
+                                android:hint="@string/text_322"
                                 android:inputType="numberDecimal" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
@@ -200,7 +200,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/etDateFrom"
-                            android:text="Desde" />
+                            android:text="@string/text_324" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilDateFrom"
@@ -214,7 +214,7 @@
                                 style="@style/Widget.Coinly.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Elegir"
+                                android:hint="@string/text_325"
                                 android:inputType="none"
                                 android:cursorVisible="false" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -227,7 +227,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:labelFor="@+id/etDateTo"
-                            android:text="Hasta" />
+                            android:text="@string/text_326" />
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilDateTo"
@@ -241,7 +241,7 @@
                                 style="@style/Widget.Coinly.EditText"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Elegir"
+                                android:hint="@string/text_325"
                                 android:inputType="none"
                                 android:cursorVisible="false" />
                         </com.google.android.material.textfield.TextInputLayout>
@@ -255,10 +255,10 @@
 
                     <com.google.android.material.button.MaterialButton android:id="@+id/btnClearFilters" style="@style/Widget.Coinly.Button.Outline.Neutral"
                         android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_marginEnd="6dp" android:layout_weight="1" android:text="Limpiar" />
+                        android:layout_marginEnd="6dp" android:layout_weight="1" android:text="@string/text_327" />
                     <com.google.android.material.button.MaterialButton android:id="@+id/btnApplyFilters" style="@style/Widget.Coinly.Button"
                         android:layout_width="0dp" android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp" android:layout_weight="1" android:text="Aplicar" />
+                        android:layout_marginStart="6dp" android:layout_weight="1" android:text="@string/text_328" />
                 </LinearLayout>
             </LinearLayout>
 

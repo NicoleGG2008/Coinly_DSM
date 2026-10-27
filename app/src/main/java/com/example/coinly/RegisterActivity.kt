@@ -27,7 +27,7 @@ class RegisterActivity : BaseActivity() {
         val etConfirm = findViewById<TextInputEditText>(R.id.etConfirmRegister)
         val acCurrency = findViewById<MaterialAutoCompleteTextView>(R.id.acCurrency)
 
-        acCurrency.setSimpleItems(Ui.CURRENCIES)
+        Ui.choices(acCurrency, Ui.CURRENCIES)
         Ui.clearErrorOnType(tilName, etName)
         Ui.clearErrorOnType(tilEmail, etEmail)
         Ui.clearErrorOnType(tilPassword, etPassword)
@@ -42,20 +42,32 @@ class RegisterActivity : BaseActivity() {
             val currency = acCurrency.text.toString().trim()
             var valid = true
 
-            if (name.isEmpty()) { tilName.error = "Completa este campo."; valid = false }
-            if (email.isEmpty()) { tilEmail.error = "Completa este campo."; valid = false }
-            else if (!Ui.isEmail(email)) { tilEmail.error = "Ingresa un correo válido."; valid = false }
-            if (password.isEmpty()) { tilPassword.error = "Completa este campo."; valid = false }
-            else if (password.length < 6) { tilPassword.error = "Mínimo 6 caracteres."; valid = false }
-            if (password != confirm) { tilConfirm.error = "Las contraseñas no coinciden."; valid = false }
-            if (currency.isEmpty()) { tilCurrency.error = "Selecciona una moneda."; valid = false }
+            if (name.isEmpty()) { tilName.error = S.text(R.string.text_020); valid = false }
+            if (email.isEmpty()) { tilEmail.error = S.text(R.string.text_020); valid = false }
+            else if (!Ui.isEmail(email)) { tilEmail.error = S.text(R.string.text_005); valid = false }
+            if (password.isEmpty()) { tilPassword.error = S.text(R.string.text_020); valid = false }
+            else if (password.length < 6) { tilPassword.error = S.text(R.string.text_021); valid = false }
+            if (password != confirm) { tilConfirm.error = S.text(R.string.text_022); valid = false }
+            if (currency.isEmpty()) { tilCurrency.error = S.text(R.string.text_067); valid = false }
             if (!valid) return
 
-            UserPrefs(this).register(name, email, password, currency)
-            startActivity(Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            })
-            finish()
+            AuthUi.run(this, findViewById(R.id.btnRegister), {
+                val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+                auth.createUserWithEmailAndPassword(email, password).continueWithTask { task ->
+                    if (!task.isSuccessful) throw task.exception ?: IllegalStateException()
+                    com.example.coinly.data.AuthSession.remember = false
+                    val profile = mapOf("name" to name, "email" to email, "currency" to currency,
+                        "university" to "", "career" to "")
+                    UserPrefs(this).cacheProfile(profile)
+                    com.example.coinly.data.CloudStore.userRef().set(profile)
+                }
+            }) {
+                com.example.coinly.data.CloudStore.start(true)
+                startActivity(Intent(this, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                })
+                finish()
+            }
         }
 
         findViewById<MaterialButton>(R.id.btnRegister).setOnClickListener { submit() }
