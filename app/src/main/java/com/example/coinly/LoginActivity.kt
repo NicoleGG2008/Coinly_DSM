@@ -59,7 +59,8 @@ class LoginActivity : BaseActivity() {
         etPassword.setOnEditorActionListener { _, _, _ -> submit(); true }
 
         findViewById<TextView>(R.id.tvForgotPassword).setOnClickListener {
-            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+            startActivity(Intent(this, ForgotPasswordActivity::class.java)
+                .putExtra(ForgotPasswordActivity.EXTRA_EMAIL, etEmail.text.toString().trim()))
         }
         findViewById<TextView>(R.id.tvGoToRegister).setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))

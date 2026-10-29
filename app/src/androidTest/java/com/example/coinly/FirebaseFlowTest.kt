@@ -160,6 +160,15 @@ class FirebaseFlowTest {
         field(R.id.etNewPassword,nextPassword)
         field(R.id.etConfirmNewPassword,nextPassword)
         onView(withId(R.id.btnSavePassword)).perform(scrollTo(),click())
+        until("password confirmed") {
+            var changed=false
+            InstrumentationRegistry.getInstrumentation().runOnMainSync {
+                val activity=monitor.getActivitiesInStage(androidx.test.runner.lifecycle.Stage.RESUMED).filterIsInstance<ChangePasswordActivity>().firstOrNull()
+                changed=activity?.let { androidx.lifecycle.ViewModelProvider(it)[PasswordActionsViewModel::class.java].state.value?.passwordChanged } == true
+            }
+            changed
+        }
+        onView(withText(R.string.password_done)).perform(click())
         until("password screen closed") {
             var closed=false
             InstrumentationRegistry.getInstrumentation().runOnMainSync {
