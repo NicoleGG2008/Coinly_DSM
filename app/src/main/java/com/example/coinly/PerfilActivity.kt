@@ -1,9 +1,6 @@
 package com.example.coinly
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -100,7 +97,7 @@ class PerfilActivity : BaseActivity() {
 
     private fun renderAvatar() {
         val photo = findViewById<ImageView>(R.id.ivAvatarPhoto)
-        val bitmap = prefs.avatarUri?.let { loadBitmap(Uri.parse(it)) }
+        val bitmap = com.example.coinly.ui.AvatarImages.load(this, prefs.avatarUri)
         if (bitmap != null) {
             photo.setImageBitmap(bitmap)
             photo.visibility = View.VISIBLE
@@ -109,13 +106,4 @@ class PerfilActivity : BaseActivity() {
         }
     }
 
-    /** Decodifica reducida (≤ 512 px) para no gastar memoria con fotos grandes. */
-    private fun loadBitmap(uri: Uri): Bitmap? = runCatching {
-        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-        contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
-        var sample = 1
-        while (bounds.outWidth / sample > 512 || bounds.outHeight / sample > 512) sample *= 2
-        val options = BitmapFactory.Options().apply { inSampleSize = sample }
-        contentResolver.openInputStream(uri)?.use { BitmapFactory.decodeStream(it, null, options) }
-    }.getOrNull()
 }

@@ -26,7 +26,7 @@ class MainActivity : BaseActivity() {
         val prefs = UserPrefs(this)
         findViewById<TextView>(R.id.tvGreeting).text = Ui.greeting()
         findViewById<TextView>(R.id.tvUserName).text = S.text(R.string.name_greeting, prefs.name)
-        findViewById<TextView>(R.id.btnProfile).text = prefs.initial
+        renderAvatar()
 
         // Navegación
         findViewById<View>(R.id.btnProfile).setOnClickListener { go(PerfilActivity::class.java) }
@@ -51,8 +51,26 @@ class MainActivity : BaseActivity() {
     override fun onCloudChanged() {
         val prefs = UserPrefs(this)
         findViewById<TextView>(R.id.tvUserName).text = S.text(R.string.name_greeting, prefs.name)
-        findViewById<TextView>(R.id.btnProfile).text = prefs.initial
+        renderAvatar()
         render()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        renderAvatar()
+    }
+
+    private fun renderAvatar() {
+        val prefs = UserPrefs(this)
+        val bitmap = com.example.coinly.ui.AvatarImages.load(this, prefs.avatarUri)
+        findViewById<TextView>(R.id.tvHomeAvatarInitial).apply {
+            text = prefs.initial
+            visibility = if (bitmap == null) View.VISIBLE else View.GONE
+        }
+        findViewById<android.widget.ImageView>(R.id.ivHomeAvatarPhoto).apply {
+            setImageBitmap(bitmap)
+            visibility = if (bitmap == null) View.GONE else View.VISIBLE
+        }
     }
 
     private fun render() {

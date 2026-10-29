@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ai_ready">Listo para consultar Gemini</string>
+    <string name="ai_connecting">Consultando Gemini…</string>
+    <string name="ai_local">Respuesta local</string>
+    <string name="ai_name">Coinly IA</string>
+    <string name="ai_context_user">Nombre preferido: %1$s.\n</string>
+    <string name="ai_data_use">Al enviar, Gemini recibirá tu mensaje y un resumen de tus movimientos y presupuestos.</string>
+    <string name="ai_error_setup">Gemini aún no está habilitado para esta app. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_access">No se pudo autorizar la conexión a Gemini. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_quota">Gemini alcanzó su límite de solicitudes. Intenta más tarde. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_blocked">Gemini no pudo responder a este mensaje. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_region">Gemini no está disponible en esta región. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_network">No se pudo conectar a Gemini. Revisa tu conexión e intenta de nuevo. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_empty">Gemini no devolvió una respuesta. Esta respuesta usa el asistente local.</string>
+    <string name="ai_error_unavailable">Gemini no está disponible en este momento. Esta respuesta usa el asistente local.</string>
+</resources>

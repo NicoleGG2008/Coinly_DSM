@@ -107,9 +107,10 @@ El APK de pruebas no debe distribuirse: usa el APK release entregado.
   leen movimientos de otras cuentas. Para volúmenes muy grandes convendrá paginar.
 - La foto seleccionada y las preferencias de apariencia se guardan localmente,
   separadas por UID. Los campos del perfil sí se sincronizan con Firestore.
-- Se conserva el asistente financiero local. No se distribuye una clave privada
-  de Gemini incrustada en el APK; integrar Gemini en producción requiere un backend
-  o un servicio de IA configurado y protegido.
+- Coinly IA usa Gemini mediante Firebase AI Logic y App Check. El asistente local
+  queda como respaldo identificado cuando falla el servicio remoto. Sigue los pasos
+  de [conexión con Gemini](docs/CONEXION-GEMINI.md) para activar el proveedor y registrar
+  el dispositivo de pruebas; no se incrusta una clave privada de Gemini en el APK.
 - No se recibió un documento previo con capturas. El documento final reúne las
   capturas reales generadas al probar esta versión, identificadas como pruebas.
 

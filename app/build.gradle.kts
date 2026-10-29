@@ -5,13 +5,6 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
 }
 
-val localProperties = Properties()
-val localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.inputStream().use { localProperties.load(it) }
-}
-val geminiApiKey: String = localProperties.getProperty("GEMINI_API_KEY") ?: ""
-
 android {
     namespace = "com.example.coinly"
     compileSdk {
@@ -29,7 +22,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GEMINI_API_KEY", "\"\"")
+        buildConfigField("String", "GEMINI_MODEL", "\"gemini-3.8-flash\"")
         buildConfigField("boolean", "FIREBASE_EMULATOR", providers.gradleProperty("firebaseEmulator").orElse("false").get())
     }
 
@@ -74,6 +67,11 @@ dependencies {
     implementation(libs.material)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation("com.google.firebase:firebase-ai:18.1.0")
+    implementation("com.google.firebase:firebase-appcheck:20.0.0")
+    debugImplementation("com.google.firebase:firebase-appcheck-debug:20.0.0")
+    releaseImplementation("com.google.firebase:firebase-appcheck-playintegrity:20.0.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

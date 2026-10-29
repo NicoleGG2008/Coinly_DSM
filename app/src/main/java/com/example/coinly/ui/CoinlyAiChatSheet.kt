@@ -65,6 +65,17 @@ object CoinlyAiChatSheet {
         val btnClose = view.findViewById<View>(R.id.btnCloseChat)
         val tvStatus = view.findViewById<TextView>(R.id.tvAiStatusBadge)
 
+        var inFlight = false
+        var pendingId: String? = null
+        dialog.setOnDismissListener {
+            assistant.close()
+            pendingId?.let { id -> sessionHistory.removeAll { it.id == id } }
+        }
+        tvStatus.text = when (sessionHistory.lastOrNull()?.source) {
+            ChatSource.GEMINI -> S.text(R.string.text_115)
+            ChatSource.RULE_BASED -> S.text(R.string.ai_local)
+            else -> S.text(R.string.ai_ready)
+        }
         btnClose.setOnClickListener { dialog.dismiss() }
 
         // Mensaje inicial de bienvenida si la sesión está limpia
@@ -76,7 +87,7 @@ object CoinlyAiChatSheet {
                 ChatMessage(
                     text = welcomeText,
                     isUser = false,
-                    source = ChatSource.GEMINI
+                    source = ChatSource.ASSISTANT
                 )
             )
         }
@@ -97,11 +108,14 @@ object CoinlyAiChatSheet {
         // Enviar mensaje
         fun sendMessage(text: String) {
             val cleanText = text.trim()
-            if (cleanText.isEmpty()) return
+            if (cleanText.isEmpty() || inFlight) return
+            inFlight = true
+            tvStatus.text = S.text(R.string.ai_connecting)
 
             etMessage.setText("")
 
             val userMsg = ChatMessage(text = cleanText, isUser = true)
+            pendingId = userMsg.id
             sessionHistory.add(userMsg)
             renderMessages()
 
@@ -115,6 +129,8 @@ object CoinlyAiChatSheet {
             assistant.ask(cleanText, sessionHistory.toList()) { responseMsg ->
                 if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid != uid ||
                     historyOwner != uid || !dialog.isShowing) return@ask
+                pendingId = null
+                inFlight = false
                 sessionHistory.add(responseMsg)
                 typingIndicator.visibility = View.GONE
                 btnSend.isEnabled = true
@@ -123,7 +139,7 @@ object CoinlyAiChatSheet {
                 tvStatus.text = if (responseMsg.source == ChatSource.GEMINI)
                     S.text(R.string.text_115)
                 else
-                    S.text(R.string.text_116)
+                    S.text(R.string.ai_local)
 
                 renderMessages()
 
@@ -199,7 +215,11 @@ object CoinlyAiChatSheet {
         // Encabezado pequeño dentro de la burbuja para la AI
         if (!msg.isUser) {
             val headerLabel = TextView(context).apply {
-                val tag = if (msg.source == ChatSource.GEMINI) S.text(R.string.text_123) else S.text(R.string.text_124)
+                val tag = when (msg.source) {
+                    ChatSource.GEMINI -> S.text(R.string.text_123)
+                    ChatSource.RULE_BASED -> S.text(R.string.ai_local)
+                    else -> S.text(R.string.ai_name)
+                }
                 text = tag
                 setTextAppearance(R.style.TextAppearance_Coinly_Caption)
                 setTextColor(ContextCompat.getColor(context, R.color.coinly_accent))
@@ -209,6 +229,14 @@ object CoinlyAiChatSheet {
             bubbleContainer.addView(headerLabel)
         }
 
+        msg.noticeRes?.let { reason ->
+            bubbleContainer.addView(TextView(context).apply {
+                setText(reason)
+                setTextAppearance(R.style.TextAppearance_Coinly_Caption)
+                setTextColor(ContextCompat.getColor(context, R.color.coinly_text_secondary))
+                setPadding(0, 0, 0, dp(context, 8))
+            })
+        }
         val textMsg = TextView(context).apply {
             text = formatMarkdownText(msg.text)
             setTextAppearance(R.style.TextAppearance_Coinly_Body)
@@ -239,7 +267,7 @@ object CoinlyAiChatSheet {
     }
 
     private fun formatMarkdownText(raw: String): Spanned {
-        val html = raw
+        val html = android.text.TextUtils.htmlEncode(raw)
             .replace("\n", "<br/>")
             .replace(Regex("\\*\\*(.*?)\\*\\*"), "<b>$1</b>")
             .replace(Regex("(?m)^[•\\-] (.*)$"), "• $1")

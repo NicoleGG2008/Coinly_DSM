@@ -57,20 +57,33 @@
                         tools:text="Usuario 👋" />
                 </LinearLayout>
 
-                <TextView
+                <FrameLayout
                     android:id="@+id/btnProfile"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/bg_avatar_glass"
                     android:contentDescription="@string/text_302"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:textColor="@color/coinly_on_dark"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:clickable="true"
-                    android:focusable="true"
-                    tools:text="U" />
+                    android:focusable="true">
+                    <TextView
+                        android:id="@+id/tvHomeAvatarInitial"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:gravity="center"
+                        android:textColor="@color/coinly_on_dark"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        tools:text="U" />
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivHomeAvatarPhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Coinly.Circle" />
+                </FrameLayout>
             </LinearLayout>
 
             <!-- Tarjeta de saldo -->
@@ -195,6 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -202,6 +216,8 @@
                     style="@style/Widget.Coinly.Button.Quick.Income"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/text_307"
                     app:icon="@drawable/ic_arrow_up" />
@@ -212,6 +228,8 @@
                     style="@style/Widget.Coinly.Button.Quick.Expense"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/text_308"
                     app:icon="@drawable/ic_arrow_down" />
@@ -220,6 +238,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
@@ -227,6 +246,8 @@
                     style="@style/Widget.Coinly.Button.Quick.History"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/text_309"
                     app:icon="@drawable/ic_dollar" />
@@ -237,6 +258,8 @@
                     style="@style/Widget.Coinly.Button.Quick.Budgets"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:minLines="2"
+                    android:gravity="center"
                     android:layout_weight="1"
                     android:text="@string/text_015"
                     app:icon="@drawable/ic_pie" />

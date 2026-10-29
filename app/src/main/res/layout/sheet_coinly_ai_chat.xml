@@ -54,7 +54,7 @@
                 android:id="@+id/tvAiStatusBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_371"
+                android:text="@string/ai_ready"
                 android:textAppearance="@style/TextAppearance.Coinly.Caption"
                 android:textColor="@color/coinly_accent"
                 android:layout_marginTop="2dp" />
@@ -96,6 +96,16 @@
             android:orientation="vertical"
             android:padding="16dp" />
     </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="6dp"
+        android:text="@string/ai_data_use"
+        android:textAppearance="@style/TextAppearance.Coinly.Caption"
+        android:textColor="@color/coinly_text_secondary" />
 
     <!-- Indicador de "Escribiendo..." -->
     <LinearLayout

@@ -7,6 +7,7 @@ import com.example.coinly.data.UserPrefs
 class CoinlyApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        AiAppCheck.install()
         S.context = applicationContext
         com.example.coinly.data.AuthSession.context = applicationContext
         com.example.coinly.data.CloudStore.context = applicationContext
