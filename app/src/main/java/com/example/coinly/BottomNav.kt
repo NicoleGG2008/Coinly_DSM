@@ -40,7 +40,10 @@ object BottomNav {
         val teal = ContextCompat.getColor(activity, R.color.coinly_accent)
         val muted = ContextCompat.getColor(activity, R.color.coinly_text_secondary)
 
-        items.forEach { item ->
+        val visibleItems = if (AccountNavigation.newsAccount) items.filter {
+            it.target == NoticiasActivity::class.java || it.target == PerfilActivity::class.java
+        } else items
+        visibleItems.forEach { item ->
             val isSelected = item.label == selected
             val color = if (isSelected) teal else muted
 
@@ -142,7 +145,7 @@ object BottomNav {
                 marginEnd = dp(activity, 16)
                 bottomMargin = dp(activity, 16)
             }
-            addView(fab, fabParams)
+            if (!AccountNavigation.newsAccount) addView(fab, fabParams)
         }
 
         return ScreenFrame.wrap(activity, contentContainer, bar)

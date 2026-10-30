@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="password_requirements">Usa de 8 a 128 caracteres, con mayúscula, minúscula y número.</string>
+    <string name="news_add">Agregar noticia</string>
+    <string name="news_publish">Publicar noticia</string>
+    <string name="news_title">Título</string>
+    <string name="news_summary">Resumen</string>
+    <string name="news_content">Contenido</string>
+    <string name="news_category">Categoría</string>
+    <string name="news_calendar_date">Fecha del evento (opcional, AAAA-MM-DD)</string>
+    <string name="news_admin_required">Esta cuenta no tiene permiso para publicar noticias.</string>
+    <string name="news_invalid">Completa título, resumen y contenido. Revisa los límites indicados y la fecha del evento.</string>
+    <string name="news_saved">Noticia publicada.</string>
+    <string name="news_loading">Cargando noticias…</string>
+    <string name="news_network_error">No se pudieron actualizar las noticias. Toca para reintentar.</string>
+    <string name="ai_device_access">Este dispositivo no pudo autorizar Coinly IA. Si es un APK de prueba, registra el token de App Check de este celular; el token del emulador no lo autoriza.</string>
+    <string name="ai_retry">Reintentar conexión</string>
+    <string name="ai_device_help">Resolver acceso en este celular</string>
+    <string name="ai_copy_code">Copiar código privado</string>
+    <string name="ai_device_instructions">Este APK de prueba necesita autorizar este celular. Copia el código y regístralo en Firebase → App Check → tu app → Tokens de depuración. No lo publiques. Después cierra y abre la app y vuelve a preguntar.</string>
+    <string name="ai_device_no_code">No se pudo obtener el código de prueba. Conecta el celular a Android Studio y busca “Firebase App Check debug token” en Logcat.</string>
+    <string name="ai_release_help">Esta versión utiliza Play Integrity. Verifica que la firma y la distribución de esta app coincidan con el proveedor registrado en Firebase App Check. Para pruebas fuera de esa distribución, utiliza el APK de depuración y autoriza su token de prueba.</string>
+    <string name="news_back">Volver</string>
+    <string name="news_publishing">Publicando…</string>
+</resources>

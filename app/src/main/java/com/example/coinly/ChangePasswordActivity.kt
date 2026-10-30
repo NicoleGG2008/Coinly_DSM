@@ -21,6 +21,7 @@ class ChangePasswordActivity : BaseActivity() {
         val tilCurrent = findViewById<TextInputLayout>(R.id.tilCurrentPassword)
         val tilNew = findViewById<TextInputLayout>(R.id.tilNewPassword)
         val tilConfirm = findViewById<TextInputLayout>(R.id.tilConfirmNewPassword)
+        tilNew.helperText = getString(R.string.password_requirements)
         val current = findViewById<TextInputEditText>(R.id.etCurrentPassword)
         val next = findViewById<TextInputEditText>(R.id.etNewPassword)
         val confirm = findViewById<TextInputEditText>(R.id.etConfirmNewPassword)
@@ -41,7 +42,7 @@ class ChangePasswordActivity : BaseActivity() {
             error.visibility = View.GONE
             var valid = true
             if (current.text.isNullOrEmpty()) { tilCurrent.error = getString(R.string.text_020); valid = false }
-            if (next.text.toString().length < 6) { tilNew.error = getString(R.string.text_021); valid = false }
+            if (!PasswordPolicy.valid(next.text.toString())) { tilNew.error = getString(R.string.password_requirements); valid = false }
             else if (next.text.toString() == current.text.toString()) { tilNew.error = getString(R.string.password_must_differ); valid = false }
             if (next.text.toString() != confirm.text.toString()) { tilConfirm.error = getString(R.string.text_022); valid = false }
             if (valid) model.changePassword(current.text.toString(), next.text.toString())

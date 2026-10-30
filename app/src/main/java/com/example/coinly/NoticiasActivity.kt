@@ -20,10 +20,33 @@ import java.util.Calendar
 class NoticiasActivity : BaseActivity() {
 
     private var category = "Todas"
-    private var year = 2026
-    private var month = 7
+    private var year = Calendar.getInstance().get(Calendar.YEAR)
+    private var month = Calendar.getInstance().get(Calendar.MONTH)
     private var selectedDay: Int? = null
+    private var showingNews = true
+    private var administrator = false
+    private var checkingRole = true
+    private var roleFailed = false
+    private val newsEditor = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            category = NewsRepository.categories.first()
+            val group = findViewById<ChipGroup>(R.id.chipGroupNews)
+            (group.getChildAt(0) as? Chip)?.isChecked = true
+            showTab(true); renderNews()
+        }
+    }
+    private val economicEditor = registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.getStringExtra("saved_date")?.takeIf { com.example.coinly.data.NewsDates.valid(it) }?.split("-")?.let {
+                year = it[0].toInt(); month = it[1].toInt() - 1; selectedDay = it[2].toInt()
+            }
+            showTab(false); renderCalendar()
+        }
+    }
 
+    private var economicEvents: List<com.example.coinly.data.EconomicEvent> = emptyList()
+    private var economicListener: com.google.firebase.firestore.ListenerRegistration? = null
+    private var unsubscribeNews: (() -> Unit)? = null
     private lateinit var tabNews: TextView
     private lateinit var tabCalendar: TextView
 
@@ -36,18 +59,87 @@ class NoticiasActivity : BaseActivity() {
         tabNews.setOnClickListener { showTab(news = true) }
         tabCalendar.setOnClickListener { showTab(news = false) }
 
+
+        savedInstanceState?.let {
+            year = it.getInt("calendarYear", year); month = it.getInt("calendarMonth", month)
+            selectedDay = it.getInt("calendarDay", 0).takeIf { day -> day > 0 }
+            category = it.getString("newsCategory", category) ?: category
+            showingNews = it.getBoolean("newsTab", true)
+        }
         setupCategoryChips()
         renderNews()
-
-        // El calendario abre en el mes del próximo evento
-        val today = Ui.todayIso()
-        val first = NewsRepository.events.filter { it.date >= today }.minByOrNull { it.date } ?: NewsRepository.events.first()
-        first.date.split("-").let { year = it[0].toInt(); month = it[1].toInt() - 1 }
+        findViewById<View>(R.id.btnAddNews).setOnClickListener { newsEditor.launch(Intent(this, NewsEditorActivity::class.java)) }
+        findViewById<View>(R.id.btnRefreshNewsRole).setOnClickListener { checkPublishingAccess() }
+        findViewById<View>(R.id.tvNewsNetwork).setOnClickListener { subscribeNews() }
+        findViewById<View>(R.id.btnAddEconomicEvent).setOnClickListener {
+            val date = selectedDay?.let { String.format(java.util.Locale.ROOT, "%04d-%02d-%02d", year, month + 1, it) }
+            economicEditor.launch(Intent(this, EconomicEventActivity::class.java).apply { date?.let { putExtra("event_date", it) } })
+        }
         setupCalendar()
-        showTab(news = true)
+        showTab(news = showingNews)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        subscribeNews()
+        economicEvents = emptyList()
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+        if (uid != null) economicListener = com.example.coinly.data.EconomicEvents.collection(uid).addSnapshotListener { snap, error ->
+            if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid != uid) return@addSnapshotListener
+            if (snap != null) economicEvents = snap.documents.mapNotNull(com.example.coinly.data.EconomicEvents::from)
+            if (error != null) android.widget.Toast.makeText(applicationContext, R.string.economic_error, android.widget.Toast.LENGTH_LONG).show()
+            renderCalendar()
+        }
+        checkPublishingAccess()
+    }
+    private fun checkPublishingAccess() {
+        checkingRole = true; roleFailed = false; renderActions()
+        val user = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser ?: return
+        user.getIdToken(true).addOnCompleteListener(this) { result ->
+            if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid != user.uid) return@addOnCompleteListener
+            checkingRole = false; roleFailed = !result.isSuccessful
+            administrator = result.isSuccessful && result.result.claims["newsAdmin"] == true
+            renderActions()
+        }
+    }
+    private fun renderActions() {
+        findViewById<View>(R.id.btnAddEconomicEvent).visibility = if (showingNews || AccountNavigation.newsAccount) View.GONE else View.VISIBLE
+        findViewById<View>(R.id.newsRoleStatus).visibility = if (showingNews) View.VISIBLE else View.GONE
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddNews).apply {
+            visibility = if (showingNews && (checkingRole || roleFailed || administrator)) View.VISIBLE else View.GONE
+            isEnabled = administrator && !checkingRole && !roleFailed
+        }
+        findViewById<View>(R.id.btnRefreshNewsRole).visibility = if (showingNews && AccountNavigation.newsAccount &&
+            !checkingRole && (!administrator || roleFailed)) View.VISIBLE else View.GONE
+        findViewById<TextView>(R.id.newsRoleStatus).text = when {
+            checkingRole -> getString(R.string.news_role_loading)
+            roleFailed -> getString(R.string.news_role_failed)
+            administrator -> getString(R.string.news_role_admin, com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.email.orEmpty())
+            else -> getString(R.string.news_role_reader)
+        }
+    }
+    override fun onStop() { economicListener?.remove(); economicListener = null; unsubscribeNews?.invoke(); unsubscribeNews = null; super.onStop() }
+    private fun subscribeNews() {
+        unsubscribeNews?.invoke()
+        unsubscribeNews = NewsRepository.subscribe { failed ->
+            findViewById<TextView>(R.id.tvNewsNetwork).apply {
+                setText(if (failed) R.string.news_network_error else R.string.news_loading)
+                visibility = if (failed) View.VISIBLE else View.GONE
+            }
+            renderNews(); renderCalendar()
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt("calendarYear", year); outState.putInt("calendarMonth", month)
+        outState.putInt("calendarDay", selectedDay ?: 0); outState.putString("newsCategory", category)
+        outState.putBoolean("newsTab", showingNews)
+        super.onSaveInstanceState(outState)
     }
 
     private fun showTab(news: Boolean) {
+        showingNews = news
+        renderActions()
         findViewById<View>(R.id.layoutNewsSection).visibility = if (news) View.VISIBLE else View.GONE
         findViewById<View>(R.id.layoutCalendarSection).visibility = if (news) View.GONE else View.VISIBLE
         findViewById<View>(R.id.indicatorNews).visibility = if (news) View.VISIBLE else View.INVISIBLE
@@ -61,13 +153,15 @@ class NoticiasActivity : BaseActivity() {
     // ---------------- Noticias ----------------
     private fun setupCategoryChips() {
         val group = findViewById<ChipGroup>(R.id.chipGroupNews)
+        group.isSaveEnabled = false
+        group.isSaveFromParentEnabled = false
         NewsRepository.categories.forEachIndexed { i, name ->
             group.addView(Chip(this).apply {
                 id = View.generateViewId()
                 text = name
                 tag = name
                 isCheckable = true
-                isChecked = i == 0
+                isChecked = name == category
             })
         }
         group.setOnCheckedStateChangeListener { g, ids ->
@@ -121,7 +215,7 @@ class NoticiasActivity : BaseActivity() {
     }
 
     private fun shiftMonth(delta: Int) {
-        val cal = Calendar.getInstance().apply { set(year, month, 1); add(Calendar.MONTH, delta) }
+        val cal = Calendar.getInstance().apply { clear(); set(year, month, 1); add(Calendar.MONTH, delta) }
         year = cal.get(Calendar.YEAR); month = cal.get(Calendar.MONTH); selectedDay = null
         renderCalendar()
     }
@@ -144,20 +238,23 @@ class NoticiasActivity : BaseActivity() {
         EventType.EVENT -> R.color.coinly_tint_neutral
     }
 
-    private fun eventsOfMonth(): List<CalendarEvent> = NewsRepository.events.filter {
-        val p = it.date.split("-"); p[0].toInt() == year && p[1].toInt() - 1 == month
+    private fun eventsOfMonth(): List<CalendarEvent> = (NewsRepository.events + economicEvents.map { it.calendar() }).filter {
+        it.date.startsWith(String.format(java.util.Locale.ROOT, "%04d-%02d-", year, month + 1))
     }.sortedBy { it.date }
 
-    private fun dayOf(e: CalendarEvent) = e.date.split("-")[2].toInt()
+    private fun dayOf(e: CalendarEvent) = e.date.takeLast(2).toIntOrNull() ?: 0
 
     private fun renderCalendar() {
+        findViewById<com.google.android.material.button.MaterialButton>(R.id.btnAddEconomicEvent).text = selectedDay?.let {
+            getString(R.string.economic_add_selected, String.format(java.util.Locale.ROOT, "%02d/%02d/%04d", it, month + 1, year))
+        } ?: getString(R.string.economic_add)
         findViewById<TextView>(R.id.tvMonthTitle).text = Ui.monthName(month).replaceFirstChar { it.uppercase() } + " " + year
 
         val monthEvents = eventsOfMonth()
         val grid = findViewById<LinearLayout>(R.id.layoutCalendarGrid)
         grid.removeAllViews()
 
-        val first = Calendar.getInstance().apply { set(year, month, 1) }
+        val first = Calendar.getInstance().apply { clear(); set(year, month, 1) }
         val offset = first.get(Calendar.DAY_OF_WEEK) - 1
         val days = first.getActualMaximum(Calendar.DAY_OF_MONTH)
         val now = Calendar.getInstance()
@@ -171,7 +268,7 @@ class NoticiasActivity : BaseActivity() {
                 row.addView(
                     if (day in 1..days) dayCell(day, monthEvents.filter { dayOf(it) == day }, isThisMonth && now.get(Calendar.DAY_OF_MONTH) == day)
                     else View(this),
-                    LinearLayout.LayoutParams(0, Ui.dp(this, 52), 1f)
+                    LinearLayout.LayoutParams(0, Ui.dp(this, maxOf(52, (52 * resources.configuration.fontScale).toInt())), 1f)
                 )
             }
             grid.addView(row)
@@ -199,12 +296,12 @@ class NoticiasActivity : BaseActivity() {
             textSize = 15f
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             when {
-                isToday -> { setBackgroundResource(R.drawable.bg_calendar_today); setTextColor(getColor(R.color.coinly_on_dark)); setTypeface(typeface, android.graphics.Typeface.BOLD) }
                 selected -> { setBackgroundResource(R.drawable.bg_calendar_selected); setTextColor(getColor(R.color.coinly_accent)); setTypeface(typeface, android.graphics.Typeface.BOLD) }
+                isToday -> { setBackgroundResource(R.drawable.bg_calendar_today); setTextColor(getColor(R.color.coinly_on_dark)); setTypeface(typeface, android.graphics.Typeface.BOLD) }
                 else -> setTextColor(getColor(R.color.coinly_text_primary))
             }
         }
-        cell.addView(number, LinearLayout.LayoutParams(Ui.dp(this, 34), Ui.dp(this, 34)).apply { topMargin = Ui.dp(this@NoticiasActivity, 3) })
+        cell.addView(number, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Ui.dp(this, maxOf(34, (34 * resources.configuration.fontScale).toInt()))).apply { topMargin = Ui.dp(this@NoticiasActivity, 3) })
 
         val dots = LinearLayout(this).apply { orientation = LinearLayout.HORIZONTAL; importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO }
         events.take(2).forEach { e ->
@@ -245,6 +342,9 @@ class NoticiasActivity : BaseActivity() {
             item.findViewById<TextView>(R.id.tvEventTitle).text = e.title
             item.findViewById<TextView>(R.id.tvEventType).text = e.type.label
             item.contentDescription = "${e.title}, ${e.type.label}, ${Ui.longDate(e.date)}"
+            e.scheduleId?.let { id -> item.setOnClickListener {
+                economicEditor.launch(Intent(this, EconomicEventActivity::class.java).putExtra("event_id", id))
+            } }
             list.addView(item)
         }
     }

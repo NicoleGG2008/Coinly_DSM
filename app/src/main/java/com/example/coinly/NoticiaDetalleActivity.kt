@@ -19,11 +19,21 @@ class NoticiaDetalleActivity : BaseActivity() {
 
         findViewById<View>(R.id.btnBackNews).setOnClickListener { finish() }
 
-        val news = NewsRepository.byId(intent.getStringExtra(EXTRA_ID).orEmpty())
+        val requestedId = intent.getStringExtra(EXTRA_ID).orEmpty()
+        if (requestedId.isBlank() || requestedId.contains('/')) { finish(); return }
+        val news = NewsRepository.byId(requestedId)
         if (news == null) {
-            finish()
+            com.google.firebase.firestore.FirebaseFirestore.getInstance().collection("noticias")
+                .document(requestedId).get().addOnCompleteListener(this) { result ->
+                    val loaded = if (result.isSuccessful) NewsRepository.fromDocument(result.result) else null
+                    if (loaded == null) { android.widget.Toast.makeText(applicationContext, R.string.news_network_error, android.widget.Toast.LENGTH_LONG).show(); finish() }
+                    else bindNews(loaded)
+                }
             return
         }
+        bindNews(news)
+    }
+    private fun bindNews(news: com.example.coinly.model.NewsItem) {
         findViewById<ImageView>(R.id.ivDetailImage).setImageResource(news.imageRes)
         findViewById<TextView>(R.id.tvDetailCategory).text = news.category
         findViewById<TextView>(R.id.tvDetailTitle).text = news.title

@@ -25,6 +25,7 @@ class RegisterActivity : BaseActivity() {
         val etEmail = findViewById<TextInputEditText>(R.id.etEmailRegister)
         val etPassword = findViewById<TextInputEditText>(R.id.etPasswordRegister)
         val etConfirm = findViewById<TextInputEditText>(R.id.etConfirmRegister)
+        tilPassword.helperText = getString(R.string.password_requirements)
         val acCurrency = findViewById<MaterialAutoCompleteTextView>(R.id.acCurrency)
 
         Ui.choices(acCurrency, Ui.CURRENCIES)
@@ -46,7 +47,7 @@ class RegisterActivity : BaseActivity() {
             if (email.isEmpty()) { tilEmail.error = S.text(R.string.text_020); valid = false }
             else if (!Ui.isEmail(email)) { tilEmail.error = S.text(R.string.text_005); valid = false }
             if (password.isEmpty()) { tilPassword.error = S.text(R.string.text_020); valid = false }
-            else if (password.length < 6) { tilPassword.error = S.text(R.string.text_021); valid = false }
+            else if (!PasswordPolicy.valid(password)) { tilPassword.error = S.text(R.string.password_requirements); valid = false }
             if (password != confirm) { tilConfirm.error = S.text(R.string.text_022); valid = false }
             if (currency.isEmpty()) { tilCurrency.error = S.text(R.string.text_067); valid = false }
             if (!valid) return
@@ -71,7 +72,10 @@ class RegisterActivity : BaseActivity() {
         }
 
         findViewById<MaterialButton>(R.id.btnRegister).setOnClickListener { submit() }
-        etConfirm.setOnEditorActionListener { _, _, _ -> submit(); true }
+        etConfirm.setOnEditorActionListener { _, action, event ->
+            if (action == android.view.inputmethod.EditorInfo.IME_ACTION_DONE ||
+                (event?.keyCode == android.view.KeyEvent.KEYCODE_ENTER && event.action == android.view.KeyEvent.ACTION_UP)) { submit(); true } else false
+        }
 
         findViewById<TextView>(R.id.tvGoToLogin).setOnClickListener {
             startActivity(Intent(this, LoginActivity::class.java))

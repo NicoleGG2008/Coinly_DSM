@@ -46,6 +46,9 @@ class PasswordActionsViewModel : ViewModel() {
 
     fun changePassword(current: String, next: String) {
         if (mutableState.value?.busy == true) return
+        if (!PasswordPolicy.valid(next)) {
+            mutableState.value = PasswordActionState(errorRes = R.string.password_requirements, errorField = PasswordErrorField.NEW); return
+        }
         val user = auth.currentUser
         val email = user?.email
         if (user == null || email.isNullOrBlank()) {

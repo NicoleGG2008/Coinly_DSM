@@ -22,5 +22,7 @@ data class CalendarEvent(
     val id: String,
     val date: String, // yyyy-MM-dd
     val title: String,
-    val type: EventType
+    val type: EventType,
+    val scheduleId: String? = null,
+    val movementId: String = ""
 )

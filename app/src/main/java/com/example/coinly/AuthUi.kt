@@ -22,7 +22,7 @@ object AuthUi {
         is FirebaseTooManyRequestsException -> S.text(R.string.text_002)
         is FirebaseAuthException -> when(e.errorCode) {
             "ERROR_EMAIL_ALREADY_IN_USE" -> S.text(R.string.text_003)
-            "ERROR_WEAK_PASSWORD" -> S.text(R.string.text_004)
+            "ERROR_WEAK_PASSWORD", "ERROR_PASSWORD_DOES_NOT_MEET_REQUIREMENTS" -> S.text(R.string.password_requirements)
             "ERROR_INVALID_EMAIL" -> S.text(R.string.text_005)
             "ERROR_OPERATION_NOT_ALLOWED" -> S.text(R.string.text_006)
             "ERROR_REQUIRES_RECENT_LOGIN" -> S.text(R.string.auth_recent)

@@ -37,6 +37,8 @@
         <activity android:configChanges="orientation|screenSize|smallestScreenSize" android:name=".MovimientosActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:configChanges="orientation|screenSize|smallestScreenSize" android:name=".PresupuestosActivity" android:exported="false" android:windowSoftInputMode="adjustResize" />
         <activity android:configChanges="orientation|screenSize|smallestScreenSize" android:name=".NoticiasActivity" android:exported="false" />
+        <activity android:name=".EconomicEventActivity" android:exported="false" android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
+        <activity android:name=".NewsEditorActivity" android:exported="false" android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity android:configChanges="orientation|screenSize|smallestScreenSize" android:name=".NoticiaDetalleActivity" android:exported="false" />
         <activity android:configChanges="orientation|screenSize|smallestScreenSize" android:name=".EducacionActivity" android:exported="false" />
         <activity android:configChanges="orientation|screenSize|smallestScreenSize" android:name=".PerfilActivity" android:exported="false" />

@@ -7,6 +7,52 @@ service cloud.firestore {
     function shortText(value, max) {
       return value is string && value.size() <= max;
     }
+    function newsAdmin() {
+      return request.auth != null && request.auth.token.get('newsAdmin', false) == true;
+    }
+    function validNews() {
+      let n = request.resource.data;
+      return n.keys().hasOnly(['title', 'summary', 'content', 'category', 'date', 'published', 'imageKey', 'authorUid', 'createdAt', 'eventDate', 'eventType'])
+        && n.keys().hasAll(['title', 'summary', 'content', 'category', 'date', 'published', 'imageKey', 'authorUid', 'createdAt', 'eventDate', 'eventType'])
+        && shortText(n.title, 140) && n.title.size() > 0
+        && shortText(n.summary, 500) && n.summary.size() > 0
+        && shortText(n.content, 10000) && n.content.size() > 0
+        && shortText(n.category, 80) && n.category.size() > 0
+        && n.date is string && n.date.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$')
+        && n.eventDate is string && (n.eventDate == '' || n.eventDate.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$'))
+        && n.eventType == 'FINANCIAL' && n.published is bool
+        && n.imageKey in ['ahorro', 'presupuesto', 'inversion', 'becas']
+        && n.authorUid is string && n.createdAt is timestamp;
+    }
+    function validEconomicEvent(n) {
+      return n.keys().hasOnly(['title', 'amount', 'type', 'category', 'date', 'dueAt', 'status', 'movementId', 'createdAt'])
+        && n.keys().hasAll(['title', 'amount', 'type', 'category', 'date', 'dueAt', 'status', 'movementId', 'createdAt'])
+        && shortText(n.title, 500) && n.title.size() > 0
+        && n.amount is number && n.amount > 0 && n.amount <= 1000000000
+        && n.type in ['income', 'expense'] && shortText(n.category, 100) && n.category.size() > 0
+        && n.date is string && n.date.matches('^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$')
+        && n.dueAt is timestamp && n.createdAt is timestamp
+        && n.dueAt == timestamp.date(int(n.date[0:4]), int(n.date[5:7]), int(n.date[8:10])) + duration.value(6, 'h')
+        && n.status in ['pending', 'posted'] && n.movementId is string;
+    }
+    function scheduledMovement(uid, id) {
+      let eventId = id[5:id.size()];
+      let before = get(/databases/$(database)/documents/usuarios/$(uid)/eventos/$(eventId)).data;
+      let after = getAfter(/databases/$(database)/documents/usuarios/$(uid)/eventos/$(eventId)).data;
+      let m = request.resource.data;
+      return before.status == 'pending' && after.status == 'posted' && after.movementId == id
+        && after.dueAt <= request.time && m.description == after.title && m.amount == after.amount
+        && m.type == after.type && m.category == after.category && m.date == after.date
+        && m.paymentMethod == 'Programado' && m.tags == ['programado'];
+    }
+    match /noticias/{id} {
+      allow read: if request.auth != null && (resource.data.published == true || newsAdmin());
+      allow create: if newsAdmin() && validNews()
+        && request.resource.data.authorUid == request.auth.uid && request.resource.data.createdAt == request.time;
+      allow update: if newsAdmin() && validNews()
+        && request.resource.data.authorUid == resource.data.authorUid && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if newsAdmin();
+    }
     match /usuarios/{uid} {
       allow read, delete: if owner(uid);
       allow create, update: if owner(uid)
@@ -22,6 +68,7 @@ service cloud.firestore {
       match /movimientos/{id} {
         allow read, delete: if owner(uid);
         allow create, update: if owner(uid)
+          && (resource != null || !id.matches('^prog_.+') || scheduledMovement(uid, id))
           && request.resource.data.keys().hasOnly(['id', 'description', 'amount', 'type', 'category', 'date', 'paymentMethod', 'tags'])
           && request.resource.data.keys().hasAll(['id', 'description', 'amount', 'type', 'category', 'date', 'paymentMethod', 'tags'])
           && request.resource.data.id == id
@@ -37,6 +84,26 @@ service cloud.firestore {
           && shortText(request.resource.data.paymentMethod, 100)
           && request.resource.data.tags is list
           && request.resource.data.tags.size() <= 20;
+      }
+      match /eventos/{id} {
+        allow read, delete: if owner(uid);
+        allow create: if owner(uid) && validEconomicEvent(request.resource.data)
+          && request.resource.data.status == 'pending' && request.resource.data.movementId == ''
+          && request.resource.data.createdAt == request.time
+          && request.resource.data.dueAt >= request.time - duration.value(1, 'd');
+        allow update: if owner(uid) && validEconomicEvent(request.resource.data)
+          && resource.data.status == 'pending'
+          && request.resource.data.createdAt == resource.data.createdAt
+          && (
+            (request.resource.data.status == 'pending' && request.resource.data.movementId == ''
+              && request.resource.data.dueAt >= request.time - duration.value(1, 'd'))
+            || (request.resource.data.status == 'posted' && request.resource.data.movementId == 'prog_' + id
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'movementId'])
+              && resource.data.dueAt <= request.time
+              && getAfter(/databases/$(database)/documents/usuarios/$(uid)/movimientos/$(request.resource.data.movementId)).data.id == request.resource.data.movementId
+              && getAfter(/databases/$(database)/documents/usuarios/$(uid)/movimientos/$(request.resource.data.movementId)).data.amount == resource.data.amount
+              && getAfter(/databases/$(database)/documents/usuarios/$(uid)/movimientos/$(request.resource.data.movementId)).data.type == resource.data.type)
+          );
       }
       match /presupuestos/{id} {
         allow read, delete: if owner(uid);

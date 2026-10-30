@@ -1,9 +1,9 @@
 const {initializeTestEnvironment, assertFails, assertSucceeds} = require('@firebase/rules-unit-testing');
-const {doc, setDoc, getDoc, getDocs, collection, updateDoc, deleteDoc} = require('firebase/firestore');
+const {doc, setDoc, getDoc, getDocs, collection, updateDoc, deleteDoc, serverTimestamp, Timestamp, writeBatch} = require(require.resolve('firebase/firestore', {paths:[require('path').dirname(require.resolve('@firebase/rules-unit-testing'))]}));
 const fs = require('fs');
 const path = require('path');
 const root=path.resolve(__dirname,'..');
-const projectId=JSON.parse(fs.readFileSync(path.join(root,'app/google-services.json'))).project_info.project_id;
+const projectId='demo-coinly-review';
 (async()=>{
  const env=await initializeTestEnvironment({projectId,firestore:{host:'127.0.0.1',port:8180,rules:fs.readFileSync(path.join(root,'firestore.rules'),'utf8')}});
  let checks=0;
@@ -41,6 +41,44 @@ const projectId=JSON.parse(fs.readFileSync(path.join(root,'app/google-services.j
   await ok('owner can edit movement',updateDoc(doc(a,'usuarios/alice/movimientos/m1'),{amount:10}));
   await ok('owner can delete movement',deleteDoc(doc(a,'usuarios/alice/movimientos/m1')));
   await ok('owner can delete budget',deleteDoc(doc(a,'usuarios/alice/presupuestos/b1')));
+  const admin=env.authenticatedContext('editor',{email:'editor@example.test',newsAdmin:true}).firestore();
+  const article={title:'Noticia QA',summary:'Resumen QA',content:'Contenido QA',category:'Ahorro',date:'2026-10-29',published:true,imageKey:'ahorro',authorUid:'editor',createdAt:serverTimestamp(),eventDate:'',eventType:'FINANCIAL'};
+  await ok('non-admin cannot publish news',setDoc(doc(a,'noticias/n1'),{...article,authorUid:'alice'}),false);
+  await ok('admin can publish news',setDoc(doc(admin,'noticias/n1'),article));
+  await ok('authenticated user can read published news',getDoc(doc(a,'noticias/n1')));
+  await ok('anonymous cannot read news',getDoc(doc(anon,'noticias/n1')),false);
+  await ok('user cannot edit news',updateDoc(doc(a,'noticias/n1'),{title:'forged'}),false);
+  await ok('user cannot grant own admin role',updateDoc(doc(a,'usuarios/alice'),{newsAdmin:true}),false);
+  await ok('news admin has no access to other private finance data',getDoc(doc(admin,'usuarios/alice')),false);
+  await ok('oversized news rejected',setDoc(doc(admin,'noticias/n2'),{...article,title:'x'.repeat(141)}),false);
+
+  const day=new Date(Date.now()-6*3600000).toISOString().slice(0,10);
+  const due=Timestamp.fromDate(new Date(day+'T06:00:00Z'));
+  const futureDate=new Date(Date.now()+2*86400000).toISOString().slice(0,10);
+  const futureDue=Timestamp.fromDate(new Date(futureDate+'T06:00:00Z'));
+  const event={title:'Pago programado',amount:15,type:'expense',category:'Comida',date:day,dueAt:due,status:'pending',movementId:'',createdAt:serverTimestamp()};
+  await ok('owner can schedule event',setDoc(doc(a,'usuarios/alice/eventos/e1'),event));
+  await ok('other user cannot read event',getDoc(doc(b,'usuarios/alice/eventos/e1')),false);
+  await ok('other user cannot edit event',updateDoc(doc(b,'usuarios/alice/eventos/e1'),{amount:1}),false);
+  await ok('owner can edit pending event',updateDoc(doc(a,'usuarios/alice/eventos/e1'),{title:'Pago programado'}));
+  await ok('negative scheduled amount rejected',setDoc(doc(a,'usuarios/alice/eventos/bad'),{...event,amount:-3}),false);
+  await ok('cannot schedule already posted state',setDoc(doc(a,'usuarios/alice/eventos/bad'),{...event,status:'posted',movementId:'prog_bad'}),false);
+  await ok('due time must match actual scheduled date',setDoc(doc(a,'usuarios/alice/eventos/bad'),{...event,date:futureDate,dueAt:due}),false);
+  await ok('future event can be created',setDoc(doc(a,'usuarios/alice/eventos/future'),{...event,date:futureDate,dueAt:futureDue}));
+  function postBatch(id,date){
+    const batch=writeBatch(a); const movementId='prog_'+id;
+    batch.set(doc(a,'usuarios/alice/movimientos/'+movementId),{id:movementId,description:event.title,amount:event.amount,type:event.type,category:event.category,date,paymentMethod:'Programado',tags:['programado']});
+    batch.update(doc(a,'usuarios/alice/eventos/'+id),{status:'posted',movementId});
+    return batch.commit();
+  }
+  await ok('future event cannot post early even with fast client clock',postBatch('future',futureDate),false);
+  await ok('event cannot be marked posted without movement',updateDoc(doc(a,'usuarios/alice/eventos/e1'),{status:'posted',movementId:'prog_e1'}),false);
+  await ok('due event and movement are written atomically',postBatch('e1',day));
+  await ok('posted event cannot be changed',updateDoc(doc(a,'usuarios/alice/eventos/e1'),{amount:99}),false);
+  await ok('same event cannot be posted twice',postBatch('e1',day),false);
+  await ok('owner can delete future programming',deleteDoc(doc(a,'usuarios/alice/eventos/future')));
+  await ok('other user cannot delete event',deleteDoc(doc(b,'usuarios/alice/eventos/e1')),false);
+  await ok('ordinary movement cannot forge scheduled prefix',setDoc(doc(a,'usuarios/alice/movimientos/prog_missing'),{...m,id:'prog_missing'}),false);
   console.log(`RESULT ${checks} checks passed`);
  } finally {await env.clearFirestore(); await env.cleanup();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

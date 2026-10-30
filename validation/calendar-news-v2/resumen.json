@@ -1,0 +1,15 @@
+{
+  "unit_tests_passed": 15,
+  "android_flows_passed": 6,
+  "test_environment": "Android API 24; isolated demo-coinly-review Firebase emulators; separate reviewqa app",
+  "verified_flows": [
+    "administrator opens editor from Noticias and publishes with a real dropdown and calendar date",
+    "regular user creates an income from the selected calendar day",
+    "economic event create/edit/delete",
+    "calendar state after recreation",
+    "scheduled movement idempotency and future-date guard",
+    "password recovery"
+  ],
+  "production_data_modified_by_tests": false,
+  "firebase_configuration_and_rules": "preserved"
+}

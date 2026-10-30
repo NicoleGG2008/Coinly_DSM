@@ -6,6 +6,8 @@ import android.content.Context
 import com.example.coinly.data.BudgetRepository
 import com.example.coinly.data.MovementRepository.MovementRepository
 import com.example.coinly.data.UserPrefs
+import com.example.coinly.data.CloudStore
+import com.google.firebase.auth.FirebaseAuth
 import com.example.coinly.model.ChatMessage
 import com.example.coinly.model.ChatSource
 import com.example.coinly.ui.Ui
@@ -24,13 +26,31 @@ class CoinlyAiAssistant(private val context: Context) {
     fun close() { scope.cancel() }
 
     fun ask(userPrompt: String, history: List<ChatMessage>, onResult: (ChatMessage) -> Unit) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid == null) {
+            onResult(ChatMessage(text = S.text(R.string.ai_session_required), isUser = false, source = ChatSource.ASSISTANT))
+            return
+        }
+        // Reuses existing per-UID listeners; switching accounts clears the old snapshot synchronously.
+        CloudStore.start()
+        val unavailable = when {
+            CloudStore.loading || CloudStore.pending > 0 -> R.string.ai_data_wait
+            CloudStore.error != null -> R.string.ai_data_problem
+            else -> null
+        }
+        if (unavailable != null) {
+            onResult(ChatMessage(text = S.text(unavailable), isUser = false, source = ChatSource.ASSISTANT))
+            return
+        }
         val systemContext = buildFinancialContext()
         scope.launch {
+            if (FirebaseAuth.getInstance().currentUser?.uid != uid) return@launch
             val response = try {
                 val answer = geminiService.generateContent(userPrompt, systemContext, history)
                 ChatMessage(text = answer, isUser = false, source = ChatSource.GEMINI)
             } catch (error: Exception) {
                 if (error is CancellationException && error !is TimeoutCancellationException) throw error
+                if (FirebaseAuth.getInstance().currentUser?.uid != uid) return@launch
                 ChatMessage(
                     text = ruleBasedAssistant.generateResponse(userPrompt),
                     isUser = false,
@@ -38,7 +58,7 @@ class CoinlyAiAssistant(private val context: Context) {
                     noticeRes = GeminiErrors.message(error)
                 )
             }
-            onResult(response)
+            if (FirebaseAuth.getInstance().currentUser?.uid == uid) onResult(response)
         }
     }
 
@@ -57,6 +77,7 @@ class CoinlyAiAssistant(private val context: Context) {
             .mapValues { it.value.sumOf { m -> m.amount } }
 
         val sb = StringBuilder()
+        sb.append(S.text(R.string.ai_financial_rules))
         sb.append(S.text(R.string.text_165))
         sb.append(S.text(R.string.text_166))
 
@@ -84,12 +105,15 @@ class CoinlyAiAssistant(private val context: Context) {
                     com.example.coinly.model.BudgetStatus.WARNING -> S.text(R.string.text_176, b.percent)
                     com.example.coinly.model.BudgetStatus.SUCCESS -> S.text(R.string.text_177, b.percent)
                 }
-                sb.append(S.text(R.string.text_178, b.category, Ui.money(b.limit), Ui.money(b.spent), statusText))
+                sb.append(S.text(R.string.text_178, "${b.category} (${b.period})", Ui.money(b.limit), Ui.money(b.spent), statusText))
             }
         } else {
             sb.append(S.text(R.string.text_179))
         }
 
+        val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.ROOT).format(java.util.Date())
+        sb.append(FinancialSnapshot.describe(movements, today, userPrefs.currency))
+        if (CloudStore.cached) sb.append(S.text(R.string.ai_context_cached))
         sb.append(S.text(R.string.text_180))
         return sb.toString()
     }

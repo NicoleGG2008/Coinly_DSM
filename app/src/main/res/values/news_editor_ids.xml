@@ -1,0 +1,9 @@
+<resources>
+    <item name="newsEditorTitle" type="id" />
+    <item name="newsEditorSummary" type="id" />
+    <item name="newsEditorBody" type="id" />
+    <item name="newsEditorCategory" type="id" />
+    <item name="newsEditorEvent" type="id" />
+    <item name="btnAddNews" type="id" />
+    <item name="tvNewsNetwork" type="id" />
+</resources>

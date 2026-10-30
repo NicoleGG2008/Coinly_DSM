@@ -15,7 +15,7 @@ class BienvenidaActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (com.google.firebase.auth.FirebaseAuth.getInstance().currentUser != null) {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, AccountNavigation.landing()))
             finish()
             return
         }

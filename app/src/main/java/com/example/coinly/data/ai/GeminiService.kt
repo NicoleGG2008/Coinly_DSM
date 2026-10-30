@@ -8,10 +8,15 @@ import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.*
 import kotlinx.coroutines.withTimeout
 import java.io.IOException
+import com.example.coinly.data.awaitResult
 
 class GeminiService {
     suspend fun generateContent(prompt: String, context: String, history: List<ChatMessage>): String {
         check(!BuildConfig.FIREBASE_EMULATOR) { "AI is disabled in local Firebase tests" }
+        try {
+            withTimeout(15_000) { com.google.firebase.appcheck.FirebaseAppCheck.getInstance().getAppCheckToken(false).awaitResult() }
+        } catch (error: kotlinx.coroutines.CancellationException) { throw error }
+        catch (error: Exception) { throw DeviceAuthorizationFailure(error) }
         val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
             modelName = BuildConfig.GEMINI_MODEL,
             systemInstruction = content { text(context) },
@@ -29,14 +34,18 @@ class GeminiService {
 }
 
 private class EmptyGeminiResponse : Exception()
+private class DeviceAuthorizationFailure(cause: Throwable) : Exception(cause)
 
 /** User-facing messages never include server payloads, tokens or financial context. */
 object GeminiErrors {
     fun message(error: Throwable): Int {
         val causes = generateSequence(error) { it.cause }.take(8).toList()
         return when {
+            causes.any { it is RequestTimeoutException || it is kotlinx.coroutines.TimeoutCancellationException || it is IOException } -> R.string.ai_error_network
+            causes.any { it is DeviceAuthorizationFailure } -> R.string.ai_device_access
             causes.any { it is APINotConfiguredException || it is ServiceDisabledException } -> R.string.ai_error_setup
             causes.any { it is InvalidAPIKeyException || it is PermissionMissingException } -> R.string.ai_error_access
+            causes.any { it is ServerException && it.message.orEmpty().contains("App Check", ignoreCase = true) } -> R.string.ai_error_access
             causes.any { it is QuotaExceededException } -> R.string.ai_error_quota
             causes.any { it is PromptBlockedException || it is ContentBlockedException || it is ResponseStoppedException } -> R.string.ai_error_blocked
             causes.any { it is UnsupportedUserLocationException } -> R.string.ai_error_region

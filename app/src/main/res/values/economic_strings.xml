@@ -1,0 +1,26 @@
+<resources>
+    <string name="economic_add">Programar ingreso o gasto</string>
+    <string name="economic_income">Ingreso</string>
+    <string name="economic_expense">Gasto</string>
+    <string name="economic_registered_label">Registrado</string>
+    <string name="economic_scheduled_label">Programado</string>
+    <string name="economic_remember">Para ejecutar en segundo plano después de cerrar la app, inicia sesión con “Recordar sesión” activado.</string>
+    <string name="economic_title">Concepto</string>
+    <string name="economic_amount">Importe</string>
+    <string name="economic_type">Tipo de movimiento</string>
+    <string name="economic_category">Categoría</string>
+    <string name="economic_date">Fecha programada</string>
+    <string name="economic_save">Guardar programación</string>
+    <string name="economic_delete">Eliminar programación</string>
+    <string name="economic_view">Ver movimiento registrado</string>
+    <string name="economic_explanation">Se añadirá al historial a partir de la fecha indicada (hora de El Salvador), con sesión iniciada y conexión. Android puede demorar la ejecución si pausa la app.</string>
+    <string name="economic_invalid">Revisa concepto, importe mayor que cero, categoría, tipo y una fecha válida de hoy en adelante.</string>
+    <string name="economic_error">No se pudo guardar o sincronizar la programación. Revisa la conexión y tus permisos e intenta de nuevo.</string>
+    <string name="economic_posted">Este evento ya generó un movimiento. Puedes consultar o editar ese movimiento desde el historial.</string>
+    <string name="economic_delete_confirm">¿Eliminar la programación? Si ya se registró, el movimiento permanecerá en tu historial.</string>
+    <item name="economicTitle" type="id" />
+    <item name="economicAmount" type="id" />
+    <item name="economicType" type="id" />
+    <item name="economicCategory" type="id" />
+    <item name="economicDate" type="id" />
+</resources>

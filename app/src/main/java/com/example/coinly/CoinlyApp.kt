@@ -20,7 +20,10 @@ class CoinlyApp : Application() {
             db.useEmulator("10.0.2.2", 8180)
         }
         if (!com.example.coinly.data.AuthSession.remember) auth.signOut()
-        auth.addAuthStateListener { com.example.coinly.data.CloudStore.start() }
+        auth.addAuthStateListener {
+            com.example.coinly.data.CloudStore.start()
+            if (!BuildConfig.FIREBASE_EMULATOR) com.example.coinly.data.EconomicEventWork.configure(this, it.currentUser?.uid)
+        }
         applyTheme(UserPrefs(this).darkMode)
     }
 

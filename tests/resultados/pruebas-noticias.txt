@@ -1,8 +1,0 @@
-
-com.example.coinly.NewsRegressionTest:..
-
-Time: 0.049
-
-OK (2 tests)
-
-

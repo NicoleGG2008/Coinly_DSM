@@ -15,6 +15,9 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.example.coinly.R
 import com.example.coinly.data.UserPrefs
 import com.example.coinly.data.ai.CoinlyAiAssistant
@@ -50,6 +53,20 @@ object CoinlyAiChatSheet {
                 behavior.skipCollapsed = true
                 it.layoutParams.height = (context.resources.displayMetrics.heightPixels * 0.88).toInt()
                 it.requestLayout()
+                if (android.os.Build.VERSION.SDK_INT >= 30) {
+                    dialog.window?.let { window ->
+                        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(window, false)
+                        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+                    }
+                    androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(view) { content, insets ->
+                        val keyboard = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.ime()).bottom
+                        val navigation = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.navigationBars()).bottom
+                        content.setPadding(content.paddingLeft, content.paddingTop, content.paddingRight, maxOf(keyboard, navigation))
+                        content.findViewById<View>(R.id.layoutSuggestionsGroup).visibility = if (keyboard > 0) View.GONE else View.VISIBLE
+                        insets
+                    }
+                    androidx.core.view.ViewCompat.requestApplyInsets(view)
+                }
             }
         }
 
@@ -64,10 +81,21 @@ object CoinlyAiChatSheet {
         val btnSend = view.findViewById<View>(R.id.btnSendChat)
         val btnClose = view.findViewById<View>(R.id.btnCloseChat)
         val tvStatus = view.findViewById<TextView>(R.id.tvAiStatusBadge)
+        val accessHelp = com.google.android.material.button.MaterialButton(context).apply {
+            setText(R.string.ai_device_help); visibility = View.GONE
+            setOnClickListener { com.example.coinly.AiAppCheck.showHelp(context) }
+        }
+        (view as LinearLayout).let { root -> root.addView(accessHelp, root.childCount - 1) }
 
         var inFlight = false
         var pendingId: String? = null
+        val owner = context as? LifecycleOwner
+        val lifecycleObserver = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) dialog.dismiss()
+        }
+        owner?.lifecycle?.addObserver(lifecycleObserver)
         dialog.setOnDismissListener {
+            owner?.lifecycle?.removeObserver(lifecycleObserver)
             assistant.close()
             pendingId?.let { id -> sessionHistory.removeAll { it.id == id } }
         }
@@ -111,6 +139,7 @@ object CoinlyAiChatSheet {
             if (cleanText.isEmpty() || inFlight) return
             inFlight = true
             tvStatus.text = S.text(R.string.ai_connecting)
+            accessHelp.visibility = View.GONE
 
             etMessage.setText("")
 
@@ -132,14 +161,16 @@ object CoinlyAiChatSheet {
                 pendingId = null
                 inFlight = false
                 sessionHistory.add(responseMsg)
+                accessHelp.visibility = if (responseMsg.noticeRes in listOf(R.string.ai_device_access, R.string.ai_error_access)) View.VISIBLE else View.GONE
                 typingIndicator.visibility = View.GONE
                 btnSend.isEnabled = true
 
                 // Actualizar badge de origen (Gemini real vs Modo Local por reglas)
-                tvStatus.text = if (responseMsg.source == ChatSource.GEMINI)
-                    S.text(R.string.text_115)
-                else
-                    S.text(R.string.ai_local)
+                tvStatus.text = when (responseMsg.source) {
+                    ChatSource.GEMINI -> S.text(R.string.text_115)
+                    ChatSource.RULE_BASED -> S.text(R.string.ai_local)
+                    else -> S.text(R.string.ai_ready)
+                }
 
                 renderMessages()
 

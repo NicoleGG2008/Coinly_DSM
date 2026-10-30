@@ -22,7 +22,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GEMINI_MODEL", "\"gemini-3.8-flash\"")
+        buildConfigField("String", "GEMINI_MODEL", "\"gemini-3.5-flash-lite\"")
         buildConfigField("boolean", "FIREBASE_EMULATOR", providers.gradleProperty("firebaseEmulator").orElse("false").get())
     }
 
@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation("androidx.work:work-runtime-ktx:2.11.2")
     implementation("com.google.firebase:firebase-ai:18.1.0")
     implementation("com.google.firebase:firebase-appcheck:20.0.0")
     debugImplementation("com.google.firebase:firebase-appcheck-debug:20.0.0")

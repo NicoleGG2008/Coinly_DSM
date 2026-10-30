@@ -33,7 +33,15 @@ open class BaseActivity : AppCompatActivity() {
             })
             finish(); return
         }
+        if (AccountNavigation.newsAccount && (this is MainActivity || this is MovimientosActivity ||
+                this is PresupuestosActivity || this is EconomicEventActivity)) {
+            startActivity(android.content.Intent(this, NoticiasActivity::class.java).apply {
+                flags = android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP or android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
+            })
+            finish(); return
+        }
         com.example.coinly.data.CloudStore.start()
+        if (!BuildConfig.FIREBASE_EMULATOR) com.example.coinly.data.EconomicEventWork.configure(this, com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid)
         unsubscribe = com.example.coinly.data.CloudStore.observe {
             val store = com.example.coinly.data.CloudStore
             cloudStatus?.apply {

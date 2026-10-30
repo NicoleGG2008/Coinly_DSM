@@ -1,0 +1,15 @@
+<resources>
+    <string name="news_editor_intro">Publica una noticia para los usuarios de Coinly. Si tiene una actividad asociada, puedes añadir su fecha al calendario.</string>
+    <string name="news_event_optional">Opcional. Toca para elegir una fecha; déjalo vacío si solo quieres publicar la noticia.</string>
+    <string name="news_remove_event_date">Quitar fecha del calendario</string>
+    <string name="news_field_required">Este campo es obligatorio y admite hasta %1$d caracteres.</string>
+    <string name="news_role_loading">Comprobando permiso para publicar…</string>
+    <string name="news_role_admin">Cuenta administradora: %1$s</string>
+    <string name="news_role_reader">Esta cuenta puede leer noticias. La publicación está reservada al administrador.</string>
+    <string name="news_role_failed">No se pudieron comprobar tus permisos. Revisa la conexión y vuelve a intentarlo.</string>
+    <string name="news_refresh_role">Actualizar permisos</string>
+    <string name="news_write_denied">Firebase rechazó la publicación. Vuelve a iniciar sesión con la cuenta administradora y verifica que este dispositivo esté autorizado.</string>
+    <string name="economic_saving">Guardando programación…</string>
+    <string name="economic_amount_help">Introduce un importe mayor que cero, sin separadores de miles y con hasta dos decimales. Ejemplo: 125.50.</string>
+    <string name="economic_add_selected">Agregar evento el %1$s</string>
+</resources>

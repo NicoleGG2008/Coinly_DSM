@@ -1,8 +1,0 @@
-
-com.example.coinly.FirebaseFlowTest:.
-
-Time: 41.593
-
-OK (1 test)
-
-

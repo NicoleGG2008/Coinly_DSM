@@ -91,6 +91,14 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingStart="16dp" android:paddingEnd="16dp" android:paddingTop="10dp" android:paddingBottom="8dp" android:background="@color/coinly_card">
+        <TextView android:id="@+id/newsRoleStatus" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/news_role_loading" android:textColor="@color/coinly_text_secondary" android:accessibilityLiveRegion="polite" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnAddNews" style="@style/Widget.Coinly.Button" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/news_add" android:enabled="false" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnRefreshNewsRole" style="@style/Widget.Coinly.Button.Outline" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/news_refresh_role" android:visibility="gone" />
+        <com.google.android.material.button.MaterialButton android:id="@+id/btnAddEconomicEvent" style="@style/Widget.Coinly.Button" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/economic_add" android:visibility="gone" />
+        <TextView android:id="@+id/tvNewsNetwork" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/coinly_danger_text" android:accessibilityLiveRegion="polite" android:visibility="gone" android:minHeight="48dp" android:gravity="center_vertical" />
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

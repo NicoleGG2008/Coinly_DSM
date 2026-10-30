@@ -48,7 +48,7 @@ class LoginActivity : BaseActivity() {
                 AuthSession.remember = findViewById<CheckBox>(R.id.cbRemember).isChecked
                 CloudStore.start()
                 CoinlyApp.applyTheme(UserPrefs(this).darkMode)
-                startActivity(Intent(this, MainActivity::class.java).apply {
+                startActivity(Intent(this, AccountNavigation.landing()).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 })
                 finish()
@@ -56,7 +56,10 @@ class LoginActivity : BaseActivity() {
         }
 
         btnLogin.setOnClickListener { submit() }
-        etPassword.setOnEditorActionListener { _, _, _ -> submit(); true }
+        etPassword.setOnEditorActionListener { _, action, event ->
+            if (action == android.view.inputmethod.EditorInfo.IME_ACTION_DONE ||
+                (event?.keyCode == android.view.KeyEvent.KEYCODE_ENTER && event.action == android.view.KeyEvent.ACTION_UP)) { submit(); true } else false
+        }
 
         findViewById<TextView>(R.id.tvForgotPassword).setOnClickListener {
             startActivity(Intent(this, ForgotPasswordActivity::class.java)

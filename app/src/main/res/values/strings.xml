@@ -111,7 +111,7 @@
     <string name="text_109" formatted="false">"Pago alquiler habitación"</string>
     <string name="text_110" formatted="false">"Usuario"</string>
     <string name="text_111" formatted="false">"Académico"</string>
-    <string name="text_112">"¡Hola, **%1$s**! 👋 Soy **Coinly AI**, tu asistente financiero personal.\n\n"</string>
+    <string name="text_112">"¡Hola, **%1$s**!  Soy **Coinly AI**, tu asistente financiero personal.\n\n"</string>
     <string name="text_113" formatted="false">"¿En qué te puedo ayudar hoy? Toca una sugerencia rápida o escribe tu consulta."</string>
     <string name="text_114" formatted="false">"Coinly AI está procesando tu consulta..."</string>
     <string name="text_115" formatted="false">"Asistente con Gemini AI"</string>
@@ -189,7 +189,7 @@
     <string name="text_187" formatted="false">"Respuesta sin nodo de contenido."</string>
     <string name="text_188" formatted="false">"Respuesta sin partes de texto."</string>
     <string name="text_189" formatted="false">"Texto de respuesta vacío."</string>
-    <string name="text_190" formatted="false">"¡Hola! 👋 Aún no tienes movimientos ni presupuestos registrados en Coinly.\n\n"</string>
+    <string name="text_190" formatted="false">"¡Hola!  Aún no tienes movimientos ni presupuestos registrados en Coinly.\n\n"</string>
     <string name="text_191" formatted="false">" Para ayudarte mejor, empieza por registrar tu primer ingreso o gasto desde la pantalla de Inicio o Movimientos (+). "</string>
     <string name="text_192" formatted="false">"También puedes configurar límites en la sección de Presupuestos.\n\n"</string>
     <string name="text_193" formatted="false">"💡 **Consejo rápido:** Aplica la regla 50/30/20: 50% para necesidades básicas, 30% para gustos personales y 20% directo a tu ahorro."</string>
@@ -390,7 +390,7 @@
 <string name="filter_all">Todas</string>
 <string name="empty_movements">Aún no tienes movimientos. Registra tu primer ingreso o gasto.</string>
 <string name="empty_budgets">Aún no tienes presupuestos. Crea el primero en Presupuestos.</string>
-<string name="name_greeting">%1$s 👋</string>
+<string name="name_greeting">%1$s</string>
 <string name="profile_study">%1$s · %2$s</string>
 <string name="movement_details">%1$s · %2$s</string>
 <string name="auth_recent">Por seguridad, cierra sesión y vuelve a entrar antes de cambiar estos datos.</string>
